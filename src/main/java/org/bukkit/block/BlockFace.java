@@ -4,10 +4,10 @@ package org.bukkit.block;
  * Represents the face of a block
  */
 public enum BlockFace {
-    NORTH(0, 0, -1),
-    EAST(1, 0, 0),
-    SOUTH(0, 0, 1),
-    WEST(-1, 0, 0),
+    NORTH(-1, 0, 0),
+    EAST(0, 0, -1),
+    SOUTH(1, 0, 0),
+    WEST(0, 0, 1),
     UP(0, 1, 0),
     DOWN(0, -1, 0),
     NORTH_EAST(NORTH, EAST),
@@ -42,7 +42,6 @@ public enum BlockFace {
 
     /**
      * Get the amount of X-coordinates to modify to get the represented block
-     *
      * @return Amount of X-coordinates to modify
      */
     public int getModX() {
@@ -51,7 +50,6 @@ public enum BlockFace {
 
     /**
      * Get the amount of Y-coordinates to modify to get the represented block
-     *
      * @return Amount of Y-coordinates to modify
      */
     public int getModY() {
@@ -60,7 +58,6 @@ public enum BlockFace {
 
     /**
      * Get the amount of Z-coordinates to modify to get the represented block
-     *
      * @return Amount of Z-coordinates to modify
      */
     public int getModZ() {

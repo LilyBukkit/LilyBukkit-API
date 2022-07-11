@@ -1,46 +1,23 @@
 package org.bukkit.event.block;
 
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
 
 /**
- * Called when a block is ignited. If you want to catch when a Player places
- * fire, you need to use {@link BlockPlaceEvent}.
- * <p>
+ * Called when a block is ignited. If you want to catch when a Player places fire, you need to use {@link BlockPlaceEvent}.
+ *<p />
  * If a Block Ignite event is cancelled, the block will not be ignited.
  */
 public class BlockIgniteEvent extends BlockEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final IgniteCause cause;
-    private final Entity ignitingEntity;
-    private final Block ignitingBlock;
+    private IgniteCause cause;
     private boolean cancel;
+    private Player thePlayer;
 
-    /**
-     * @deprecated use {@link BlockIgniteEvent#BlockIgniteEvent(Block,
-     * IgniteCause, Entity)} instead.
-     */
-    @Deprecated
-    public BlockIgniteEvent(final Block theBlock, final IgniteCause cause, final Player thePlayer) {
-        this(theBlock, cause, (Entity) thePlayer);
-    }
-
-    public BlockIgniteEvent(final Block theBlock, final IgniteCause cause, final Entity ignitingEntity) {
-        this(theBlock, cause, ignitingEntity, null);
-    }
-
-    public BlockIgniteEvent(final Block theBlock, final IgniteCause cause, final Block ignitingBlock) {
-        this(theBlock, cause, null, ignitingBlock);
-    }
-
-    public BlockIgniteEvent(final Block theBlock, final IgniteCause cause, final Entity ignitingEntity, final Block ignitingBlock) {
-        super(theBlock);
+    public BlockIgniteEvent(Block theBlock, IgniteCause cause, Player thePlayer) {
+        super(Type.BLOCK_IGNITE, theBlock);
         this.cause = cause;
-        this.ignitingEntity = ignitingEntity;
-        this.ignitingBlock = ignitingBlock;
+        this.thePlayer = thePlayer;
         this.cancel = false;
     }
 
@@ -64,32 +41,10 @@ public class BlockIgniteEvent extends BlockEvent implements Cancellable {
     /**
      * Gets the player who ignited this block
      *
-     * @return The Player that placed/ignited the fire block, or null if not ignited by a Player.
+     * @return The Player who placed the fire block, if not ignited by a player returns null
      */
     public Player getPlayer() {
-        if (ignitingEntity instanceof Player) {
-            return (Player) ignitingEntity;
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the entity who ignited this block
-     *
-     * @return The Entity that placed/ignited the fire block, or null if not ignited by a Entity.
-     */
-    public Entity getIgnitingEntity() {
-        return ignitingEntity;
-    }
-
-    /**
-     * Gets the block who ignited this block
-     *
-     * @return The Block that placed/ignited the fire block, or null if not ignited by a Block.
-     */
-    public Block getIgnitingBlock() {
-        return ignitingBlock;
+        return thePlayer;
     }
 
     /**
@@ -102,7 +57,7 @@ public class BlockIgniteEvent extends BlockEvent implements Cancellable {
          */
         LAVA,
         /**
-         * Block ignition caused by a player or dispenser using flint-and-steel.
+         * Block ignition caused by a player using flint-and-steel.
          */
         FLINT_AND_STEEL,
         /**
@@ -113,26 +68,5 @@ public class BlockIgniteEvent extends BlockEvent implements Cancellable {
          * Block ignition caused by lightning.
          */
         LIGHTNING,
-        /**
-         * Block ignition caused by an entity using a fireball.
-         */
-        FIREBALL,
-        /**
-         * Block ignition caused by an Ender Crystal.
-         */
-        ENDER_CRYSTAL,
-        /**
-         * Block ignition caused by explosion.
-         */
-        EXPLOSION,
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

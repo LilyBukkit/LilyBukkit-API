@@ -2,7 +2,6 @@ package org.bukkit.event.player;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,16 +12,16 @@ import org.bukkit.event.block.Action;
  * Called when a player interacts with an object or air.
  */
 public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
     protected ItemStack item;
     protected Action action;
     protected Block blockClicked;
     protected BlockFace blockFace;
+
     private Result useClickedBlock;
     private Result useItemInHand;
 
-    public PlayerInteractEvent(final Player who, final Action action, final ItemStack item, final Block clickedBlock, final BlockFace clickedFace) {
-        super(who);
+    public PlayerInteractEvent(Player who, Action action, ItemStack item, Block clickedBlock, BlockFace clickedFace) {
+        super(Type.PLAYER_INTERACT, who);
         this.action = action;
         this.item = item;
         this.blockClicked = clickedBlock;
@@ -42,8 +41,8 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Gets the cancellation state of this event. Set to true if you want to
-     * prevent buckets from placing water and so forth
+     * Gets the cancellation state of this event. Set to true if you
+     * want to prevent buckets from placing water and so forth
      *
      * @return boolean cancellation state
      */
@@ -52,9 +51,9 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Sets the cancellation state of this event. A canceled event will not be
-     * executed in the server, but will still pass to other plugins
-     * <p>
+     * Sets the cancellation state of this event. A canceled event will not
+     * be executed in the server, but will still pass to other plugins
+     *
      * Canceling this event will prevent use of food (player won't lose the
      * food item), prevent bows/snowballs/eggs from firing, etc. (player won't
      * lose the ammo)
@@ -76,8 +75,8 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Convenience method. Returns the material of the item represented by
-     * this event
+     * Convenience method. Returns the material of the item represented by this
+     * event
      *
      * @return Material the material of the item used
      */
@@ -108,8 +107,8 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * Convenience method to inform the user whether this was a block
-     * placement event.
+     * Convenience method to inform the user whether this was a block placement
+     * event.
      *
      * @return boolean true if the item in hand was a block
      */
@@ -140,10 +139,8 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * This controls the action to take with the block (if any) that was
-     * clicked on. This event gets processed for all blocks, but most don't
-     * have a default action
-     *
+     * This controls the action to take with the block (if any) that was clicked on
+     * This event gets processed for all blocks, but most don't have a default action
      * @return the action to take with the interacted block
      */
     public Result useInteractedBlock() {
@@ -158,11 +155,9 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     }
 
     /**
-     * This controls the action to take with the item the player is holding.
-     * This includes both blocks and items (such as flint and steel or
-     * records). When this is set to default, it will be allowed if no action
-     * is taken on the interacted block.
-     *
+     * This controls the action to take with the item the player is holding
+     * This includes both blocks and items (such as flint and steel or records)
+     * When this is set to default, it will be allowed if no action is taken on the interacted block
      * @return the action to take with the item in hand
      */
     public Result useItemInHand() {
@@ -174,14 +169,5 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
      */
     public void setUseItemInHand(Result useItemInHand) {
         this.useItemInHand = useItemInHand;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

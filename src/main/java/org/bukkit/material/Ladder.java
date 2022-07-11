@@ -11,11 +11,6 @@ public class Ladder extends SimpleAttachableMaterialData {
         super(Material.LADDER);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Ladder(final int type) {
         super(type);
     }
@@ -24,20 +19,10 @@ public class Ladder extends SimpleAttachableMaterialData {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Ladder(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Ladder(final Material type, final byte data) {
         super(type, data);
     }
@@ -52,16 +37,16 @@ public class Ladder extends SimpleAttachableMaterialData {
 
         switch (data) {
         case 0x2:
-            return BlockFace.SOUTH;
+            return BlockFace.WEST;
 
         case 0x3:
-            return BlockFace.NORTH;
-
-        case 0x4:
             return BlockFace.EAST;
 
+        case 0x4:
+            return BlockFace.SOUTH;
+
         case 0x5:
-            return BlockFace.WEST;
+            return BlockFace.NORTH;
         }
 
         return null;
@@ -74,29 +59,24 @@ public class Ladder extends SimpleAttachableMaterialData {
         byte data = (byte) 0x0;
 
         switch (face) {
-        case SOUTH:
+        case WEST:
             data = 0x2;
             break;
 
-        case NORTH:
+        case EAST:
             data = 0x3;
             break;
 
-        case EAST:
+        case SOUTH:
             data = 0x4;
             break;
 
-        case WEST:
+        case NORTH:
             data = 0x5;
             break;
         }
 
         setData(data);
 
-    }
-
-    @Override
-    public Ladder clone() {
-        return (Ladder) super.clone();
     }
 }

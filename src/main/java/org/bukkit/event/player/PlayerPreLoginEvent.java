@@ -1,40 +1,23 @@
 package org.bukkit.event.player;
 
 import java.net.InetAddress;
-import java.util.UUID;
-
-import org.bukkit.Warning;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * Stores details for players attempting to log in
- *
- * @deprecated This event causes synchronization from the login thread; {@link
- *     AsyncPlayerPreLoginEvent} is preferred to keep the secondary threads
- *     asynchronous.
  */
-@Deprecated
-@Warning(reason="This event causes a login thread to synchronize with the main thread")
 public class PlayerPreLoginEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
     private Result result;
     private String message;
-    private final String name;
-    private final InetAddress ipAddress;
-    private final UUID uniqueId;
+    private String name;
+    private InetAddress ipAddress;
 
-    @Deprecated
-    public PlayerPreLoginEvent(final String name, final InetAddress ipAddress) {
-        this(name, ipAddress, null);
-    }
-
-    public PlayerPreLoginEvent(final String name, final InetAddress ipAddress, final UUID uniqueId) {
+    public PlayerPreLoginEvent(String name, InetAddress ipAddress) {
+        super(Type.PLAYER_PRELOGIN);
         this.result = Result.ALLOWED;
         this.message = "";
         this.name = name;
         this.ipAddress = ipAddress;
-        this.uniqueId = uniqueId;
     }
 
     /**
@@ -56,8 +39,7 @@ public class PlayerPreLoginEvent extends Event {
     }
 
     /**
-     * Gets the current kick message that will be used if getResult() !=
-     * Result.ALLOWED
+     * Gets the current kick message that will be used if getResult() != Result.ALLOWED
      *
      * @return Current kick message
      */
@@ -105,28 +87,10 @@ public class PlayerPreLoginEvent extends Event {
     /**
      * Gets the player IP address.
      *
-     * @return The IP address
+     * @return
      */
     public InetAddress getAddress() {
         return ipAddress;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    /**
-     * Gets the player's unique ID.
-     *
-     * @return The unique ID
-     */
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     /**
@@ -147,8 +111,7 @@ public class PlayerPreLoginEvent extends Event {
          */
         KICK_BANNED,
         /**
-         * The player is not allowed to log in, due to them not being on the
-         * white list
+         * The player is not allowed to log in, due to them not being on the white list
          */
         KICK_WHITELIST,
         /**

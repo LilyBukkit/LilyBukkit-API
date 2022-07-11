@@ -3,23 +3,21 @@ package org.bukkit.event.block;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Called when a block is damaged by a player.
- * <p>
+ * <p />
  * If a Block Damage event is cancelled, the block will not be damaged.
  */
 public class BlockDamageEvent extends BlockEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final Player player;
+    private Player player;
     private boolean instaBreak;
     private boolean cancel;
-    private final ItemStack itemstack;
+    private ItemStack itemstack;
 
-    public BlockDamageEvent(final Player player, final Block block, final ItemStack itemInHand, final boolean instaBreak) {
-        super(block);
+    public BlockDamageEvent(Player player, Block block, ItemStack itemInHand, boolean instaBreak) {
+        super(Type.BLOCK_DAMAGE, block);
         this.instaBreak = instaBreak;
         this.player = player;
         this.itemstack = itemInHand;
@@ -38,8 +36,7 @@ public class BlockDamageEvent extends BlockEvent implements Cancellable {
     /**
      * Gets if the block is set to instantly break when damaged by the player.
      *
-     * @return true if the block should instantly break when damaged by the
-     *     player
+     * @return true if the block should instantly break when damaged by the player
      */
     public boolean getInstaBreak() {
         return instaBreak;
@@ -48,8 +45,7 @@ public class BlockDamageEvent extends BlockEvent implements Cancellable {
     /**
      * Sets if the block should instantly break when damaged by the player.
      *
-     * @param bool true if you want the block to instantly break when damaged
-     *     by the player
+     * @param bool true if you want the block to instantly break when damaged by the player
      */
     public void setInstaBreak(boolean bool) {
         this.instaBreak = bool;
@@ -70,14 +66,5 @@ public class BlockDamageEvent extends BlockEvent implements Cancellable {
 
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

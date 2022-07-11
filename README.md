@@ -1,16 +1,15 @@
-Bukkit
+LilyBukkit
 ======
 
-A Minecraft Server API.
+A modified Bukkit Minecraft Server API.
 
-Website: [http://bukkit.org](http://bukkit.org)  
-Bugs/Suggestions: [http://leaky.bukkit.org](http://leaky.bukkit.org)  
-Contributing Guidelines: [CONTRIBUTING.md](https://github.com/Bukkit/Bukkit/blob/master/CONTRIBUTING.md)
+Website: [https://vladg24yt.github.io/LilyBukkit-API](https://vladg24yt.github.io/LilyBukkit-API)  
+Bugs/Suggestions: [Issues](https://github.com/Vladg24YT/LilyBukkit-API/issues) and [Discord](https://discord.gg/qzKFJZW6bZ)
 
 Compilation
 -----------
 
-We use maven to handle our dependencies.
+Bukkit uses maven to handle its' dependencies.
 
 * Install [Maven 3](http://maven.apache.org/download.html)
 * Check out this repo and: `mvn clean install`

@@ -1,30 +1,18 @@
 package org.bukkit.event.entity;
 
-import java.util.Map;
-
-import com.google.common.base.Function;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.Cancellable;
 
 /**
  * Called when an entity is damaged by a block
  */
-public class EntityDamageByBlockEvent extends EntityDamageEvent {
-    private final Block damager;
+public class EntityDamageByBlockEvent extends EntityDamageEvent implements Cancellable {
 
-    @Deprecated
-    public EntityDamageByBlockEvent(final Block damager, final Entity damagee, final DamageCause cause, final int damage) {
-        this(damager, damagee, cause, (double) damage);
-    }
+    private Block damager;
 
-    @Deprecated
-    public EntityDamageByBlockEvent(final Block damager, final Entity damagee, final DamageCause cause, final double damage) {
-        super(damagee, cause, damage);
-        this.damager = damager;
-    }
-
-    public EntityDamageByBlockEvent(final Block damager, final Entity damagee, final DamageCause cause, final Map<DamageModifier, Double> modifiers, final Map<DamageModifier, ? extends Function<? super Double, Double>> modifierFunctions) {
-        super(damagee, cause, modifiers, modifierFunctions);
+    public EntityDamageByBlockEvent(Block damager, Entity damagee, DamageCause cause, int damage) {
+        super(Type.ENTITY_DAMAGE, damagee, cause, damage);
         this.damager = damager;
     }
 

@@ -11,11 +11,6 @@ public class Torch extends SimpleAttachableMaterialData {
         super(Material.TORCH);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Torch(final int type) {
         super(type);
     }
@@ -24,20 +19,10 @@ public class Torch extends SimpleAttachableMaterialData {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Torch(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Torch(final Material type, final byte data) {
         super(type, data);
     }
@@ -52,40 +37,41 @@ public class Torch extends SimpleAttachableMaterialData {
 
         switch (data) {
         case 0x1:
-            return BlockFace.WEST;
-
-        case 0x2:
-            return BlockFace.EAST;
-
-        case 0x3:
             return BlockFace.NORTH;
 
-        case 0x4:
+        case 0x2:
             return BlockFace.SOUTH;
 
+        case 0x3:
+            return BlockFace.EAST;
+
+        case 0x4:
+            return BlockFace.WEST;
+
         case 0x5:
-        default:
             return BlockFace.DOWN;
         }
+
+        return null;
     }
 
     public void setFacingDirection(BlockFace face) {
         byte data;
 
         switch (face) {
-        case EAST:
+        case SOUTH:
             data = 0x1;
             break;
 
-        case WEST:
+        case NORTH:
             data = 0x2;
             break;
 
-        case SOUTH:
+        case WEST:
             data = 0x3;
             break;
 
-        case NORTH:
+        case EAST:
             data = 0x4;
             break;
 
@@ -95,10 +81,5 @@ public class Torch extends SimpleAttachableMaterialData {
         }
 
         setData(data);
-    }
-
-    @Override
-    public Torch clone() {
-        return (Torch) super.clone();
     }
 }

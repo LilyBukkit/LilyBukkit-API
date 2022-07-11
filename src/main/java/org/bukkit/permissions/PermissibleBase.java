@@ -15,20 +15,14 @@ import org.bukkit.plugin.Plugin;
  */
 public class PermissibleBase implements Permissible {
     private ServerOperator opable = null;
-    private Permissible parent = this;
     private final List<PermissionAttachment> attachments = new LinkedList<PermissionAttachment>();
     private final Map<String, PermissionAttachmentInfo> permissions = new HashMap<String, PermissionAttachmentInfo>();
+    private boolean dirtyPermissions = true;
 
     public PermissibleBase(ServerOperator opable) {
         this.opable = opable;
-
-        if (opable instanceof Permissible) {
-            this.parent = (Permissible) opable;
-        }
-
-        recalculatePermissions();
     }
-
+    
     public boolean isOp() {
         if (opable == null) {
             return false;
@@ -50,6 +44,8 @@ public class PermissibleBase implements Permissible {
             throw new IllegalArgumentException("Permission name cannot be null");
         }
 
+        calculatePermissions();
+
         return permissions.containsKey(name.toLowerCase());
     }
 
@@ -66,6 +62,8 @@ public class PermissibleBase implements Permissible {
             throw new IllegalArgumentException("Permission name cannot be null");
         }
 
+        calculatePermissions();
+
         String name = inName.toLowerCase();
 
         if (isPermissionSet(name)) {
@@ -76,7 +74,7 @@ public class PermissibleBase implements Permissible {
             if (perm != null) {
                 return perm.getDefault().getValue(isOp());
             } else {
-                return Permission.DEFAULT_PERMISSION.getValue(isOp());
+                return false;
             }
         }
     }
@@ -86,12 +84,17 @@ public class PermissibleBase implements Permissible {
             throw new IllegalArgumentException("Permission cannot be null");
         }
 
+        calculatePermissions();
+
         String name = perm.getName().toLowerCase();
 
         if (isPermissionSet(name)) {
             return permissions.get(name).getValue();
+        } else if (perm != null) {
+            return perm.getDefault().getValue(isOp());
+        } else {
+            return false;
         }
-        return perm.getDefault().getValue(isOp());
     }
 
     public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
@@ -118,7 +121,7 @@ public class PermissibleBase implements Permissible {
             throw new IllegalArgumentException("Plugin " + plugin.getDescription().getFullName() + " is disabled");
         }
 
-        PermissionAttachment result = new PermissionAttachment(plugin, parent);
+        PermissionAttachment result = new PermissionAttachment(plugin, this);
 
         attachments.add(result);
         recalculatePermissions();
@@ -141,36 +144,43 @@ public class PermissibleBase implements Permissible {
 
             recalculatePermissions();
         } else {
-            throw new IllegalArgumentException("Given attachment is not part of Permissible object " + parent);
+            throw new IllegalArgumentException("Given attachment is not part of Permissible object " + this);
         }
     }
 
     public void recalculatePermissions() {
-        clearPermissions();
-        Set<Permission> defaults = Bukkit.getServer().getPluginManager().getDefaultPermissions(isOp());
-        Bukkit.getServer().getPluginManager().subscribeToDefaultPerms(isOp(), parent);
+        dirtyPermissions = true;
+    }
 
-        for (Permission perm : defaults) {
-            String name = perm.getName().toLowerCase();
-            permissions.put(name, new PermissionAttachmentInfo(parent, name, null, true));
-            Bukkit.getServer().getPluginManager().subscribeToPermission(name, parent);
-            calculateChildPermissions(perm.getChildren(), false, null);
-        }
+    private synchronized void calculatePermissions() {
+        if (dirtyPermissions) {
+            clearPermissions();
+            Set<Permission> defaults = Bukkit.getServer().getPluginManager().getDefaultPermissions(isOp());
+            Bukkit.getServer().getPluginManager().subscribeToDefaultPerms(isOp(), this);
 
-        for (PermissionAttachment attachment : attachments) {
-            calculateChildPermissions(attachment.getPermissions(), false, attachment);
+            for (Permission perm : defaults) {
+                String name = perm.getName().toLowerCase();
+                permissions.put(name, new PermissionAttachmentInfo(this, name, null, true));
+                Bukkit.getServer().getPluginManager().subscribeToPermission(name, this);
+                calculateChildPermissions(perm.getChildren(), false, null);
+            }
+
+            for (PermissionAttachment attachment : attachments) {
+                calculateChildPermissions(attachment.getPermissions(), false, attachment);
+            }
+
+            dirtyPermissions = false;
         }
     }
 
-    public synchronized void clearPermissions() {
+    private synchronized void clearPermissions() {
         Set<String> perms = permissions.keySet();
 
         for (String name : perms) {
-            Bukkit.getServer().getPluginManager().unsubscribeFromPermission(name, parent);
+            Bukkit.getServer().getPluginManager().unsubscribeFromPermission(name, this);
         }
 
-        Bukkit.getServer().getPluginManager().unsubscribeFromDefaultPerms(false, parent);
-        Bukkit.getServer().getPluginManager().unsubscribeFromDefaultPerms(true, parent);
+        Bukkit.getServer().getPluginManager().unsubscribeFromDefaultPerms(isOp(), this);
 
         permissions.clear();
     }
@@ -183,8 +193,8 @@ public class PermissibleBase implements Permissible {
             boolean value = children.get(name) ^ invert;
             String lname = name.toLowerCase();
 
-            permissions.put(lname, new PermissionAttachmentInfo(parent, lname, attachment, value));
-            Bukkit.getServer().getPluginManager().subscribeToPermission(name, parent);
+            permissions.put(lname, new PermissionAttachmentInfo(this, lname, attachment, value));
+            Bukkit.getServer().getPluginManager().subscribeToPermission(name, this);
 
             if (perm != null) {
                 calculateChildPermissions(perm.getChildren(), !value, attachment);
@@ -220,7 +230,7 @@ public class PermissibleBase implements Permissible {
         PermissionAttachment result = addAttachment(plugin);
 
         if (Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RemoveAttachmentRunnable(result), ticks) == -1) {
-            Bukkit.getServer().getLogger().log(Level.WARNING, "Could not add PermissionAttachment to " + parent + " for plugin " + plugin.getDescription().getFullName() + ": Scheduler returned -1");
+            Bukkit.getServer().getLogger().log(Level.WARNING, "Could not add PermissionAttachment to " + this + " for plugin " + plugin.getDescription().getFullName() + ": Scheduler returned -1");
             result.remove();
             return null;
         } else {
@@ -229,6 +239,7 @@ public class PermissibleBase implements Permissible {
     }
 
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        calculatePermissions();
         return new HashSet<PermissionAttachmentInfo>(permissions.values());
     }
 

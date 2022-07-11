@@ -1,9 +1,7 @@
 package org.bukkit.inventory;
 
-import org.bukkit.entity.HumanEntity;
-
 /**
- * Interface to the inventory of a Player, including the four armor slots.
+ * Includes interface to the 4 armor slots
  */
 public interface PlayerInventory extends Inventory {
 
@@ -45,37 +43,37 @@ public interface PlayerInventory extends Inventory {
     /**
      * Put the given ItemStacks into the armor slots
      *
-     * @param items The ItemStacks to use as armour
+     *  @param items The ItemStacks to use as armour
      */
     public void setArmorContents(ItemStack[] items);
 
     /**
-     * Put the given ItemStack into the helmet slot. This does not check if
-     * the ItemStack is a helmet
+     * Put the given ItemStack into the helmet slot
+     * This does not check if the ItemStack is a helmet
      *
      * @param helmet The ItemStack to use as helmet
      */
     public void setHelmet(ItemStack helmet);
 
     /**
-     * Put the given ItemStack into the chestplate slot. This does not check
-     * if the ItemStack is a chestplate
+     * Put the given ItemStack into the chestplate slot
+     * This does not check if the ItemStack is a chestplate
      *
      * @param chestplate The ItemStack to use as chestplate
      */
     public void setChestplate(ItemStack chestplate);
 
     /**
-     * Put the given ItemStack into the leg slot. This does not check if the
-     * ItemStack is a pair of leggings
+     * Put the given ItemStack into the leg slot
+     * This does not check if the ItemStack is a pair of leggings
      *
      * @param leggings The ItemStack to use as leggings
      */
     public void setLeggings(ItemStack leggings);
 
     /**
-     * Put the given ItemStack into the boots slot. This does not check if the
-     * ItemStack is a boots
+     * Put the given ItemStack into the boots slot
+     * This does not check if the ItemStack is a boots
      *
      * @param boots The ItemStack to use as boots
      */
@@ -101,30 +99,4 @@ public interface PlayerInventory extends Inventory {
      * @return Held item slot number
      */
     public int getHeldItemSlot();
-
-    /**
-     * Set the slot number of the currently held item.
-     * <p>
-     * This validates whether the slot is between 0 and 8 inclusive.
-     *
-     * @param slot The new slot number
-     * @throws IllegalArgumentException Thrown if slot is not between 0 and 8
-     *     inclusive
-     */
-    public void setHeldItemSlot(int slot);
-
-    /**
-     * Clears all matching items from the inventory. Setting either value to
-     * -1 will skip it's check, while setting both to -1 will clear all items
-     * in your inventory unconditionally.
-     *
-     * @param id the id of the item you want to clear from the inventory
-     * @param data the data of the item you want to clear from the inventory
-     * @return The number of items cleared
-     * @deprecated Magic value
-     */
-    @Deprecated
-    public int clear(int id, int data);
-
-    public HumanEntity getHolder();
 }

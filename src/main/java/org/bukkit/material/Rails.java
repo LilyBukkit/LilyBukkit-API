@@ -12,11 +12,6 @@ public class Rails extends MaterialData {
         super(Material.RAILS);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Rails(final int type) {
         super(type);
     }
@@ -25,20 +20,10 @@ public class Rails extends MaterialData {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Rails(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Rails(final Material type, final byte data) {
         super(type, data);
     }
@@ -62,11 +47,11 @@ public class Rails extends MaterialData {
     }
 
     /**
-     * @return the direction these tracks are set
-     *     <p>
-     *     Note that tracks are bidirectional and that the direction returned
-     *     is the ascending direction if the track is set on a slope. If it is
-     *     set as a curve, the corner of the track is returned.
+     * @return the direction these tracks are set <br>
+     *         Note that tracks are bidirectional and that the direction
+     *         returned is the ascending direction if the track is set on a
+     *         slope. If it is set as a curve, the corner of the track is
+     *         returned.
      */
     public BlockFace getDirection() {
         byte d = getConvertedData();
@@ -74,34 +59,34 @@ public class Rails extends MaterialData {
         switch (d) {
         case 0x0:
         default:
-            return BlockFace.SOUTH;
-
-        case 0x1:
-            return BlockFace.EAST;
-
-        case 0x2:
-            return BlockFace.EAST;
-
-        case 0x3:
             return BlockFace.WEST;
 
-        case 0x4:
-            return BlockFace.NORTH;
-
-        case 0x5:
+        case 0x1:
             return BlockFace.SOUTH;
 
-        case 0x6:
-            return BlockFace.NORTH_WEST;
+        case 0x2:
+            return BlockFace.SOUTH;
 
-        case 0x7:
+        case 0x3:
+            return BlockFace.NORTH;
+
+        case 0x4:
+            return BlockFace.EAST;
+
+        case 0x5:
+            return BlockFace.WEST;
+
+        case 0x6:
             return BlockFace.NORTH_EAST;
 
-        case 0x8:
+        case 0x7:
             return BlockFace.SOUTH_EAST;
 
-        case 0x9:
+        case 0x8:
             return BlockFace.SOUTH_WEST;
+
+        case 0x9:
+            return BlockFace.NORTH_WEST;
         }
     }
 
@@ -111,66 +96,55 @@ public class Rails extends MaterialData {
     }
 
     /**
-     * Return the data without the extended properties used by {@link
-     * PoweredRail} and {@link DetectorRail}. Overridden in {@link
-     * ExtendedRails}
-     *
+     * Return the data without the extended properties used by PoweredRail and DetectorRail. Overridden in xtendedRails
      * @return the data without the extended part
-     * @deprecated Magic value
      */
-    @Deprecated
     protected byte getConvertedData() {
         return getData();
     }
 
     /**
-     * Set the direction of these tracks
-     * <p>
-     * Note that tracks are bidirectional and that the direction returned is
-     * the ascending direction if the track is set on a slope. If it is set as
-     * a curve, the corner of the track should be supplied.
-     *
+     * Set the direction of these tracks<br>
+     *         Note that tracks are bidirectional and that the direction
+     *         returned is the ascending direction if the track is set on a
+     *         slope. If it is set as a curve, the corner of the track should
+     *         be supplied.
      * @param face the direction the track should be facing
      * @param isOnSlope whether or not the track should be on a slope
      */
     public void setDirection(BlockFace face, boolean isOnSlope) {
         switch (face) {
-        case EAST:
+        case SOUTH:
             setData((byte) (isOnSlope ? 0x2 : 0x1));
             break;
 
-        case WEST:
+        case NORTH:
             setData((byte) (isOnSlope ? 0x3 : 0x1));
             break;
 
-        case NORTH:
+        case EAST:
             setData((byte) (isOnSlope ? 0x4 : 0x0));
             break;
 
-        case SOUTH:
+        case WEST:
             setData((byte) (isOnSlope ? 0x5 : 0x0));
             break;
 
-        case NORTH_WEST:
+        case NORTH_EAST:
             setData((byte) 0x6);
             break;
 
-        case NORTH_EAST:
+        case SOUTH_EAST:
             setData((byte) 0x7);
             break;
 
-        case SOUTH_EAST:
+        case SOUTH_WEST:
             setData((byte) 0x8);
             break;
 
-        case SOUTH_WEST:
+        case NORTH_WEST:
             setData((byte) 0x9);
             break;
         }
-    }
-
-    @Override
-    public Rails clone() {
-        return (Rails) super.clone();
     }
 }

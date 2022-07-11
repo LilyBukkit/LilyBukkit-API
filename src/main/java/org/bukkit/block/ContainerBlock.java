@@ -1,11 +1,18 @@
 package org.bukkit.block;
 
-import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.Inventory;
 
 /**
  * Indicates a block type that has inventory.
  *
- * @deprecated in favour of {@link InventoryHolder}
+ * @author sk89q
  */
-@Deprecated
-public interface ContainerBlock extends InventoryHolder {}
+public interface ContainerBlock {
+
+    /**
+     * Get the block's inventory.
+     *
+     * @return
+     */
+    public Inventory getInventory();
+}

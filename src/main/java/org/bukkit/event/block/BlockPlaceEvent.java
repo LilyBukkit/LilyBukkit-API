@@ -4,16 +4,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Called when a block is placed by a player.
- * <p>
+ *<p />
  * If a Block Place event is cancelled, the block will not be placed.
  */
 public class BlockPlaceEvent extends BlockEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
     protected boolean cancel;
     protected boolean canBuild;
     protected Block placedAgainst;
@@ -21,8 +19,8 @@ public class BlockPlaceEvent extends BlockEvent implements Cancellable {
     protected ItemStack itemInHand;
     protected Player player;
 
-    public BlockPlaceEvent(final Block placedBlock, final BlockState replacedBlockState, final Block placedAgainst, final ItemStack itemInHand, final Player thePlayer, final boolean canBuild) {
-        super(placedBlock);
+    public BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) {
+        super(Type.BLOCK_PLACE, placedBlock);
         this.placedAgainst = placedAgainst;
         this.itemInHand = itemInHand;
         this.player = thePlayer;
@@ -49,8 +47,8 @@ public class BlockPlaceEvent extends BlockEvent implements Cancellable {
     }
 
     /**
-     * Clarity method for getting the placed block. Not really needed except
-     * for reasons of clarity.
+     * Clarity method for getting the placed block. Not really needed
+     * except for reasons of clarity.
      *
      * @return The Block that was placed
      */
@@ -59,8 +57,7 @@ public class BlockPlaceEvent extends BlockEvent implements Cancellable {
     }
 
     /**
-     * Gets the BlockState for the block which was replaced. Material type air
-     * mostly.
+     * Gets the BlockState for the block which was replaced. Material type air mostly.
      *
      * @return The BlockState for the block which was replaced.
      */
@@ -80,8 +77,7 @@ public class BlockPlaceEvent extends BlockEvent implements Cancellable {
     /**
      * Gets the item in the player's hand when they placed the block.
      *
-     * @return The ItemStack for the item in the player's hand when they
-     *     placed the block
+     * @return The ItemStack for the item in the player's hand when they placed the block
      */
     public ItemStack getItemInHand() {
         return itemInHand;
@@ -108,14 +104,5 @@ public class BlockPlaceEvent extends BlockEvent implements Cancellable {
      */
     public void setBuild(boolean canBuild) {
         this.canBuild = canBuild;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

@@ -5,11 +5,11 @@ import org.bukkit.Chunk;
 /**
  * Represents a Chunk related event
  */
-public abstract class ChunkEvent extends WorldEvent {
+public class ChunkEvent extends WorldEvent {
     protected Chunk chunk;
 
-    protected ChunkEvent(final Chunk chunk) {
-        super(chunk.getWorld());
+    protected ChunkEvent(Type type, Chunk chunk) {
+        super(type, chunk.getWorld());
         this.chunk = chunk;
     }
 

@@ -6,10 +6,12 @@ import org.bukkit.event.Event;
 /**
  * Represents events within a world
  */
-public abstract class WorldEvent extends Event {
+public class WorldEvent extends Event {
     private final World world;
 
-    public WorldEvent(final World world) {
+    public WorldEvent(final Type type, final World world) {
+        super(type);
+
         this.world = world;
     }
 

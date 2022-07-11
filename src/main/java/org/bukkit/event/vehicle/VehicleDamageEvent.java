@@ -3,25 +3,17 @@ package org.bukkit.event.vehicle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.bukkit.util.NumberConversions;
 
 /**
  * Raised when a vehicle receives damage.
  */
 public class VehicleDamageEvent extends VehicleEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final Entity attacker;
-    private double damage;
+    private Entity attacker;
+    private int damage;
     private boolean cancelled;
 
-    @Deprecated
-    public VehicleDamageEvent(final Vehicle vehicle, final Entity attacker, final int damage) {
-        this(vehicle, attacker, (double) damage);
-    }
-
-    public VehicleDamageEvent(final Vehicle vehicle, final Entity attacker, final double damage) {
-        super(vehicle);
+    public VehicleDamageEvent(Vehicle vehicle, Entity attacker, int damage) {
+        super(Type.VEHICLE_DAMAGE, vehicle);
         this.attacker = attacker;
         this.damage = damage;
     }
@@ -40,37 +32,17 @@ public class VehicleDamageEvent extends VehicleEvent implements Cancellable {
      *
      * @return the damage done to the vehicle
      */
-    public double getDamage() {
+    public int getDamage() {
         return damage;
-    }
-
-    /**
-     * This method exists for legacy reasons to provide backwards
-     * compatibility. It will not exist at runtime and should not be used
-     * under any circumstances.
-     */
-    @Deprecated
-    public int _INVALID_getDamage() {
-        return NumberConversions.ceil(getDamage());
     }
 
     /**
      * Sets the damage done to the vehicle
      *
-     * @param damage The damage
+     * @param damage
      */
-    public void setDamage(double damage) {
+    public void setDamage(int damage) {
         this.damage = damage;
-    }
-
-    /**
-     * This method exists for legacy reasons to provide backwards
-     * compatibility. It will not exist at runtime and should not be used
-     * under any circumstances.
-     */
-    @Deprecated
-    public void _INVALID_setDamage(int damage) {
-        setDamage(damage);
     }
 
     public boolean isCancelled() {
@@ -79,14 +51,5 @@ public class VehicleDamageEvent extends VehicleEvent implements Cancellable {
 
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

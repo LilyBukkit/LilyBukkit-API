@@ -1,3 +1,4 @@
+
 package org.bukkit.command;
 
 /**
@@ -9,15 +10,6 @@ public class MultipleCommandAlias extends Command {
     public MultipleCommandAlias(String name, Command[] commands) {
         super(name);
         this.commands = commands;
-    }
-
-    /**
-     * Gets the commands associated with the multi-command alias.
-     *
-     * @return commands associated with alias
-     */
-    public Command[] getCommands() {
-        return commands;
     }
 
     @Override

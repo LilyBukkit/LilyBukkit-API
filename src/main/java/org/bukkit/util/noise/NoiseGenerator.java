@@ -1,3 +1,4 @@
+
 package org.bukkit.util.noise;
 
 /**
@@ -11,7 +12,7 @@ public abstract class NoiseGenerator {
 
     /**
      * Speedy floor, faster than (int)Math.floor(x)
-     *
+     * 
      * @param x Value to floor
      * @return Floored value
      */
@@ -66,8 +67,7 @@ public abstract class NoiseGenerator {
     public abstract double noise(double x, double y, double z);
 
     /**
-     * Generates noise for the 1D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 1D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param octaves Number of octaves to use
@@ -80,8 +80,7 @@ public abstract class NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 1D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 1D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param octaves Number of octaves to use
@@ -95,8 +94,7 @@ public abstract class NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 2D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 2D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
@@ -110,8 +108,7 @@ public abstract class NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 2D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 2D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
@@ -126,8 +123,7 @@ public abstract class NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 3D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 3D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
@@ -142,8 +138,7 @@ public abstract class NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 3D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 3D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate

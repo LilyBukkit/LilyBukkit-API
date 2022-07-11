@@ -10,11 +10,6 @@ public class PressurePlate extends MaterialData implements PressureSensor {
         super(Material.WOOD_PLATE);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public PressurePlate(int type) {
         super(type);
     }
@@ -23,20 +18,10 @@ public class PressurePlate extends MaterialData implements PressureSensor {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public PressurePlate(int type, byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public PressurePlate(Material type, byte data) {
         super(type, data);
     }
@@ -48,10 +33,5 @@ public class PressurePlate extends MaterialData implements PressureSensor {
     @Override
     public String toString() {
         return super.toString() + (isPressed() ? " PRESSED" : "");
-    }
-
-    @Override
-    public PressurePlate clone() {
-        return (PressurePlate) super.clone();
     }
 }

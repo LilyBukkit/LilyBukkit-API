@@ -16,11 +16,6 @@ public class Leaves extends MaterialData {
         setSpecies(species);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Leaves(final int type) {
         super(type);
     }
@@ -29,20 +24,10 @@ public class Leaves extends MaterialData {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Leaves(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Leaves(final Material type, final byte data) {
         super(type, data);
     }
@@ -53,7 +38,7 @@ public class Leaves extends MaterialData {
      * @return TreeSpecies of this leave
      */
     public TreeSpecies getSpecies() {
-        return TreeSpecies.getByData((byte) (getData() & 3));
+        return TreeSpecies.getByData(getData());
     }
 
     /**
@@ -68,10 +53,5 @@ public class Leaves extends MaterialData {
     @Override
     public String toString() {
         return getSpecies() + " " + super.toString();
-    }
-
-    @Override
-    public Leaves clone() {
-        return (Leaves) super.clone();
     }
 }

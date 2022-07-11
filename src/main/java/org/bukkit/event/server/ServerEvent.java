@@ -5,5 +5,8 @@ import org.bukkit.event.Event;
 /**
  * Miscellaneous server events
  */
-public abstract class ServerEvent extends Event {
+public class ServerEvent extends Event {
+    public ServerEvent(final Type type) {
+        super(type);
+    }
 }

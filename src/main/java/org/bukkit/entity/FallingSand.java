@@ -1,9 +1,12 @@
+/**
+ *
+ */
 package org.bukkit.entity;
 
 /**
- * Represents a falling block.
+ * Represents Falling Sand.
  *
- * @deprecated See {@link FallingBlock}
+ * @author Cogito
+ *
  */
-@Deprecated
-public interface FallingSand extends FallingBlock {}
+public interface FallingSand extends Entity {}

@@ -6,16 +6,11 @@ import org.bukkit.Material;
 /**
  * Represents a lever
  */
-public class Lever extends SimpleAttachableMaterialData implements Redstone {
+public class Lever extends SimpleAttachableMaterialData implements Greenstone {
     public Lever() {
         super(Material.LEVER);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Lever(final int type) {
         super(type);
     }
@@ -24,20 +19,10 @@ public class Lever extends SimpleAttachableMaterialData implements Redstone {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Lever(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Lever(final Material type, final byte data) {
         super(type, data);
     }
@@ -54,7 +39,6 @@ public class Lever extends SimpleAttachableMaterialData implements Redstone {
 
     /**
      * Set this lever to be powered or not.
-     *
      * @param isPowered whether the lever should be powered or not
      */
     public void setPowered(boolean isPowered) {
@@ -71,25 +55,20 @@ public class Lever extends SimpleAttachableMaterialData implements Redstone {
 
         switch (data) {
         case 0x1:
-            return BlockFace.WEST;
-
-        case 0x2:
-            return BlockFace.EAST;
-
-        case 0x3:
             return BlockFace.NORTH;
 
-        case 0x4:
+        case 0x2:
             return BlockFace.SOUTH;
+
+        case 0x3:
+            return BlockFace.EAST;
+
+        case 0x4:
+            return BlockFace.WEST;
 
         case 0x5:
         case 0x6:
             return BlockFace.DOWN;
-
-        case 0x0:
-        case 0x7:
-            return BlockFace.UP;
-
         }
 
         return null;
@@ -100,47 +79,34 @@ public class Lever extends SimpleAttachableMaterialData implements Redstone {
      */
     public void setFacingDirection(BlockFace face) {
         byte data = (byte) (getData() & 0x8);
-        BlockFace attach = getAttachedFace();
 
-        if (attach == BlockFace.DOWN) {
+        if (getAttachedFace() == BlockFace.DOWN) {
             switch (face) {
-            case SOUTH:
-            case NORTH:
+            case WEST:
+            case EAST:
                 data |= 0x5;
                 break;
 
-            case EAST:
-            case WEST:
-                data |= 0x6;
-                break;
-            }
-        } else if (attach == BlockFace.UP) {
-            switch (face) {
             case SOUTH:
             case NORTH:
-                data |= 0x7;
-                break;
-
-            case EAST:
-            case WEST:
-                data |= 0x0;
+                data |= 0x6;
                 break;
             }
         } else {
             switch (face) {
-            case EAST:
+            case SOUTH:
                 data |= 0x1;
                 break;
 
-            case WEST:
+            case NORTH:
                 data |= 0x2;
                 break;
 
-            case SOUTH:
+            case WEST:
                 data |= 0x3;
                 break;
 
-            case NORTH:
+            case EAST:
                 data |= 0x4;
                 break;
             }
@@ -151,10 +117,5 @@ public class Lever extends SimpleAttachableMaterialData implements Redstone {
     @Override
     public String toString() {
         return super.toString() + " facing " + getFacing() + " " + (isPowered() ? "" : "NOT ") + "POWERED";
-    }
-
-    @Override
-    public Lever clone() {
-        return (Lever) super.clone();
     }
 }

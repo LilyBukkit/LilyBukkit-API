@@ -5,11 +5,14 @@ import org.bukkit.event.Event;
 
 /**
  * Represents a vehicle-related event.
+ *
+ * @author sk89q
  */
-public abstract class VehicleEvent extends Event {
+public class VehicleEvent extends Event {
     protected Vehicle vehicle;
 
-    public VehicleEvent(final Vehicle vehicle) {
+    public VehicleEvent(final Type type, final Vehicle vehicle) {
+        super(type);
         this.vehicle = vehicle;
     }
 

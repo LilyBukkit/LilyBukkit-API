@@ -2,30 +2,24 @@ package org.bukkit.event.block;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.event.HandlerList;
-
 /**
  * Called when a block spreads based on world conditions.
- * <p>
- * Use {@link BlockFormEvent} to catch blocks that "randomly" form instead of
- * actually spread.
- * <p>
+ * Use {@link BlockFormEvent} to catch blocks that "randomly" form instead of actually spread.
+ *<p />
  * Examples:
- * <ul>
- * <li>Mushrooms spreading.
- * <li>Fire spreading.
+ *<ul>
+ *     <li>Mushrooms spreading.</li>
+ *     <li>Fire spreading.</li>
  * </ul>
- * <p>
+ *<p />
  * If a Block Spread event is cancelled, the block will not spread.
- *
  * @see BlockFormEvent
  */
 public class BlockSpreadEvent extends BlockFormEvent {
-    private static final HandlerList handlers = new HandlerList();
-    private final Block source;
+    private Block source;
 
-    public BlockSpreadEvent(final Block block, final Block source, final BlockState newState) {
-        super(block, newState);
+    public BlockSpreadEvent(Block block, Block source, BlockState newState) {
+        super(Type.BLOCK_SPREAD, block, newState);
         this.source = source;
     }
 
@@ -36,14 +30,5 @@ public class BlockSpreadEvent extends BlockFormEvent {
      */
     public Block getSource() {
         return source;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

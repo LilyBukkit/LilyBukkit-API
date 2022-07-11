@@ -16,11 +16,6 @@ public class Crops extends MaterialData {
         setState(state);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Crops(final int type) {
         super(type);
     }
@@ -29,20 +24,10 @@ public class Crops extends MaterialData {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Crops(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Crops(final Material type, final byte data) {
         super(type, data);
     }
@@ -50,7 +35,7 @@ public class Crops extends MaterialData {
     /**
      * Gets the current growth state of this crop
      *
-     * @return CropState of this crop
+     * @return CropState of this leave
      */
     public CropState getState() {
         return CropState.getByData(getData());
@@ -68,10 +53,5 @@ public class Crops extends MaterialData {
     @Override
     public String toString() {
         return getState() + " " + super.toString();
-    }
-
-    @Override
-    public Crops clone() {
-        return (Crops) super.clone();
     }
 }

@@ -3,21 +3,19 @@ package org.bukkit.event.block;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
 
 /**
  * Called when a sign is changed by a player.
- * <p>
+ * <p />
  * If a Sign Change event is cancelled, the sign will not be changed.
  */
 public class SignChangeEvent extends BlockEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
     private boolean cancel = false;
-    private final Player player;
-    private final String[] lines;
+    private Player player;
+    private String[] lines;
 
-    public SignChangeEvent(final Block theBlock, final Player thePlayer, final String[] theLines) {
-        super(theBlock);
+    public SignChangeEvent(final Block theBlock, final Player thePlayer, String[] theLines) {
+        super(Type.SIGN_CHANGE, theBlock);
         this.player = thePlayer;
         this.lines = theLines;
     }
@@ -25,7 +23,7 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
     /**
      * Gets the player changing the sign involved in this event.
      *
-     * @return the Player involved in this event
+     * @return The Player involved in this event.
      */
     public Player getPlayer() {
         return player;
@@ -34,7 +32,7 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
     /**
      * Gets all of the lines of text from the sign involved in this event.
      *
-     * @return the String array for the sign's lines new text
+     * @return A String[] of the sign's lines of text
      */
     public String[] getLines() {
         return lines;
@@ -44,10 +42,8 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
      * Gets a single line of text from the sign involved in this event.
      *
      * @param index index of the line to get
-     * @return the String containing the line of text associated with the
-     *     provided index
-     * @throws IndexOutOfBoundsException thrown when the provided index is > 3
-     *     or < 0
+     * @return The String containing the line of text associated with the provided index
+     * @throws IndexOutOfBoundsException thrown when the provided index is > 4 and < 0
      */
     public String getLine(int index) throws IndexOutOfBoundsException {
         return lines[index];
@@ -58,8 +54,7 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
      *
      * @param index index of the line to set
      * @param line text to set
-     * @throws IndexOutOfBoundsException thrown when the provided index is > 3
-     *     or < 0
+     * @throws IndexOutOfBoundsException thrown when the provided index is > 4 and < 0
      */
     public void setLine(int index, String line) throws IndexOutOfBoundsException {
         lines[index] = line;
@@ -71,14 +66,5 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
 
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

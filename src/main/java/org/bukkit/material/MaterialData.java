@@ -6,15 +6,10 @@ import org.bukkit.Material;
 /**
  * Handles specific metadata for certain items or blocks
  */
-public class MaterialData implements Cloneable {
+public class MaterialData {
     private final int type;
     private byte data = 0;
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public MaterialData(final int type) {
         this(type, (byte) 0);
     }
@@ -23,21 +18,11 @@ public class MaterialData implements Cloneable {
         this(type, (byte) 0);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public MaterialData(final int type, final byte data) {
         this.type = type;
         this.data = data;
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public MaterialData(final Material type, final byte data) {
         this(type.getId(), data);
     }
@@ -46,9 +31,7 @@ public class MaterialData implements Cloneable {
      * Gets the raw data in this material
      *
      * @return Raw data
-     * @deprecated Magic value
      */
-    @Deprecated
     public byte getData() {
         return data;
     }
@@ -57,9 +40,7 @@ public class MaterialData implements Cloneable {
      * Sets the raw data of this material
      *
      * @param data New raw data
-     * @deprecated Magic value
      */
-    @Deprecated
     public void setData(byte data) {
         this.data = data;
     }
@@ -77,9 +58,7 @@ public class MaterialData implements Cloneable {
      * Gets the Material Id that this MaterialData represents
      *
      * @return Material Id represented by this MaterialData
-     * @deprecated Magic value
      */
-    @Deprecated
     public int getItemTypeId() {
         return type;
     }
@@ -96,7 +75,6 @@ public class MaterialData implements Cloneable {
     /**
      * Creates a new ItemStack based on this MaterialData
      *
-     * @param amount The stack size of the new stack
      * @return New ItemStack containing a copy of this MaterialData
      */
     public ItemStack toItemStack(int amount) {
@@ -121,15 +99,6 @@ public class MaterialData implements Cloneable {
             return (md.getItemTypeId() == getItemTypeId() && md.getData() == getData());
         } else {
             return false;
-        }
-    }
-
-    @Override
-    public MaterialData clone() {
-        try {
-            return (MaterialData) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new Error(e);
         }
     }
 }

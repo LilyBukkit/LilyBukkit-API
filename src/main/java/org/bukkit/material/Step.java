@@ -1,119 +1,85 @@
 package org.bukkit.material;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 import org.bukkit.Material;
 
 /**
  * Represents the different types of steps.
  */
-public class Step extends TexturedMaterial {
-    private static final List<Material> textures = new ArrayList<Material>();
+public class Step extends MaterialData {
+    private static HashSet<Material> stepTypes = new HashSet<Material>();
     static {
-        textures.add(Material.STONE);
-        textures.add(Material.SANDSTONE);
-        textures.add(Material.WOOD);
-        textures.add(Material.COBBLESTONE);
-        textures.add(Material.BRICK);
-        textures.add(Material.SMOOTH_BRICK);
-        textures.add(Material.NETHER_BRICK);
-        textures.add(Material.QUARTZ_BLOCK);
+        stepTypes.add(Material.WOOD);
+        stepTypes.add(Material.COBBLESTONE);
+        stepTypes.add(Material.STONE);
     }
 
     public Step() {
         super(Material.STEP);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Step(final int type) {
         super(type);
     }
 
     public Step(final Material type) {
-        super((textures.contains(type)) ? Material.STEP : type);
-        if (textures.contains(type)) {
+        super((stepTypes.contains(type)) ? Material.STEP : type);
+        if (stepTypes.contains(type)) {
             setMaterial(type);
         }
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Step(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Step(final Material type, final byte data) {
         super(type, data);
     }
 
-    @Override
-    public List<Material> getTextures() {
-        return textures;
-    }
-
     /**
-     * Test if step is inverted
+     * Gets the current Material this step is made of
      *
-     * @return true if inverted (top half), false if normal (bottom half)
+     * @return Material of this step
      */
-    public boolean isInverted() {
-        return ((getData() & 0x8) != 0);
-    }
+    public Material getMaterial() {
+        switch ((int) getData()) {
+        case 2:
+            return Material.WOOD;
 
-    /**
-     * Set step inverted state
-     *
-     * @param inv - true if step is inverted (top half), false if step is
-     *     normal (bottom half)
-     */
-    public void setInverted(boolean inv) {
-        int dat = getData() & 0x7;
-        if (inv) {
-            dat |= 0x8;
+        case 3:
+            return Material.COBBLESTONE;
+
+        case 0:
+        default:
+            return Material.STONE;
         }
-        setData((byte) dat);
     }
 
     /**
+     * Sets the material this step is made of
      *
-     * @deprecated Magic value
+     * @param material New material of this step
      */
-    @Deprecated
-    @Override
-    protected int getTextureIndex() {
-        return getData() & 0x7;
-    }
+    public void setMaterial(Material material) {
+        switch (material) {
+        case WOOD:
+            setData((byte) 0x2);
+            break;
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
-    @Override
-    protected void setTextureIndex(int idx) {
-        setData((byte) ((getData() & 0x8) | idx));
-    }
+        case COBBLESTONE:
+            setData((byte) 0x3);
+            break;
 
-    @Override
-    public Step clone() {
-        return (Step) super.clone();
+        case STONE:
+        default:
+            setData((byte) 0x0);
+        }
     }
 
     @Override
     public String toString() {
-        return super.toString() + (isInverted()?"inverted":"");
+        return getMaterial() + " " + super.toString();
     }
 }

@@ -2,18 +2,16 @@ package org.bukkit.event.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
 
 /**
  * Called when a player toggles their sneaking state
  */
 public class PlayerToggleSneakEvent extends PlayerEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final boolean isSneaking;
+    private boolean isSneaking;
     private boolean cancel = false;
 
-    public PlayerToggleSneakEvent(final Player player, final boolean isSneaking) {
-        super(player);
+    public PlayerToggleSneakEvent(final Player player, boolean isSneaking) {
+        super(Type.PLAYER_TOGGLE_SNEAK, player);
         this.isSneaking = isSneaking;
     }
 
@@ -32,14 +30,5 @@ public class PlayerToggleSneakEvent extends PlayerEvent implements Cancellable {
 
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

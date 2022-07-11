@@ -6,17 +6,12 @@ import org.bukkit.event.Event;
 /**
  * Represents a player related event
  */
-public abstract class PlayerEvent extends Event {
+public class PlayerEvent extends Event {
     protected Player player;
 
-    public PlayerEvent(final Player who) {
+    public PlayerEvent(final Type type, final Player who) {
+        super(type);
         player = who;
-    }
-
-    PlayerEvent(final Player who, boolean async) {
-        super(async);
-        player = who;
-
     }
 
     /**

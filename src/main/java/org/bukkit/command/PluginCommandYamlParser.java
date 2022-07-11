@@ -5,71 +5,52 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 public class PluginCommandYamlParser {
 
+    @SuppressWarnings("unchecked")
     public static List<Command> parse(Plugin plugin) {
         List<Command> pluginCmds = new ArrayList<Command>();
+        Object object = plugin.getDescription().getCommands();
 
-        Map<String, Map<String, Object>> map = plugin.getDescription().getCommands();
-
-        if (map == null) {
+        if (object == null) {
             return pluginCmds;
         }
 
-        for (Entry<String, Map<String, Object>> entry : map.entrySet()) {
-            if (entry.getKey().contains(":")) {
-                Bukkit.getServer().getLogger().severe("Could not load command " + entry.getKey() + " for plugin " + plugin.getName() + ": Illegal Characters");
-                continue;
-            }
-            Command newCmd = new PluginCommand(entry.getKey(), plugin);
-            Object description = entry.getValue().get("description");
-            Object usage = entry.getValue().get("usage");
-            Object aliases = entry.getValue().get("aliases");
-            Object permission = entry.getValue().get("permission");
-            Object permissionMessage = entry.getValue().get("permission-message");
+        Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) object;
 
-            if (description != null) {
-                newCmd.setDescription(description.toString());
-            }
+        if (map != null) {
+            for (Entry<String, Map<String, Object>> entry : map.entrySet()) {
+                Command newCmd = new PluginCommand(entry.getKey(), plugin);
+                Object description = entry.getValue().get("description");
+                Object usage = entry.getValue().get("usage");
+                Object aliases = entry.getValue().get("aliases");
 
-            if (usage != null) {
-                newCmd.setUsage(usage.toString());
-            }
+                if (description != null) {
+                    newCmd.setDescription(description.toString());
+                }
 
-            if (aliases != null) {
-                List<String> aliasList = new ArrayList<String>();
+                if (usage != null) {
+                    newCmd.setUsage(usage.toString());
+                }
 
-                if (aliases instanceof List) {
-                    for (Object o : (List<?>) aliases) {
-                        if (o.toString().contains(":")) {
-                            Bukkit.getServer().getLogger().severe("Could not load alias " + o.toString() + " for plugin " + plugin.getName() + ": Illegal Characters");
-                            continue;
+                if (aliases != null) {
+                    List<String> aliasList = new ArrayList<String>();
+
+                    if (aliases instanceof List) {
+                        for (Object o : (List<Object>) aliases) {
+                            aliasList.add(o.toString());
                         }
-                        aliasList.add(o.toString());
-                    }
-                } else {
-                    if (aliases.toString().contains(":")) {
-                        Bukkit.getServer().getLogger().severe("Could not load alias " + aliases.toString() + " for plugin " + plugin.getName() + ": Illegal Characters");
                     } else {
                         aliasList.add(aliases.toString());
                     }
+
+                    newCmd.setAliases(aliasList);
                 }
 
-                newCmd.setAliases(aliasList);
+                pluginCmds.add(newCmd);
             }
-
-            if (permission != null) {
-                newCmd.setPermission(permission.toString());
-            }
-
-            if (permissionMessage != null) {
-                newCmd.setPermissionMessage(permissionMessage.toString());
-            }
-
-            pluginCmds.add(newCmd);
         }
         return pluginCmds;
     }

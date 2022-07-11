@@ -6,16 +6,11 @@ import org.bukkit.Material;
 /**
  * Represents a button
  */
-public class Button extends SimpleAttachableMaterialData implements Redstone {
+public class Button extends SimpleAttachableMaterialData implements Greenstone {
     public Button() {
         super(Material.STONE_BUTTON);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Button(final int type) {
         super(type);
     }
@@ -24,20 +19,10 @@ public class Button extends SimpleAttachableMaterialData implements Redstone {
         super(type);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Button(final int type, final byte data) {
         super(type, data);
     }
 
-    /**
-     *
-     * @deprecated Magic value
-     */
-    @Deprecated
     public Button(final Material type, final byte data) {
         super(type, data);
     }
@@ -72,16 +57,16 @@ public class Button extends SimpleAttachableMaterialData implements Redstone {
 
         switch (data) {
         case 0x1:
-            return BlockFace.WEST;
-
-        case 0x2:
-            return BlockFace.EAST;
-
-        case 0x3:
             return BlockFace.NORTH;
 
-        case 0x4:
+        case 0x2:
             return BlockFace.SOUTH;
+
+        case 0x3:
+            return BlockFace.EAST;
+
+        case 0x4:
+            return BlockFace.WEST;
         }
 
         return null;
@@ -94,19 +79,19 @@ public class Button extends SimpleAttachableMaterialData implements Redstone {
         byte data = (byte) (getData() & 0x8);
 
         switch (face) {
-        case EAST:
+        case SOUTH:
             data |= 0x1;
             break;
 
-        case WEST:
+        case NORTH:
             data |= 0x2;
             break;
 
-        case SOUTH:
+        case WEST:
             data |= 0x3;
             break;
 
-        case NORTH:
+        case EAST:
             data |= 0x4;
             break;
         }
@@ -117,10 +102,5 @@ public class Button extends SimpleAttachableMaterialData implements Redstone {
     @Override
     public String toString() {
         return super.toString() + " " + (isPowered() ? "" : "NOT ") + "POWERED";
-    }
-
-    @Override
-    public Button clone() {
-        return (Button) super.clone();
     }
 }

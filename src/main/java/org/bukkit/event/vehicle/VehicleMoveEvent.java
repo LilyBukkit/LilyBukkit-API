@@ -2,18 +2,18 @@ package org.bukkit.event.vehicle;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.event.HandlerList;
 
 /**
  * Raised when a vehicle moves.
+ *
+ * @author sk89q
  */
 public class VehicleMoveEvent extends VehicleEvent {
-    private static final HandlerList handlers = new HandlerList();
-    private final Location from;
-    private final Location to;
+    private Location from;
+    private Location to;
 
-    public VehicleMoveEvent(final Vehicle vehicle, final Location from, final Location to) {
-        super(vehicle);
+    public VehicleMoveEvent(Vehicle vehicle, Location from, Location to) {
+        super(Type.VEHICLE_MOVE, vehicle);
 
         this.from = from;
         this.to = to;
@@ -22,7 +22,7 @@ public class VehicleMoveEvent extends VehicleEvent {
     /**
      * Get the previous position.
      *
-     * @return Old position.
+     * @return
      */
     public Location getFrom() {
         return from;
@@ -31,19 +31,9 @@ public class VehicleMoveEvent extends VehicleEvent {
     /**
      * Get the next position.
      *
-     * @return New position.
+     * @return
      */
     public Location getTo() {
         return to;
-    }
-
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

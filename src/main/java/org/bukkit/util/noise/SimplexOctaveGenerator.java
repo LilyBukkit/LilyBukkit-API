@@ -1,3 +1,4 @@
+
 package org.bukkit.util.noise;
 
 import java.util.Random;
@@ -8,7 +9,7 @@ import org.bukkit.World;
  */
 public class SimplexOctaveGenerator extends OctaveGenerator {
     private double wScale = 1;
-
+    
     /**
      * Creates a simplex octave generator for the given world
      *
@@ -64,13 +65,12 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
     }
 
     /**
-     * Generates noise for the 3D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 3D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
      * @param z Z-coordinate
-     * @param w W-coordinate
+     * @para, w W-coordinate
      * @param frequency How much to alter the frequency by each octave
      * @param amplitude How much to alter the amplitude by each octave
      * @return Resulting noise
@@ -80,13 +80,12 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
     }
 
     /**
-     * Generates noise for the 3D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 3D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
      * @param z Z-coordinate
-     * @param w W-coordinate
+     * @para, w W-coordinate
      * @param frequency How much to alter the frequency by each octave
      * @param amplitude How much to alter the amplitude by each octave
      * @param normalized If true, normalize the value to [-1, 1]
@@ -103,8 +102,8 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
         z *= zScale;
         w *= wScale;
 
-        for (NoiseGenerator octave : octaves) {
-            result += ((SimplexNoiseGenerator) octave).noise(x * freq, y * freq, z * freq, w * freq) * amp;
+        for (int i = 0; i < octaves.length; i++) {
+            result += ((SimplexNoiseGenerator)octaves[i]).noise(x * freq, y * freq, z * freq, w * freq) * amp;
             max += amp;
             freq *= frequency;
             amp *= amplitude;

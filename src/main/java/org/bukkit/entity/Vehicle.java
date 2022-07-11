@@ -4,6 +4,8 @@ import org.bukkit.util.Vector;
 
 /**
  * Represents a vehicle entity.
+ *
+ * @author sk89q
  */
 public interface Vehicle extends Entity {
 

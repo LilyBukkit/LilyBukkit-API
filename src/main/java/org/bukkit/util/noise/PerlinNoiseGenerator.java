@@ -5,9 +5,8 @@ import org.bukkit.World;
 
 /**
  * Generates noise using the "classic" perlin generator
- *
- * @see SimplexNoiseGenerator "Improved" and faster version with slighly
- *     different results
+ * 
+ * @see SimplexNoiseGenerator "Improved" and faster version with slighly different results
  */
 public class PerlinNoiseGenerator extends NoiseGenerator {
     protected static final int grad3[][] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
@@ -83,8 +82,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Computes and returns the 1D unseeded perlin noise for the given
-     * coordinates in 1D space
+     * Computes and returns the 1D unseeded perlin noise for the given coordinates in 1D space
      *
      * @param x X coordinate
      * @return Noise at given location, from range -1 to 1
@@ -94,8 +92,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Computes and returns the 2D unseeded perlin noise for the given
-     * coordinates in 2D space
+     * Computes and returns the 2D unseeded perlin noise for the given coordinates in 2D space
      *
      * @param x X coordinate
      * @param y Y coordinate
@@ -106,8 +103,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Computes and returns the 3D unseeded perlin noise for the given
-     * coordinates in 3D space
+     * Computes and returns the 3D unseeded perlin noise for the given coordinates in 3D space
      *
      * @param x X coordinate
      * @param y Y coordinate
@@ -171,8 +167,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 1D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 1D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param octaves Number of octaves to use
@@ -185,8 +180,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 2D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 2D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate
@@ -200,8 +194,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator {
     }
 
     /**
-     * Generates noise for the 3D coordinates using the specified number of
-     * octaves and parameters
+     * Generates noise for the 3D coordinates using the specified number of octaves and parameters
      *
      * @param x X-coordinate
      * @param y Y-coordinate

@@ -6,10 +6,11 @@ import org.bukkit.event.Event;
 /**
  * Represents a block related event.
  */
-public abstract class BlockEvent extends Event {
+public class BlockEvent extends Event {
     protected Block block;
 
-    public BlockEvent(final Block theBlock) {
+    public BlockEvent(final Type type, final Block theBlock) {
+        super(type);
         block = theBlock;
     }
 

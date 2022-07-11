@@ -1,23 +1,18 @@
 package org.bukkit.plugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.server.ServiceRegisterEvent;
-import org.bukkit.event.server.ServiceUnregisterEvent;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  * A simple services manager.
+ *
+ * @author sk89q
  */
 public class SimpleServicesManager implements ServicesManager {
 
@@ -35,36 +30,31 @@ public class SimpleServicesManager implements ServicesManager {
      * @param plugin plugin with the provider
      * @param priority priority of the provider
      */
-    public <T> void register(Class<T> service, T provider, Plugin plugin, ServicePriority priority) {
-        RegisteredServiceProvider<T> registeredProvider = null;
+    public <T> void register(Class<T> service, T provider,
+            Plugin plugin, ServicePriority priority) {
+
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
+
             if (registered == null) {
                 registered = new ArrayList<RegisteredServiceProvider<?>>();
                 providers.put(service, registered);
             }
 
-            registeredProvider = new RegisteredServiceProvider<T>(service, provider, priority, plugin);
+            registered.add(new RegisteredServiceProvider<T>(service, provider, priority, plugin));
 
-            // Insert the provider into the collection, much more efficient big O than sort
-            int position = Collections.binarySearch(registered, registeredProvider);
-            if (position < 0) {
-                registered.add(-(position + 1), registeredProvider);
-            } else {
-                registered.add(position, registeredProvider);
-            }
-
+            // Make sure that providers are in the right order in order
+            // for priorities to work correctly
+            Collections.sort(registered);
         }
-        Bukkit.getServer().getPluginManager().callEvent(new ServiceRegisterEvent(registeredProvider));
     }
 
     /**
      * Unregister all the providers registered by a particular plugin.
      *
-     * @param plugin The plugin
+     * @param plugin
      */
     public void unregisterAll(Plugin plugin) {
-        ArrayList<ServiceUnregisterEvent> unregisteredEvents = new ArrayList<ServiceUnregisterEvent>();
         synchronized (providers) {
             Iterator<Map.Entry<Class<?>, List<RegisteredServiceProvider<?>>>> it = providers.entrySet().iterator();
 
@@ -77,11 +67,8 @@ public class SimpleServicesManager implements ServicesManager {
                         // Removed entries that are from this plugin
 
                         while (it2.hasNext()) {
-                            RegisteredServiceProvider<?> registered = it2.next();
-
-                            if (registered.getPlugin().equals(plugin)) {
+                            if (it2.next().getPlugin() == plugin) {
                                 it2.remove();
-                                unregisteredEvents.add(new ServiceUnregisterEvent(registered));
                             }
                         }
                     } catch (NoSuchElementException e) { // Why does Java suck
@@ -94,19 +81,15 @@ public class SimpleServicesManager implements ServicesManager {
                 }
             } catch (NoSuchElementException e) {}
         }
-        for (ServiceUnregisterEvent event : unregisteredEvents) {
-            Bukkit.getServer().getPluginManager().callEvent(event);
-        }
     }
 
     /**
      * Unregister a particular provider for a particular service.
      *
-     * @param service The service interface
-     * @param provider The service provider implementation
+     * @param service
+     * @param provider
      */
     public void unregister(Class<?> service, Object provider) {
-        ArrayList<ServiceUnregisterEvent> unregisteredEvents = new ArrayList<ServiceUnregisterEvent>();
         synchronized (providers) {
             Iterator<Map.Entry<Class<?>, List<RegisteredServiceProvider<?>>>> it = providers.entrySet().iterator();
 
@@ -125,11 +108,8 @@ public class SimpleServicesManager implements ServicesManager {
                         // Removed entries that are from this plugin
 
                         while (it2.hasNext()) {
-                            RegisteredServiceProvider<?> registered = it2.next();
-
-                            if (registered.getProvider() == provider) {
+                            if (it2.next().getProvider() == provider) {
                                 it2.remove();
-                                unregisteredEvents.add(new ServiceUnregisterEvent(registered));
                             }
                         }
                     } catch (NoSuchElementException e) { // Why does Java suck
@@ -142,18 +122,14 @@ public class SimpleServicesManager implements ServicesManager {
                 }
             } catch (NoSuchElementException e) {}
         }
-        for (ServiceUnregisterEvent event : unregisteredEvents) {
-            Bukkit.getServer().getPluginManager().callEvent(event);
-        }
     }
 
     /**
      * Unregister a particular provider.
      *
-     * @param provider The service provider implementation
+     * @param provider
      */
     public void unregister(Object provider) {
-        ArrayList<ServiceUnregisterEvent> unregisteredEvents = new ArrayList<ServiceUnregisterEvent>();
         synchronized (providers) {
             Iterator<Map.Entry<Class<?>, List<RegisteredServiceProvider<?>>>> it = providers.entrySet().iterator();
 
@@ -166,11 +142,8 @@ public class SimpleServicesManager implements ServicesManager {
                         // Removed entries that are from this plugin
 
                         while (it2.hasNext()) {
-                            RegisteredServiceProvider<?> registered = it2.next();
-
-                            if (registered.getProvider().equals(provider)) {
+                            if (it2.next().getProvider() == provider) {
                                 it2.remove();
-                                unregisteredEvents.add(new ServiceUnregisterEvent(registered));
                             }
                         }
                     } catch (NoSuchElementException e) { // Why does Java suck
@@ -183,19 +156,17 @@ public class SimpleServicesManager implements ServicesManager {
                 }
             } catch (NoSuchElementException e) {}
         }
-        for (ServiceUnregisterEvent event : unregisteredEvents) {
-            Bukkit.getServer().getPluginManager().callEvent(event);
-        }
     }
 
     /**
      * Queries for a provider. This may return if no provider has been
      * registered for a service. The highest priority provider is returned.
      *
-     * @param <T> The service interface
-     * @param service The service interface
+     * @param <T>
+     * @param service
      * @return provider or null
      */
+    @SuppressWarnings("unchecked")
     public <T> T load(Class<T> service) {
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
@@ -205,7 +176,7 @@ public class SimpleServicesManager implements ServicesManager {
             }
 
             // This should not be null!
-            return service.cast(registered.get(0).getProvider());
+            return (T) registered.get(0).getProvider();
         }
     }
 
@@ -213,8 +184,8 @@ public class SimpleServicesManager implements ServicesManager {
      * Queries for a provider registration. This may return if no provider
      * has been registered for a service.
      *
-     * @param <T> The service interface
-     * @param service The service interface
+     * @param <T>
+     * @param service
      * @return provider registration or null
      */
     @SuppressWarnings("unchecked")
@@ -234,73 +205,72 @@ public class SimpleServicesManager implements ServicesManager {
     /**
      * Get registrations of providers for a plugin.
      *
-     * @param plugin The plugin
+     * @param plugin
      * @return provider registration or null
      */
     public List<RegisteredServiceProvider<?>> getRegistrations(Plugin plugin) {
-        ImmutableList.Builder<RegisteredServiceProvider<?>> ret = ImmutableList.<RegisteredServiceProvider<?>>builder();
         synchronized (providers) {
+            List<RegisteredServiceProvider<?>> ret = new ArrayList<RegisteredServiceProvider<?>>();
+
             for (List<RegisteredServiceProvider<?>> registered : providers.values()) {
                 for (RegisteredServiceProvider<?> provider : registered) {
-                    if (provider.getPlugin().equals(plugin)) {
+                    if (provider.getPlugin() == plugin) {
                         ret.add(provider);
                     }
                 }
             }
+
+            return ret;
         }
-        return ret.build();
     }
 
     /**
      * Get registrations of providers for a service. The returned list is
-     * an unmodifiable copy.
+     * unmodifiable.
      *
-     * @param <T> The service interface
-     * @param service The service interface
-     * @return a copy of the list of registrations
+     * @param <T>
+     * @param service
+     * @return list of registrations
      */
     @SuppressWarnings("unchecked")
-    public <T> List<RegisteredServiceProvider<T>> getRegistrations(Class<T> service) {
-        ImmutableList.Builder<RegisteredServiceProvider<T>> ret;
+    public <T> Collection<RegisteredServiceProvider<T>> getRegistrations(Class<T> service) {
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
 
             if (registered == null) {
-                return ImmutableList.<RegisteredServiceProvider<T>>of();
+                return Collections.unmodifiableList(new ArrayList<RegisteredServiceProvider<T>>());
             }
 
-            ret = ImmutableList.<RegisteredServiceProvider<T>>builder();
+            List<RegisteredServiceProvider<T>> ret = new ArrayList<RegisteredServiceProvider<T>>();
 
             for (RegisteredServiceProvider<?> provider : registered) {
                 ret.add((RegisteredServiceProvider<T>) provider);
             }
 
+            return Collections.unmodifiableList(ret);
         }
-        return ret.build();
     }
 
     /**
      * Get a list of known services. A service is known if it has registered
      * providers for it.
      *
-     * @return a copy of the set of known services
+     * @return list of known services
      */
-    public Set<Class<?>> getKnownServices() {
-        synchronized (providers) {
-            return ImmutableSet.<Class<?>>copyOf(providers.keySet());
-        }
+    public Collection<Class<?>> getKnownServices() {
+        return Collections.unmodifiableSet(providers.keySet());
     }
 
     /**
-     * Returns whether a provider has been registered for a service.
+     * Returns whether a provider has been registered for a service. Do not
+     * check this first only to call <code>load(service)</code> later, as that
+     * would be a non-thread safe situation.
      *
      * @param <T> service
      * @param service service to check
-     * @return true if and only if there are registered providers
+     * @return whether there has been a registered provider
      */
     public <T> boolean isProvidedFor(Class<T> service) {
-        synchronized (providers) {
-            return providers.containsKey(service);
-        }
+        return getRegistration(service) != null;
     }
 }

@@ -1,42 +1,44 @@
 package org.bukkit.util;
 
-import static org.bukkit.util.NumberConversions.*;
-
-import org.bukkit.World;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.World;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.lang.IllegalStateException;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
+ *
+ * @author raphfrk
  */
+
 public class BlockIterator implements Iterator<Block> {
 
-    private final World world;
-    private final int maxDistance;
+    private final World  world;
+    private final int    maxDistance;
 
-    private static final int gridSize = 1 << 24;
+    private static final int    gridSize = 1 << 24;
 
-    private boolean end = false;
+    private boolean      end = false;
 
-    private Block[] blockQueue = new Block[3];
-    private int currentBlock = 0;
-    private int currentDistance = 0;
-    private int maxDistanceInt;
+    private Block[]      blockQueue = new Block[3];
+    private int          currentBlock = 0;
+    private int          currentDistance = 0;
+    private int          maxDistanceInt;
 
-    private int secondError;
-    private int thirdError;
+    private int          secondError;
+    private int          thirdError;
 
-    private int secondStep;
-    private int thirdStep;
+    private int          secondStep;
+    private int          thirdStep;
 
     private BlockFace mainFace;
-    private BlockFace secondFace;
-    private BlockFace thirdFace;
+    private BlockFace    secondFace;
+    private BlockFace    thirdFace;
 
     /**
      * Constructs the BlockIterator
@@ -44,13 +46,11 @@ public class BlockIterator implements Iterator<Block> {
      * @param world The world to use for tracing
      * @param start A Vector giving the initial location for the trace
      * @param direction A Vector pointing in the direction for the trace
-     * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
-     * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
+     * @param yOffset The trace begins vertically offset from the start vector by this value
+     * @param maxDistance This is the maximum distance in blocks for the trace. Setting this value above 140 may lead to problems with unloaded chunks. A value of 0 indicates no limit
      *
      */
+
     public BlockIterator(World world, Vector start, Vector direction, double yOffset, int maxDistance) {
         this.world = world;
         this.maxDistance = maxDistance;
@@ -69,7 +69,7 @@ public class BlockIterator implements Iterator<Block> {
         double secondPosition = 0;
         double thirdPosition = 0;
 
-        Block startBlock = this.world.getBlockAt(floor(startClone.getX()), floor(startClone.getY()), floor(startClone.getZ()));
+        Block startBlock = world.getBlockAt((int) Math.floor(startClone.getX()), (int) Math.floor(startClone.getY()), (int) Math.floor(startClone.getZ()));
 
         if (getXLength(direction) > mainDirection) {
             mainFace = getXFace(direction);
@@ -120,10 +120,10 @@ public class BlockIterator implements Iterator<Block> {
         // Guarantee that the ray will pass though the start block.
         // It is possible that it would miss due to rounding
         // This should only move the ray by 1 grid position
-        secondError = floor(secondd * gridSize);
-        secondStep = round(secondDirection / mainDirection * gridSize);
-        thirdError = floor(thirdd * gridSize);
-        thirdStep = round(thirdDirection / mainDirection * gridSize);
+        secondError = (int) (Math.floor(secondd * gridSize));
+        secondStep = (int) (Math.round(secondDirection / mainDirection * gridSize));
+        thirdError = (int) (Math.floor(thirdd * gridSize));
+        thirdStep = (int) (Math.round(thirdDirection / mainDirection * gridSize));
 
         if (secondError + secondStep <= 0) {
             secondError = -secondStep + 1;
@@ -135,16 +135,16 @@ public class BlockIterator implements Iterator<Block> {
 
         Block lastBlock;
 
-        lastBlock = startBlock.getRelative(mainFace.getOppositeFace());
+        lastBlock = startBlock.getRelative(reverseFace(mainFace));
 
         if (secondError < 0) {
             secondError += gridSize;
-            lastBlock = lastBlock.getRelative(secondFace.getOppositeFace());
+            lastBlock = lastBlock.getRelative(reverseFace(secondFace));
         }
 
         if (thirdError < 0) {
             thirdError += gridSize;
-            lastBlock = lastBlock.getRelative(thirdFace.getOppositeFace());
+            lastBlock = lastBlock.getRelative(reverseFace(thirdFace));
         }
 
         // This means that when the variables are positive, it means that the coord=1 boundary has been crossed
@@ -171,7 +171,7 @@ public class BlockIterator implements Iterator<Block> {
         }
 
         // Calculate the number of planes passed to give max distance
-        maxDistanceInt = round(maxDistance / (Math.sqrt(mainDirection * mainDirection + secondDirection * secondDirection + thirdDirection * thirdDirection) / mainDirection));
+        maxDistanceInt = (int) Math.round(maxDistance / (Math.sqrt(mainDirection * mainDirection + secondDirection * secondDirection + thirdDirection * thirdDirection) / mainDirection));
 
     }
 
@@ -179,8 +179,33 @@ public class BlockIterator implements Iterator<Block> {
         return a.getX() == b.getX() && a.getY() == b.getY() && a.getZ() == b.getZ();
     }
 
+    private BlockFace reverseFace(BlockFace face) {
+        switch (face) {
+        case UP:
+            return BlockFace.DOWN;
+
+        case DOWN:
+            return BlockFace.UP;
+
+        case NORTH:
+            return BlockFace.SOUTH;
+
+        case SOUTH:
+            return BlockFace.NORTH;
+
+        case EAST:
+            return BlockFace.WEST;
+
+        case WEST:
+            return BlockFace.EAST;
+
+        default:
+            return null;
+        }
+    }
+
     private BlockFace getXFace(Vector direction) {
-        return ((direction.getX() > 0) ? BlockFace.EAST : BlockFace.WEST);
+        return ((direction.getX() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
     }
 
     private BlockFace getYFace(Vector direction) {
@@ -188,19 +213,19 @@ public class BlockIterator implements Iterator<Block> {
     }
 
     private BlockFace getZFace(Vector direction) {
-        return ((direction.getZ() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
+        return ((direction.getZ() > 0) ? BlockFace.WEST : BlockFace.EAST);
     }
 
     private double getXLength(Vector direction) {
-        return Math.abs(direction.getX());
+        return(Math.abs(direction.getX()));
     }
 
     private double getYLength(Vector direction) {
-        return Math.abs(direction.getY());
+        return(Math.abs(direction.getY()));
     }
 
     private double getZLength(Vector direction) {
-        return Math.abs(direction.getZ());
+        return(Math.abs(direction.getZ()));
     }
 
     private double getPosition(double direction, double position, int blockPosition) {
@@ -223,12 +248,11 @@ public class BlockIterator implements Iterator<Block> {
      * Constructs the BlockIterator
      *
      * @param loc The location for the start of the ray trace
-     * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
-     * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
+     * @param yOffset The trace begins vertically offset from the start vector by this value
+     * @param maxDistance This is the maximum distance in blocks for the trace. Setting this value above 140 may lead to problems with unloaded chunks. A value of 0 indicates no limit
+     *
      */
+
     public BlockIterator(Location loc, double yOffset, int maxDistance) {
         this(loc.getWorld(), loc.toVector(), loc.getDirection(), yOffset, maxDistance);
     }
@@ -237,8 +261,8 @@ public class BlockIterator implements Iterator<Block> {
      * Constructs the BlockIterator.
      *
      * @param loc The location for the start of the ray trace
-     * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
+     * @param yOffset The trace begins vertically offset from the start vector by this value
+     *
      */
 
     public BlockIterator(Location loc, double yOffset) {
@@ -249,6 +273,7 @@ public class BlockIterator implements Iterator<Block> {
      * Constructs the BlockIterator.
      *
      * @param loc The location for the start of the ray trace
+     *
      */
 
     public BlockIterator(Location loc) {
@@ -259,9 +284,8 @@ public class BlockIterator implements Iterator<Block> {
      * Constructs the BlockIterator.
      *
      * @param entity Information from the entity is used to set up the trace
-     * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
+     * @param maxDistance  This is the maximum distance in blocks for the trace. Setting this value above 140 may lead to problems with unloaded chunks. A value of 0 indicates no limit
+     *
      */
 
     public BlockIterator(LivingEntity entity, int maxDistance) {
@@ -272,6 +296,7 @@ public class BlockIterator implements Iterator<Block> {
      * Constructs the BlockIterator.
      *
      * @param entity Information from the entity is used to set up the trace
+     *
      */
 
     public BlockIterator(LivingEntity entity) {
@@ -280,6 +305,7 @@ public class BlockIterator implements Iterator<Block> {
 
     /**
      * Returns true if the iteration has more elements
+     *
      */
 
     public boolean hasNext() {

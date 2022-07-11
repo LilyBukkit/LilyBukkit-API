@@ -4,98 +4,98 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.lang.reflect.Constructor;
+import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
-import org.bukkit.Warning;
-import org.bukkit.Warning.WarningState;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.CustomEventListener;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.AuthorNagException;
-import org.bukkit.plugin.EventExecutor;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.RegisteredListener;
-import org.bukkit.plugin.TimedRegisteredListener;
-import org.bukkit.plugin.UnknownDependencyException;
+import org.bukkit.event.block.*;
+import org.bukkit.event.painting.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.event.server.*;
+import org.bukkit.event.vehicle.*;
+import org.bukkit.event.world.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.plugin.*;
 import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Represents a Java plugin loader, allowing plugins in the form of .jar
  */
 public final class JavaPluginLoader implements PluginLoader {
-    final Server server;
-    private final Pattern[] fileFilters = new Pattern[] { Pattern.compile("\\.jar$"), };
+    private final Server server;
+    private final Pattern[] fileFilters = new Pattern[] {
+        Pattern.compile("\\.jar$"),
+    };
     private final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
-    private final Map<String, PluginClassLoader> loaders = new LinkedHashMap<String, PluginClassLoader>();
+    private final Map<String, PluginClassLoader> loaders = new HashMap<String, PluginClassLoader>();
 
-    /**
-     * This class was not meant to be constructed explicitly
-     */
-    @Deprecated
     public JavaPluginLoader(Server instance) {
-        Validate.notNull(instance, "Server cannot be null");
         server = instance;
     }
 
-    public Plugin loadPlugin(final File file) throws InvalidPluginException {
-        Validate.notNull(file, "File cannot be null");
+    public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
+        return loadPlugin(file, false);
+    }
+
+    public Plugin loadPlugin(File file, boolean ignoreSoftDependencies) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
+        JavaPlugin result = null;
+        PluginDescriptionFile description = null;
 
         if (!file.exists()) {
-            throw new InvalidPluginException(new FileNotFoundException(file.getPath() + " does not exist"));
+            throw new InvalidPluginException(new FileNotFoundException(String.format("%s does not exist", file.getPath())));
         }
-
-        final PluginDescriptionFile description;
         try {
-            description = getPluginDescription(file);
-        } catch (InvalidDescriptionException ex) {
+            JarFile jar = new JarFile(file);
+            JarEntry entry = jar.getJarEntry("plugin.yml");
+
+            if (entry == null) {
+                throw new InvalidPluginException(new FileNotFoundException("Jar does not contain plugin.yml"));
+            }
+
+            InputStream stream = jar.getInputStream(entry);
+
+            description = new PluginDescriptionFile(stream);
+
+            stream.close();
+            jar.close();
+        } catch (IOException ex) {
+            throw new InvalidPluginException(ex);
+        } catch (YAMLException ex) {
             throw new InvalidPluginException(ex);
         }
 
-        final File parentFile = file.getParentFile();
-        final File dataFolder = new File(parentFile, description.getName());
-        @SuppressWarnings("deprecation")
-        final File oldDataFolder = new File(parentFile, description.getRawName());
+        File dataFolder = new File(file.getParentFile(), description.getName());
+        File oldDataFolder = getDataFolder(file);
 
         // Found old data folder
         if (dataFolder.equals(oldDataFolder)) {
             // They are equal -- nothing needs to be done!
         } else if (dataFolder.isDirectory() && oldDataFolder.isDirectory()) {
-            server.getLogger().warning(String.format(
-                "While loading %s (%s) found old-data folder: `%s' next to the new one `%s'",
-                description.getFullName(),
+            server.getLogger().log(Level.INFO, String.format(
+                "While loading %s (%s) found old-data folder: %s next to the new one: %s",
+                description.getName(),
                 file,
                 oldDataFolder,
                 dataFolder
             ));
         } else if (oldDataFolder.isDirectory() && !dataFolder.exists()) {
             if (!oldDataFolder.renameTo(dataFolder)) {
-                throw new InvalidPluginException("Unable to rename old data folder: `" + oldDataFolder + "' to: `" + dataFolder + "'");
+                throw new InvalidPluginException(new Exception("Unable to rename old data folder: '" + oldDataFolder + "' to: '" + dataFolder + "'"));
             }
             server.getLogger().log(Level.INFO, String.format(
-                "While loading %s (%s) renamed data folder: `%s' to `%s'",
-                description.getFullName(),
+                "While loading %s (%s) renamed data folder: '%s' to '%s'",
+                description.getName(),
                 file,
                 oldDataFolder,
                 dataFolder
@@ -103,15 +103,26 @@ public final class JavaPluginLoader implements PluginLoader {
         }
 
         if (dataFolder.exists() && !dataFolder.isDirectory()) {
-            throw new InvalidPluginException(String.format(
-                "Projected datafolder: `%s' for %s (%s) exists and is not a directory",
+            throw new InvalidPluginException(new Exception(String.format(
+                "Projected datafolder: '%s' for %s (%s) exists and is not a directory",
                 dataFolder,
-                description.getFullName(),
+                description.getName(),
                 file
-            ));
+            )));
         }
 
-        for (final String pluginName : description.getDepend()) {
+        ArrayList<String> depend;
+
+        try {
+            depend = (ArrayList) description.getDepend();
+            if (depend == null) {
+                depend = new ArrayList<String>();
+            }
+        } catch (ClassCastException ex) {
+            throw new InvalidPluginException(ex);
+        }
+
+        for (String pluginName : depend) {
             if (loaders == null) {
                 throw new UnknownDependencyException(pluginName);
             }
@@ -122,63 +133,79 @@ public final class JavaPluginLoader implements PluginLoader {
             }
         }
 
-        final PluginClassLoader loader;
+        if (!ignoreSoftDependencies) {
+            ArrayList<String> softDepend;
+
+            try {
+                softDepend = (ArrayList) description.getSoftDepend();
+                if (softDepend == null) {
+                    softDepend = new ArrayList<String>();
+                }
+            } catch (ClassCastException ex) {
+                throw new InvalidPluginException(ex);
+            }
+
+            for (String pluginName : softDepend) {
+                if (loaders == null) {
+                    throw new UnknownSoftDependencyException(pluginName);
+                }
+                PluginClassLoader current = loaders.get(pluginName);
+
+                if (current == null) {
+                    throw new UnknownSoftDependencyException(pluginName);
+                }
+            }
+        }
+
+        PluginClassLoader loader = null;
+
         try {
-            loader = new PluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file);
-        } catch (InvalidPluginException ex) {
-            throw ex;
+            URL[] urls = new URL[1];
+
+            urls[0] = file.toURI().toURL();
+            loader = new PluginClassLoader(this, urls, getClass().getClassLoader());
+            Class<?> jarClass = Class.forName(description.getMain(), true, loader);
+            Class<? extends JavaPlugin> plugin = jarClass.asSubclass(JavaPlugin.class);
+
+            Constructor<? extends JavaPlugin> constructor = plugin.getConstructor();
+
+            result = constructor.newInstance();
+
+            result.initialize(this, server, description, dataFolder, file, loader);
         } catch (Throwable ex) {
             throw new InvalidPluginException(ex);
         }
 
-        loaders.put(description.getName(), loader);
+        loaders.put(description.getName(), (PluginClassLoader) loader);
 
-        return loader.plugin;
+        return (Plugin) result;
     }
 
-    public PluginDescriptionFile getPluginDescription(File file) throws InvalidDescriptionException {
-        Validate.notNull(file, "File cannot be null");
+    private File getDataFolder(File file) {
+        File dataFolder = null;
 
-        JarFile jar = null;
-        InputStream stream = null;
+        String filename = file.getName();
+        int index = file.getName().lastIndexOf(".");
 
-        try {
-            jar = new JarFile(file);
-            JarEntry entry = jar.getJarEntry("plugin.yml");
+        if (index != -1) {
+            String name = filename.substring(0, index);
 
-            if (entry == null) {
-                throw new InvalidDescriptionException(new FileNotFoundException("Jar does not contain plugin.yml"));
-            }
+            dataFolder = new File(file.getParentFile(), name);
+        } else {
+            // This is if there is no extension, which should not happen
+            // Using _ to prevent name collision
 
-            stream = jar.getInputStream(entry);
-
-            return new PluginDescriptionFile(stream);
-
-        } catch (IOException ex) {
-            throw new InvalidDescriptionException(ex);
-        } catch (YAMLException ex) {
-            throw new InvalidDescriptionException(ex);
-        } finally {
-            if (jar != null) {
-                try {
-                    jar.close();
-                } catch (IOException e) {
-                }
-            }
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                }
-            }
+            dataFolder = new File(file.getParentFile(), filename + "_");
         }
+
+        return dataFolder;
     }
 
     public Pattern[] getPluginFileFilters() {
-        return fileFilters.clone();
+        return fileFilters;
     }
 
-    Class<?> getClassByName(final String name) {
+    public Class<?> getClassByName(final String name) {
         Class<?> cachedClass = classes.get(name);
 
         if (cachedClass != null) {
@@ -198,120 +225,586 @@ public final class JavaPluginLoader implements PluginLoader {
         return null;
     }
 
-    void setClass(final String name, final Class<?> clazz) {
+    public void setClass(final String name, final Class<?> clazz) {
         if (!classes.containsKey(name)) {
             classes.put(name, clazz);
-
-            if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
-                Class<? extends ConfigurationSerializable> serializable = clazz.asSubclass(ConfigurationSerializable.class);
-                ConfigurationSerialization.registerClass(serializable);
-            }
         }
     }
 
-    private void removeClass(String name) {
-        Class<?> clazz = classes.remove(name);
+    public EventExecutor createExecutor(Event.Type type, Listener listener) {
+        // TODO: remove multiple Listener type and hence casts
 
-        try {
-            if ((clazz != null) && (ConfigurationSerializable.class.isAssignableFrom(clazz))) {
-                Class<? extends ConfigurationSerializable> serializable = clazz.asSubclass(ConfigurationSerializable.class);
-                ConfigurationSerialization.unregisterClass(serializable);
-            }
-        } catch (NullPointerException ex) {
-            // Boggle!
-            // (Native methods throwing NPEs is not fun when you can't stop it before-hand)
-        }
-    }
+        switch (type) {
+        // Player Events
 
-    public Map<Class<? extends Event>, Set<RegisteredListener>> createRegisteredListeners(Listener listener, final Plugin plugin) {
-        Validate.notNull(plugin, "Plugin can not be null");
-        Validate.notNull(listener, "Listener can not be null");
-
-        boolean useTimings = server.getPluginManager().useTimings();
-        Map<Class<? extends Event>, Set<RegisteredListener>> ret = new HashMap<Class<? extends Event>, Set<RegisteredListener>>();
-        Set<Method> methods;
-        try {
-            Method[] publicMethods = listener.getClass().getMethods();
-            methods = new HashSet<Method>(publicMethods.length, Float.MAX_VALUE);
-            for (Method method : publicMethods) {
-                methods.add(method);
-            }
-            for (Method method : listener.getClass().getDeclaredMethods()) {
-                methods.add(method);
-            }
-        } catch (NoClassDefFoundError e) {
-            plugin.getLogger().severe("Plugin " + plugin.getDescription().getFullName() + " has failed to register events for " + listener.getClass() + " because " + e.getMessage() + " does not exist.");
-            return ret;
-        }
-
-        for (final Method method : methods) {
-            final EventHandler eh = method.getAnnotation(EventHandler.class);
-            if (eh == null) continue;
-            final Class<?> checkClass;
-            if (method.getParameterTypes().length != 1 || !Event.class.isAssignableFrom(checkClass = method.getParameterTypes()[0])) {
-                plugin.getLogger().severe(plugin.getDescription().getFullName() + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.getClass());
-                continue;
-            }
-            final Class<? extends Event> eventClass = checkClass.asSubclass(Event.class);
-            method.setAccessible(true);
-            Set<RegisteredListener> eventSet = ret.get(eventClass);
-            if (eventSet == null) {
-                eventSet = new HashSet<RegisteredListener>();
-                ret.put(eventClass, eventSet);
-            }
-
-            for (Class<?> clazz = eventClass; Event.class.isAssignableFrom(clazz); clazz = clazz.getSuperclass()) {
-                // This loop checks for extending deprecated events
-                if (clazz.getAnnotation(Deprecated.class) != null) {
-                    Warning warning = clazz.getAnnotation(Warning.class);
-                    WarningState warningState = server.getWarningState();
-                    if (!warningState.printFor(warning)) {
-                        break;
-                    }
-                    plugin.getLogger().log(
-                            Level.WARNING,
-                            String.format(
-                                    "\"%s\" has registered a listener for %s on method \"%s\", but the event is Deprecated." +
-                                    " \"%s\"; please notify the authors %s.",
-                                    plugin.getDescription().getFullName(),
-                                    clazz.getName(),
-                                    method.toGenericString(),
-                                    (warning != null && warning.reason().length() != 0) ? warning.reason() : "Server performance will be affected",
-                                    Arrays.toString(plugin.getDescription().getAuthors().toArray())),
-                            warningState == WarningState.ON ? new AuthorNagException(null) : null);
-                    break;
-                }
-            }
-
-            EventExecutor executor = new EventExecutor() {
-                public void execute(Listener listener, Event event) throws EventException {
-                    try {
-                        if (!eventClass.isAssignableFrom(event.getClass())) {
-                            return;
-                        }
-                        method.invoke(listener, event);
-                    } catch (InvocationTargetException ex) {
-                        throw new EventException(ex.getCause());
-                    } catch (Throwable t) {
-                        throw new EventException(t);
-                    }
+        case PLAYER_JOIN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerJoin((PlayerJoinEvent) event);
                 }
             };
-            if (useTimings) {
-                eventSet.add(new TimedRegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
-            } else {
-                eventSet.add(new RegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
-            }
+
+        case PLAYER_QUIT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerQuit((PlayerQuitEvent) event);
+                }
+            };
+
+        case PLAYER_RESPAWN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerRespawn((PlayerRespawnEvent) event);
+                }
+            };
+
+        case PLAYER_KICK:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerKick((PlayerKickEvent) event);
+                }
+            };
+
+        case PLAYER_COMMAND_PREPROCESS:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerCommandPreprocess((PlayerCommandPreprocessEvent) event);
+                }
+            };
+
+        case PLAYER_CHAT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerChat((PlayerChatEvent) event);
+                }
+            };
+
+        case PLAYER_MOVE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerMove((PlayerMoveEvent) event);
+                }
+            };
+
+        case PLAYER_VELOCITY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerVelocity((PlayerVelocityEvent) event);
+                }
+            };
+
+        case PLAYER_TELEPORT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerTeleport((PlayerTeleportEvent) event);
+                }
+            };
+
+        case PLAYER_INTERACT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerInteract((PlayerInteractEvent) event);
+                }
+            };
+
+        case PLAYER_INTERACT_ENTITY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerInteractEntity((PlayerInteractEntityEvent) event);
+                }
+            };
+
+        case PLAYER_LOGIN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerLogin((PlayerLoginEvent) event);
+                }
+            };
+
+        case PLAYER_PRELOGIN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerPreLogin((PlayerPreLoginEvent) event);
+                }
+            };
+
+        case PLAYER_ANIMATION:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerAnimation((PlayerAnimationEvent) event);
+                }
+            };
+
+        case INVENTORY_OPEN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onInventoryOpen((PlayerInventoryEvent) event);
+                }
+            };
+
+        case PLAYER_ITEM_HELD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onItemHeldChange((PlayerItemHeldEvent) event);
+                }
+            };
+
+        case PLAYER_DROP_ITEM:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerDropItem((PlayerDropItemEvent) event);
+                }
+            };
+
+        case PLAYER_PICKUP_ITEM:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerPickupItem((PlayerPickupItemEvent) event);
+                }
+            };
+
+        case PLAYER_TOGGLE_SNEAK:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerToggleSneak((PlayerToggleSneakEvent) event);
+                }
+            };
+
+        case PLAYER_BUCKET_EMPTY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerBucketEmpty((PlayerBucketEmptyEvent) event);
+                }
+            };
+
+        case PLAYER_BUCKET_FILL:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
+                }
+            };
+
+        case PLAYER_BED_ENTER:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerBedEnter((PlayerBedEnterEvent) event);
+                }
+            };
+
+        case PLAYER_BED_LEAVE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerBedLeave((PlayerBedLeaveEvent) event);
+                }
+            };
+
+        // Block Events
+        case BLOCK_PHYSICS:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockPhysics((BlockPhysicsEvent) event);
+                }
+            };
+
+        case BLOCK_CANBUILD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockCanBuild((BlockCanBuildEvent) event);
+                }
+            };
+
+        case BLOCK_PLACE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockPlace((BlockPlaceEvent) event);
+                }
+            };
+
+        case BLOCK_DAMAGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockDamage((BlockDamageEvent) event);
+                }
+            };
+
+        case BLOCK_FROMTO:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockFromTo((BlockFromToEvent) event);
+                }
+            };
+
+        case LEAVES_DECAY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onLeavesDecay((LeavesDecayEvent) event);
+                }
+            };
+
+        case SIGN_CHANGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onSignChange((SignChangeEvent) event);
+                }
+            };
+
+        case BLOCK_IGNITE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockIgnite((BlockIgniteEvent) event);
+                }
+            };
+
+        case GREENSTONE_CHANGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockGreenstoneChange((BlockGreenstoneEvent) event);
+                }
+            };
+
+        case BLOCK_BURN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockBurn((BlockBurnEvent) event);
+                }
+            };
+
+        case BLOCK_BREAK:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockBreak((BlockBreakEvent) event);
+                }
+            };
+
+        case BLOCK_FORM:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockForm((BlockFormEvent) event);
+                }
+            };
+
+        case BLOCK_SPREAD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockSpread((BlockSpreadEvent) event);
+                }
+            };
+
+
+        case BLOCK_FADE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockFade((BlockFadeEvent) event);
+                }
+            };
+
+        case BLOCK_DISPENSE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((BlockListener) listener).onBlockDispense((BlockDispenseEvent) event);
+                }
+            };
+
+        // Server Events
+        case PLUGIN_ENABLE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((ServerListener) listener).onPluginEnable((PluginEnableEvent) event);
+                }
+            };
+
+        case PLUGIN_DISABLE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((ServerListener) listener).onPluginDisable((PluginDisableEvent) event);
+                }
+            };
+
+        case SERVER_COMMAND:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((ServerListener) listener).onServerCommand((ServerCommandEvent) event);
+                }
+            };
+
+        // World Events
+        case CHUNK_LOAD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onChunkLoad((ChunkLoadEvent) event);
+                }
+            };
+
+        case CHUNK_POPULATED:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onChunkPopulate((ChunkPopulateEvent) event);
+                }
+            };
+
+        case CHUNK_UNLOAD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onChunkUnload((ChunkUnloadEvent) event);
+                }
+            };
+
+        case SPAWN_CHANGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onSpawnChange((SpawnChangeEvent) event);
+                }
+            };
+
+        case WORLD_SAVE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onWorldSave((WorldSaveEvent) event);
+                }
+            };
+
+        case WORLD_INIT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onWorldInit((WorldInitEvent) event);
+                }
+            };
+
+        case WORLD_LOAD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onWorldLoad((WorldLoadEvent) event);
+                }
+            };
+
+        case WORLD_UNLOAD:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((WorldListener) listener).onWorldUnload((WorldUnloadEvent) event);
+                }
+            };
+
+        // Painting Events
+        case PAINTING_PLACE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onPaintingPlace((PaintingPlaceEvent) event);
+                }
+            };
+
+        case PAINTING_BREAK:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onPaintingBreak((PaintingBreakEvent) event);
+                }
+            };
+
+        // Entity Events
+        case ENTITY_DAMAGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityDamage((EntityDamageEvent) event);
+                }
+            };
+
+        case ENTITY_DEATH:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityDeath((EntityDeathEvent) event);
+                }
+            };
+
+        case ENTITY_COMBUST:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityCombust((EntityCombustEvent) event);
+                }
+            };
+
+        case ENTITY_EXPLODE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityExplode((EntityExplodeEvent) event);
+                }
+            };
+
+        case EXPLOSION_PRIME:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onExplosionPrime((ExplosionPrimeEvent) event);
+                }
+            };
+
+        case ENTITY_TARGET:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityTarget((EntityTargetEvent) event);
+                }
+            };
+
+        case ENTITY_INTERACT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityInteract((EntityInteractEvent) event);
+                }
+            };
+
+        case CREATURE_SPAWN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onCreatureSpawn((CreatureSpawnEvent) event);
+                }
+            };
+
+        case ITEM_SPAWN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onItemSpawn((ItemSpawnEvent) event);
+                }
+            };
+
+        case CREEPER_POWER:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onCreeperPower((CreeperPowerEvent) event);
+                }
+            };
+
+        case ENTITY_REGAIN_HEALTH:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onEntityRegainHealth((EntityRegainHealthEvent) event);
+                }
+            };
+
+        case PROJECTILE_HIT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((EntityListener) listener).onProjectileHit((ProjectileHitEvent) event);
+                }
+            };
+
+        // Vehicle Events
+        case VEHICLE_CREATE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleCreate((VehicleCreateEvent) event);
+                }
+            };
+
+        case VEHICLE_DAMAGE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleDamage((VehicleDamageEvent) event);
+                }
+            };
+
+        case VEHICLE_DESTROY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleDestroy((VehicleDestroyEvent) event);
+                }
+            };
+
+        case VEHICLE_COLLISION_BLOCK:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleBlockCollision((VehicleBlockCollisionEvent) event);
+                }
+            };
+
+        case VEHICLE_COLLISION_ENTITY:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleEntityCollision((VehicleEntityCollisionEvent) event);
+                }
+            };
+
+        case VEHICLE_ENTER:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleEnter((VehicleEnterEvent) event);
+                }
+            };
+
+        case VEHICLE_EXIT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleExit((VehicleExitEvent) event);
+                }
+            };
+
+        case VEHICLE_MOVE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleMove((VehicleMoveEvent) event);
+                }
+            };
+
+        case VEHICLE_UPDATE:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((VehicleListener) listener).onVehicleUpdate((VehicleUpdateEvent) event);
+                }
+            };
+
+        // Inventory Events
+        case FURNACE_SMELT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((InventoryListener) listener).onFurnaceSmelt((FurnaceSmeltEvent) event);
+                }
+            };
+        case FURNACE_BURN:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((InventoryListener) listener).onFurnaceBurn((FurnaceBurnEvent) event);
+                }
+            };
+
+        //Lilypad Events
+        case PLAYER_DASH:
+            return new EventExecutor() {
+                @Override
+                public void execute(Listener listener, Event event) {
+                    ((PlayerListener) listener).onPlayerDash((PlayerDashEvent) event);
+                }
+            };
+
+            case PLAYER_CHEAT:
+                return new EventExecutor() {
+                    @Override
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerCheat((PlayerCheatEvent) event);
+                    }
+                };
+
+            case CODE_INPUT:
+                return new EventExecutor() {
+                    @Override
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onCodeInput((SafeCodeInputEvent) event);
+                    }
+                };
+
+        // Custom Events
+        case CUSTOM_EVENT:
+            return new EventExecutor() {
+                public void execute(Listener listener, Event event) {
+                    ((CustomEventListener) listener).onCustomEvent(event);
+                }
+            };
         }
-        return ret;
+
+        throw new IllegalArgumentException("Event " + type + " is not supported");
     }
 
     public void enablePlugin(final Plugin plugin) {
-        Validate.isTrue(plugin instanceof JavaPlugin, "Plugin is not associated with this PluginLoader");
+        if (!(plugin instanceof JavaPlugin)) {
+            throw new IllegalArgumentException("Plugin is not associated with this PluginLoader");
+        }
 
         if (!plugin.isEnabled()) {
-            plugin.getLogger().info("Enabling " + plugin.getDescription().getFullName());
-
             JavaPlugin jPlugin = (JavaPlugin) plugin;
 
             String pluginName = jPlugin.getDescription().getName();
@@ -323,7 +816,7 @@ public final class JavaPluginLoader implements PluginLoader {
             try {
                 jPlugin.setEnabled(true);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?): " + ex.getMessage(), ex);
             }
 
             // Perhaps abort here, rather than continue going, but as it stands,
@@ -333,22 +826,21 @@ public final class JavaPluginLoader implements PluginLoader {
     }
 
     public void disablePlugin(Plugin plugin) {
-        Validate.isTrue(plugin instanceof JavaPlugin, "Plugin is not associated with this PluginLoader");
+        if (!(plugin instanceof JavaPlugin)) {
+            throw new IllegalArgumentException("Plugin is not associated with this PluginLoader");
+        }
 
         if (plugin.isEnabled()) {
-            String message = String.format("Disabling %s", plugin.getDescription().getFullName());
-            plugin.getLogger().info(message);
-
-            server.getPluginManager().callEvent(new PluginDisableEvent(plugin));
-
             JavaPlugin jPlugin = (JavaPlugin) plugin;
             ClassLoader cloader = jPlugin.getClassLoader();
 
             try {
                 jPlugin.setEnabled(false);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?): " + ex.getMessage(), ex);
             }
+
+            server.getPluginManager().callEvent(new PluginDisableEvent(plugin));
 
             loaders.remove(jPlugin.getDescription().getName());
 
@@ -357,7 +849,7 @@ public final class JavaPluginLoader implements PluginLoader {
                 Set<String> names = loader.getClasses();
 
                 for (String name : names) {
-                    removeClass(name);
+                    classes.remove(name);
                 }
             }
         }
