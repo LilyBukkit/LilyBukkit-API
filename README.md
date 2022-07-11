@@ -1,4 +1,4 @@
-LilyBukkit
+LilyBukkit-API
 ======
 
 A modified Bukkit Minecraft Server API.
