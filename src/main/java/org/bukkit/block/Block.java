@@ -249,11 +249,4 @@ public interface Block {
      * @return true if this block is liquid
      */
     boolean isLiquid();
-
-    /**
-     * Gets the temperature of the biome of this block
-     *
-     * @return Temperature of this block
-     */
-    double getTemperature();
 }

@@ -567,30 +567,6 @@ public interface World {
     public boolean getAllowMonsters();
 
     /**
-     * Gets the temperature for the given block coordinates.
-     *
-     * It is safe to run this method when the block does not exist, it will not create the block.
-     *
-     * @param x X coordinate of the block
-     * @param z Z coordinate of the block
-     *
-     * @return Temperature of the requested block
-     */
-    public double getTemperature(int x, int z);
-
-    /**
-     * Gets the humidity for the given block coordinates.
-     *
-     * It is safe to run this method when the block does not exist, it will not create the block.
-     *
-     * @param x X coordinate of the block
-     * @param z Z coordinate of the block
-     *
-     * @return Humidity of the requested block
-     */
-    public double getHumidity(int x, int z);
-
-    /**
      * Gets the maximum height of this world.
      *
      * If the max height is 100, there are only blocks from y=0 to y=99.
@@ -612,6 +588,13 @@ public interface World {
     * @param keepLoaded if true then the world's spawn area will be kept loaded into memory.
     */
     public void setKeepSpawnInMemory(boolean keepLoaded);
+
+    /**
+     * Returns whether the world is covered with snow
+     *
+     * @return if the world is covered with snow
+     */
+    public boolean isWinter();
 
     /**
      * Represents various map environment types that a world may be
