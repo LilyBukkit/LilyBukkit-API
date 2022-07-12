@@ -19,7 +19,7 @@ public class SimpleServicesManager implements ServicesManager {
     /**
      * Map of providers.
      */
-    private final Map<Class<?>, List<RegisteredServiceProvider<?>>> providers = new HashMap<Class<?>, List<RegisteredServiceProvider<?>>>();
+    private final Map<Class<?>, List<RegisteredServiceProvider<?>>> providers = new HashMap<>();
 
     /**
      * Register a provider of a service.
@@ -37,7 +37,7 @@ public class SimpleServicesManager implements ServicesManager {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
 
             if (registered == null) {
-                registered = new ArrayList<RegisteredServiceProvider<?>>();
+                registered = new ArrayList<>();
                 providers.put(service, registered);
             }
 
@@ -52,7 +52,7 @@ public class SimpleServicesManager implements ServicesManager {
     /**
      * Unregister all the providers registered by a particular plugin.
      *
-     * @param plugin
+     * @param plugin the plugin that registered the providers
      */
     public void unregisterAll(Plugin plugin) {
         synchronized (providers) {
@@ -79,7 +79,7 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException e) {}
+            } catch (NoSuchElementException ignored) {}
         }
     }
 
@@ -120,7 +120,7 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException e) {}
+            } catch (NoSuchElementException ignored) {}
         }
     }
 
@@ -154,7 +154,7 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException e) {}
+            } catch (NoSuchElementException ignored) {}
         }
     }
 

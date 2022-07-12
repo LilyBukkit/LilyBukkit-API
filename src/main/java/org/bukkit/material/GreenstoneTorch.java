@@ -3,7 +3,7 @@ package org.bukkit.material;
 import org.bukkit.Material;
 
 /**
- * Represents a redstone torch
+ * Represents a Greenstone torch
  */
 public class GreenstoneTorch extends Torch implements Greenstone {
     public GreenstoneTorch() {

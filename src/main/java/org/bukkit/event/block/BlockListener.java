@@ -69,9 +69,9 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {}
 
     /**
-     * Called when redstone changes.<br />
-     * From: the source of the redstone change.<br />
-     * To: The redstone dust that changed.
+     * Called when Greenstone changes.<br />
+     * From: the source of the Greenstone change.<br />
+     * To: The Greenstone dust that changed.
      *
      * @param event Relevant event details
      */

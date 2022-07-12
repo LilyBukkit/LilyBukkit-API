@@ -216,7 +216,7 @@ public final class JavaPluginLoader implements PluginLoader {
 
                 try {
                     cachedClass = loader.findClass(name, false);
-                } catch (ClassNotFoundException cnfe) {}
+                } catch (ClassNotFoundException ignored) {}
                 if (cachedClass != null) {
                     return cachedClass;
                 }

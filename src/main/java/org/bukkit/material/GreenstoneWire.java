@@ -3,7 +3,7 @@ package org.bukkit.material;
 import org.bukkit.Material;
 
 /**
- * Represents redstone wire
+ * Represents Greenstone wire
  */
 public class GreenstoneWire extends MaterialData implements Greenstone {
     public GreenstoneWire() {

@@ -1,7 +1,7 @@
 package org.bukkit.material;
 
 /**
- * Indicated a Material that may carry or create a Redstone current
+ * Indicated a Material that may carry or create a Greenstone current
  */
 public interface Greenstone {
 

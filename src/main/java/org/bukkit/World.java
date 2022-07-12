@@ -411,69 +411,12 @@ public interface World {
      * Sets the in-game time on the server
      * <br /><br />
      * Note that this sets the full time of the world, which may cause adverse
-     * effects such as breaking redstone clocks and any scheduled events
+     * effects such as breaking Greenstone clocks and any scheduled events
      *
      * @param time The new absolute time to set this world to
      * @see #setTime(long) Sets the relative time of this world
      */
     public void setFullTime(long time);
-
-    /**
-     * Returns whether the world has an ongoing storm.
-     *
-     * @return Whether there is an ongoing storm
-     */
-    public boolean hasStorm();
-
-    /**
-     * Set whether there is a storm. A duration will be set for the new
-     * current conditions.
-     *
-     * @param hasStorm Whether there is rain and snow
-     */
-    public void setStorm(boolean hasStorm);
-
-    /**
-     * Get the remaining time in ticks of the current conditions.
-     *
-     * @return Time in ticks
-     */
-    public int getWeatherDuration();
-
-    /**
-     * Set the remaining time in ticks of the current conditions.
-     *
-     * @param duration Time in ticks
-     */
-    public void setWeatherDuration(int duration);
-
-    /**
-     * Returns whether there is thunder.
-     *
-     * @return Whether there is thunder
-     */
-    public boolean isThundering();
-
-    /**
-     * Set whether it is thundering.
-     *
-     * @param thundering Whether it is thundering
-     */
-    public void setThundering(boolean thundering);
-
-    /**
-     * Get the thundering duration.
-     *
-     * @return Duration in ticks
-     */
-    public int getThunderDuration();
-
-    /**
-     * Set the thundering duration.
-     *
-     * @param duration Duration in ticks
-     */
-    public void setThunderDuration(int duration);
 
     /**
      * Creates explosion at given coordinates with given power

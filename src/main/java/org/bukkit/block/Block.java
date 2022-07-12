@@ -190,35 +190,35 @@ public interface Block {
     BlockState getState();
 
     /**
-     * Returns true if the block is being powered by Redstone.
+     * Returns true if the block is being powered by Greenstone.
      *
-     * @return
+     * @return if block is powered
      */
     boolean isBlockPowered();
 
     /**
-     * Returns true if the block is being indirectly powered by Redstone.
+     * Returns true if the block is being indirectly powered by Greenstone.
      *
-     * @return
+     * @return if block is powered indirectly
      */
     boolean isBlockIndirectlyPowered();
 
     /**
-     * Returns true if the block face is being powered by Redstone.
+     * Returns true if the block face is being powered by Greenstone.
      *
      * @return
      */
     boolean isBlockFacePowered(BlockFace face);
 
     /**
-     * Returns true if the block face is being indirectly powered by Redstone.
+     * Returns true if the block face is being indirectly powered by Greenstone.
      *
      * @return
      */
     boolean isBlockFaceIndirectlyPowered(BlockFace face);
 
     /**
-     * Returns the redstone power being provided to this block face
+     * Returns the Greenstone power being provided to this block face
      *
      * @param face the face of the block to query or BlockFace.SELF for the block itself
      * @return
@@ -226,7 +226,7 @@ public interface Block {
     int getBlockPower(BlockFace face);
 
     /**
-     * Returns the redstone power being provided to this block
+     * Returns the Greenstone power being provided to this block
      *
      * @return
      */
@@ -256,11 +256,4 @@ public interface Block {
      * @return Temperature of this block
      */
     double getTemperature();
-
-    /**
-     * Gets the humidity of the biome of this block
-     *
-     * @return Humidity of this block
-     */
-    double getHumidity();
 }

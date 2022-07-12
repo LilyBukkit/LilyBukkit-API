@@ -77,24 +77,6 @@ public interface ChunkSnapshot {
     int getHighestBlockYAt(int x, int z);
 
     /**
-     * Get raw biome temperature (0.0-1.0) at given coordinate
-     *
-     * @param x X-coordinate
-     * @param z Z-coordinate
-     * @return temperature at given coordinate
-     */
-    double getRawBiomeTemperature(int x, int z);
-
-    /**
-     * Get raw biome rainfall (0.0-1.0) at given coordinate
-     *
-     * @param x X-coordinate
-     * @param z Z-coordinate
-     * @return rainfall at given coordinate
-     */
-    double getRawBiomeRainfall(int x, int z);
-
-    /**
      * Get world full time when chunk snapshot was captured
      * @return time in ticks
      */

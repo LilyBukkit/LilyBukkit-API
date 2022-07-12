@@ -89,7 +89,7 @@ public class Configuration extends ConfigurationNode {
                 if (stream != null) {
                     stream.close();
                 }
-            } catch (IOException e) {}
+            } catch (IOException ignored) {}
         }
     }
 
@@ -156,12 +156,12 @@ public class Configuration extends ConfigurationNode {
             }
             yaml.dump(root, writer);
             return true;
-        } catch (IOException e) {} finally {
+        } catch (IOException ignored) {} finally {
             try {
                 if (stream != null) {
                     stream.close();
                 }
-            } catch (IOException e) {}
+            } catch (IOException ignored) {}
         }
 
         return false;

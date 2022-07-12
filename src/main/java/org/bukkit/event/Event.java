@@ -109,10 +109,6 @@ public abstract class Event implements Serializable {
          */
         LIVING_ENTITY,
         /**
-         * Represents Weather-based events
-         */
-        WEATHER,
-        /**
          * Represents Vehicle-based events
          */
         VEHICLE,
@@ -370,8 +366,8 @@ public abstract class Event implements Serializable {
          */
         SIGN_CHANGE(Category.BLOCK),
         /**
-         * Called when a block changes redstone current. Only triggered on blocks
-         * that are actually capable of transmitting or carrying a redstone
+         * Called when a block changes Greenstone current. Only triggered on blocks
+         * that are actually capable of transmitting or carrying a Greenstone
          * current
          *
          * @see BlockGreenstoneEvent

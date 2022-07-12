@@ -11,7 +11,7 @@ import org.bukkit.material.MaterialData;
 public class ShapedRecipe implements Recipe {
     private ItemStack output;
     private String[] rows;
-    private HashMap<Character, MaterialData> ingredients = new HashMap<Character, MaterialData>();
+    private HashMap<Character, MaterialData> ingredients = new HashMap<>();
 
     /**
      * Create a shaped recipe to craft the specified ItemStack. The constructor merely determines the
@@ -46,11 +46,11 @@ public class ShapedRecipe implements Recipe {
         // Remove character mappings for characters that no longer exist in the shape
         HashMap<Character, MaterialData> ingredientsTemp = this.ingredients;
 
-        this.ingredients = new HashMap<Character, MaterialData>();
+        this.ingredients = new HashMap<>();
         for (char key : ingredientsTemp.keySet()) {
             try {
                 setIngredient(key, ingredientsTemp.get(key));
-            } catch (IllegalArgumentException e) {}
+            } catch (IllegalArgumentException ignored) {}
         }
         return this;
     }
