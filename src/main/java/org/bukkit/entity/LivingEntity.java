@@ -33,14 +33,6 @@ public interface LivingEntity extends Entity {
     public double getEyeHeight();
 
     /**
-     * Gets the height of the entity's head above its Location
-     *
-     * @param ignoreSneaking If set to true, the effects of sneaking will be ignored
-     * @return Height of the entity's eyes above its Location
-     */
-    public double getEyeHeight(boolean ignoreSneaking);
-
-    /**
      * Get a Location detailing the current eye position of the LivingEntity.
      *
      * @return a Location at the eyes of the LivingEntity.
@@ -127,20 +119,6 @@ public interface LivingEntity extends Entity {
     public void setRemainingAir(int ticks);
 
     /**
-     * Returns the maximum amount of air this entity can have, in ticks
-     *
-     * @return Maximum amount of air
-     */
-    public int getMaximumAir();
-
-    /**
-     * Sets the maximum amount of air this entity can have, in ticks
-     *
-     * @param ticks Maximum amount of air
-     */
-    public void setMaximumAir(int ticks);
-
-    /**
      * Deals the given amount of damage to this entity
      *
      * @param amount Amount of damage to deal
@@ -154,50 +132,5 @@ public interface LivingEntity extends Entity {
      * @param source Entity which to attribute this damage from
      */
     public void damage(int amount, Entity source);
-
-    /**
-     * Returns the entities current maximum noDamageTicks
-     * This is the time in ticks the entity will become unable to take
-     * equal or less damage than the lastDamage
-     *
-     * @return noDamageTicks
-     */
-    public int getMaximumNoDamageTicks();
-
-    /**
-     * Sets the entities current maximum noDamageTicks
-     *
-     * @param ticks maximumNoDamageTicks
-     */
-    public void setMaximumNoDamageTicks(int ticks);
-
-    /**
-     * Returns the entities lastDamage taken in the current noDamageTicks time.
-     * Only damage higher than this amount will further damage the entity.
-     *
-     * @return lastDamage
-     */
-    public int getLastDamage();
-
-    /**
-     * Sets the entities current maximum noDamageTicks
-     *
-     * @param damage last damage
-     */
-    public void setLastDamage(int damage);
-
-    /**
-     * Returns the entities current noDamageTicks
-     *
-     * @return noDamageTicks
-     */
-    public int getNoDamageTicks();
-
-    /**
-     * Sets the entities current noDamageTicks
-     *
-     * @param ticks NoDamageTicks
-     */
-    public void setNoDamageTicks(int ticks);
 
 }
