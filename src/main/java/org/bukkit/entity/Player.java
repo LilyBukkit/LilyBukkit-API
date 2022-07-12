@@ -197,10 +197,4 @@ public interface Player extends HumanEntity, CommandSender {
      */
     public void resetPlayerTime();
 
-    /**
-     * Returns the player's hunger meter value
-     * @return How full is the hunger meter
-     */
-    public int getHunger();
-
 }
