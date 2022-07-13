@@ -64,7 +64,7 @@ public interface Entity {
      * @param x Size of the box along x axis
      * @param y Size of the box along y axis
      * @param z Size of the box along z axis
-     * @return List<Entity> List of entities nearby
+     * @return {@code List<Entity>} List of entities nearby
      */
     public List<Entity> getNearbyEntities(double x, double y, double z);
 
@@ -92,7 +92,6 @@ public interface Entity {
     /**
      * Sets the entity's current fire ticks (ticks before the entity stops being on fire).
      *
-     * @param ticks
      */
     public void setFireTicks(int ticks);
 
@@ -124,7 +123,6 @@ public interface Entity {
     /**
      * Set the passenger of a vehicle.
      *
-     * @param passenger
      * @return false if it could not be done for whatever reason
      */
     public abstract boolean setPassenger(Entity passenger);
@@ -139,19 +137,16 @@ public interface Entity {
     /**
      * Eject any passenger. True if there was a passenger.
      *
-     * @return
      */
     public abstract boolean eject();
 
     /**
      * Returns the distance this entity has fallen
-     * @return
      */
     public float getFallDistance();
 
     /**
      * Sets the fall distance for this entity
-     * @param distance
      */
     public void setFallDistance(float distance);
 

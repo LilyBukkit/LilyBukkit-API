@@ -663,13 +663,6 @@ public final class JavaPluginLoader implements PluginLoader {
                 }
             };
 
-        case CREEPER_POWER:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onCreeperPower((CreeperPowerEvent) event);
-                }
-            };
-
         case ENTITY_REGAIN_HEALTH:
             return new EventExecutor() {
                 public void execute(Listener listener, Event event) {

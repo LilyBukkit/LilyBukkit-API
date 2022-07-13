@@ -14,10 +14,10 @@ import org.bukkit.block.Block;
  */
 public abstract class ChunkGenerator {
     /**
-     * Shapes the chunk for the given coordinates.<br />
-     * <br />
+     * Shapes the chunk for the given coordinates.<br>
+     * <br>
      * This method should return a byte[32768] in the following format:
-     * <pre>
+     * {@code
      * for (int x = 0; x < 16; x++) {
      *     for (int z = 0; z < 16; z++) {
      *         for (int y = 0; y < 128; y++) {
@@ -25,7 +25,7 @@ public abstract class ChunkGenerator {
      *         }
      *     }
      * }
-     * </pre>
+     * }
      *
      * Note that this method should <b>never</b> attempt to get the Chunk at
      * the passed coordinates, as doing so may cause an infinite loop

@@ -405,31 +405,31 @@ public abstract class Event implements Serializable {
         /**
          * Called when a player opens an inventory
          *
-         * @todo: add javadoc see comment
+         * todo: add javadoc see comment
          */
         INVENTORY_OPEN(Category.INVENTORY),
         /**
          * Called when a player closes an inventory
          *
-         * @todo: add javadoc see comment
+         * todo: add javadoc see comment
          */
         INVENTORY_CLOSE(Category.INVENTORY),
         /**
          * Called when a player clicks on an inventory slot
          *
-         * @todo: add javadoc see comment
+         * todo: add javadoc see comment
          */
         INVENTORY_CLICK(Category.INVENTORY),
         /**
          * Called when an inventory slot changes values or type
          *
-         * @todo: add javadoc see comment
+         * todo: add javadoc see comment
          */
         INVENTORY_CHANGE(Category.INVENTORY),
         /**
          * Called when a player is attempting to perform an inventory transaction
          *
-         * @todo: add javadoc see comment
+         * todo: add javadoc see comment
          */
         INVENTORY_TRANSACTION(Category.INVENTORY),
         /**
@@ -610,12 +610,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.entity.EntityInteractEvent
          */
         ENTITY_INTERACT(Category.LIVING_ENTITY),
-        /**
-         * Called when a creeper gains or loses a power shell
-         *
-         * @see org.bukkit.event.entity.CreeperPowerEvent
-         */
-        CREEPER_POWER(Category.LIVING_ENTITY),
         /**
          * Called when a {@link Projectile} hits something
          *

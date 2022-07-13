@@ -43,7 +43,7 @@ public interface LivingEntity extends Entity {
      * Gets all blocks along the player's line of sight
      * List iterates from player's position to target inclusive
      *
-     * @param transparent<Byte> HashSet containing all transparent block IDs. If set to null only air is considered transparent.
+     * @param transparent HashSet containing all transparent block IDs. If set to null only air is considered transparent.
      * @param maxDistance This is the maximum distance to scan. This may be further limited by the server, but never to less than 100 blocks.
      * @return List containing all blocks along the player's line of sight
      */
@@ -52,7 +52,7 @@ public interface LivingEntity extends Entity {
     /**
      * Gets the block that the player has targeted
      *
-     * @param transparent<Byte> HashSet containing all transparent block IDs. If set to null only air is considered transparent.
+     * @param transparent HashSet containing all transparent block IDs. If set to null only air is considered transparent.
      * @param maxDistance This is the maximum distance to scan. This may be further limited by the server, but never to less than 100 blocks.
      * @return Block that the player has targeted
      */
@@ -62,7 +62,7 @@ public interface LivingEntity extends Entity {
      * Gets the last two blocks along the player's line of sight.
      * The target block will be the last block in the list.
      *
-     * @param transparent<Byte> HashSet containing all transparent block IDs. If set to null only air is considered transparent.
+     * @param transparent HashSet containing all transparent block IDs. If set to null only air is considered transparent.
      * @param maxDistance This is the maximum distance to scan. This may be further limited by the server, but never to less than 100 blocks
      * @return List containing the last 2 blocks along the player's line of sight
      */
@@ -76,14 +76,12 @@ public interface LivingEntity extends Entity {
     /**
      * Shoots an arrow from the entity.
      *
-     * @return
      */
     public Arrow shootArrow();
 
     /**
      * Returns whether this entity is inside a vehicle.
      *
-     * @return
      */
     public boolean isInsideVehicle();
 
@@ -92,15 +90,12 @@ public interface LivingEntity extends Entity {
      * (and is removed from it), true will be returned, otherwise false will
      * be returned.
      *
-     * @return
      */
     public boolean leaveVehicle();
 
     /**
      * Get the vehicle that this player is inside. If there is no vehicle,
      * null will be returned.
-     *
-     * @return
      */
     public Vehicle getVehicle();
 

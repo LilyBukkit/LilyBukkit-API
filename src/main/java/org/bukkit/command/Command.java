@@ -1,7 +1,13 @@
 package org.bukkit.command;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Server;
+import org.bukkit.permissions.Permissible;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a Command, which executes various tasks upon user input
@@ -33,9 +39,9 @@ public abstract class Command {
     /**
      * Executes the command, returning its success
      *
-     * @param sender Source object which is executing this command
+     * @param sender       Source object which is executing this command
      * @param commandLabel The alias of the command used
-     * @param args All arguments passed to the command, split via ' '
+     * @param args         All arguments passed to the command, split via ' '
      * @return true if the command was successful, otherwise false
      */
     public abstract boolean execute(CommandSender sender, String commandLabel, String[] args);
@@ -182,5 +188,65 @@ public abstract class Command {
     public Command setUsage(String usage) {
         this.usageMessage = usage;
         return this;
+    }
+
+    // UPDATE 1.0.5
+    private String permission;
+
+    /**
+     * Gets the permission required by users to be able to perform this command
+     *
+     * @return Permission name, or null if none
+     */
+    public String getPermission() {
+        return permission;
+    }
+
+    /**
+     * Sets the permission required by users to be able to perform this command
+     *
+     * @param permission Permission name or null
+     */
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    /**
+     * Tests the given {@link CommandSender} to see if they can perform this command.
+     * <p>
+     * If they do not have permission, they will be informed that they cannot do this.
+     *
+     * @param target User to test
+     * @return true if they can use it, otherwise false
+     */
+    public boolean testPermission(CommandSender target) {
+        if ((permission == null) || (permission.length() == 0) || (target.hasPermission(permission))) {
+            return true;
+        }
+
+        target.sendMessage(ChatColor.RED + "Bukkit sad. Bukkit want you to access command, but Bukkit cannot let you. Bukkit will leak tears :'(");
+        return false;
+    }
+
+    public static void broadcastCommandMessage(CommandSender source, String message) {
+        Set<Permissible> users = Bukkit.getServer().getPluginManager().getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
+        String result = source.getName() + ": " + message;
+        String colored = ChatColor.GRAY + "(" + result + ")";
+
+        if (!(source instanceof ConsoleCommandSender)) {
+            source.sendMessage(message);
+        }
+
+        for (Permissible user : users) {
+            if (user instanceof CommandSender) {
+                CommandSender target = (CommandSender) user;
+
+                if (target instanceof ConsoleCommandSender) {
+                    target.sendMessage(result);
+                } else if (target != source) {
+                    target.sendMessage(colored);
+                }
+            }
+        }
     }
 }

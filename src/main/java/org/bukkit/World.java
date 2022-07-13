@@ -389,7 +389,7 @@ public interface World {
      * Sets the relative in-game time on the server.
      *
      * The relative time is analogous to hours * 1000
-     * <br /><br />
+     * <br><br>
      * Note that setting the relative time below the current relative time will
      * actually move the clock forward a day. If you require to rewind time, please
      * see setFullTime
@@ -409,7 +409,7 @@ public interface World {
 
     /**
      * Sets the in-game time on the server
-     * <br /><br />
+     * <br><br>
      * Note that this sets the full time of the world, which may cause adverse
      * effects such as breaking Greenstone clocks and any scheduled events
      *
@@ -513,7 +513,7 @@ public interface World {
      * @param location the {@link Location} to spawn the entity at
      * @param clazz the class of the {@link Entity} to spawn
      * @return an instance of the spawned {@link Entity}
-     * @throws {@link IllegalArgumentException} if either parameter is null or the {@link Entity} requested cannot be spawned
+     * @throws IllegalArgumentException if either parameter is null or the {@link Entity} requested cannot be spawned
      */
     public <T extends Entity> T spawn(Location location, Class<T> clazz) throws IllegalArgumentException;
 

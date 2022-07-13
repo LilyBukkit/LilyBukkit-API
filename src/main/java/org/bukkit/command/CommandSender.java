@@ -18,4 +18,12 @@ public interface CommandSender extends Permissible {
      * @return Server instance
      */
     public Server getServer();
+
+    // UPDATE 1.0.5
+    /**
+     * Gets the name of this command sender
+     *
+     * @return Name of the sender
+     */
+    public String getName();
 }

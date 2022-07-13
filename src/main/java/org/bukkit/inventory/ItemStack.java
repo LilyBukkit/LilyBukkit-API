@@ -60,8 +60,8 @@ public class ItemStack {
     }
 
     /**
-     * Sets the type of this item<br />
-     * <br />
+     * Sets the type of this item<br>
+     * <br>
      * Note that in doing so you will reset the MaterialData for this stack
      *
      * @param type New type to set the items in this stack to
@@ -80,8 +80,8 @@ public class ItemStack {
     }
 
     /**
-     * Sets the type id of this item<br />
-     * <br />
+     * Sets the type id of this item<br>
+     * <br>
      * Note that in doing so you will reset the MaterialData for this stack
      *
      * @param type New type id to set the items in this stack to

@@ -14,7 +14,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block is damaged by a player.
-     * <p />
+     * <br>
      * If a Block Damage event is cancelled, the block will not be damaged.
      *
      * @param event Relevant event details
@@ -23,7 +23,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when we try to place a block, to see if we can build it here or not.
-     *<p />
+     *<br>
      * Note:
      * <ul>
      *    <li>The Block returned by getBlock() is the block we are trying to place on, not the block we are trying to place.</li>
@@ -36,7 +36,7 @@ public class BlockListener implements Listener {
 
     /**
      * Represents events with a source block and a destination block, currently only applies to liquid (lava and water).
-     *<p />
+     *<br>
      * If a Block From To event is cancelled, the block will not move (the liquid will not flow).
      *
      * @param event Relevant event details
@@ -45,7 +45,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block is ignited. If you want to catch when a Player places fire, you need to use {@link BlockPlaceEvent}.
-     *<p />
+     *<br>
      * If a Block Ignite event is cancelled, the block will not be ignited.
      *
      * @param event Relevant event details
@@ -61,7 +61,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block is placed by a player.
-     *<p />
+     *<br>
      * If a Block Place event is cancelled, the block will not be placed.
      *
      * @param event Relevant event details
@@ -69,8 +69,8 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {}
 
     /**
-     * Called when Greenstone changes.<br />
-     * From: the source of the Greenstone change.<br />
+     * Called when Greenstone changes.<br>
+     * From: the source of the Greenstone change.<br>
      * To: The Greenstone dust that changed.
      *
      * @param event Relevant event details
@@ -79,7 +79,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when leaves are decaying naturally.
-     *<p />
+     *<br>
      * If a Leaves Decay event is cancelled, the leaves will not decay.
      *
      * @param event Relevant event details
@@ -88,7 +88,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a sign is changed by a player.
-     * <p />
+     * <br>
      * If a Sign Change event is cancelled, the sign will not be changed.
      *
      * @param event Relevant event details
@@ -97,7 +97,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block is destroyed as a result of being burnt by fire.
-     *<p />
+     *<br>
      * If a Block Burn event is cancelled, the block will not be destroyed as a result of being burnt by fire.
      *
      * @param event Relevant event details
@@ -106,11 +106,11 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block is broken by a player.
-     *<p />
+     *<br>
      * Note:
      * Plugins wanting to simulate a traditional block drop should set the block to air and utilise their own methods for determining
      *   what the default drop for the block being broken is and what to do about it, if anything.
-     *<p />
+     *<br>
      * If a Block Break event is cancelled, the block will not break.
      *
      * @param event Relevant event details
@@ -120,13 +120,13 @@ public class BlockListener implements Listener {
     /**
      * Called when a block is formed or spreads based on world conditions.
      * Use {@link BlockSpreadEvent} to catch blocks that actually spread and don't just "randomly" form.
-     *<p />
+     *<br>
      * Examples:
      *<ul>
      *     <li>Snow forming due to a snow storm.</li>
      *     <li>Ice forming in a snowy Biome like Tiga or Tundra.</li>
      * </ul>
-     *<p />
+     *<br>
      * If a Block Form event is cancelled, the block will not be formed or will not spread.
      *
      * @see BlockSpreadEvent
@@ -137,13 +137,13 @@ public class BlockListener implements Listener {
     /**
      * Called when a block spreads based on world conditions.
      * Use {@link BlockFormEvent} to catch blocks that "randomly" form instead of actually spread.
-     *<p />
+     *<br>
      * Examples:
      *<ul>
      *     <li>Mushrooms spreading.</li>
      *     <li>Fire spreading.</li>
      * </ul>
-     *<p />
+     *<br>
      * If a Block Spread event is cancelled, the block will not spread.
      *
      * @param event Relevant event details
@@ -152,13 +152,13 @@ public class BlockListener implements Listener {
 
     /**
      * Called when a block fades, melts or disappears based on world conditions
-     * <p />
+     * <br>
      * Examples:
      * <ul>
      *     <li>Snow melting due to being near a light source.</li>
      *     <li>Ice melting due to being near a light source.</li>
      * </ul>
-     * <p />
+     * <br>
      * If a Block Fade event is cancelled, the block will not fade, melt or disappear.
      *
      * @param event Relevant event details
@@ -167,7 +167,7 @@ public class BlockListener implements Listener {
 
     /**
      * Called when an item is dispensed from a block.
-     *<p />
+     *<br>
      * If a Block Dispense event is cancelled, the block will not dispense the item.
      *
      * @param event Relevant event details

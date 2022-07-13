@@ -41,19 +41,19 @@ public interface Block {
     Block getRelative(int modX, int modY, int modZ);
 
     /**
-     * Gets the block at the given face<br />
-     * <br />
+     * Gets the block at the given face<br>
+     * <br>
      * This method is equal to getRelative(face, 1)
      *
      * @param face Face of this block to return
      * @return Block at the given face
-     * @see Block#getRelative(BlockFace face, int distance);
+     * @see Block#getRelative(BlockFace, int)
      */
     Block getRelative(BlockFace face);
 
     /**
-     * Gets the block at the given distance of the given face<br />
-     * <br />
+     * Gets the block at the given distance of the given face<br>
+     * <br>
      * For example, the following method places water at 100,102,100; two blocks
      * above 100,100,100.
      * <pre>
@@ -161,8 +161,8 @@ public interface Block {
     boolean setTypeIdAndData(int type, byte data, boolean applyPhyiscs);
 
     /**
-     * Gets the face relation of this block compared to the given block<br />
-     * <br />
+     * Gets the face relation of this block compared to the given block<br>
+     * <br>
      * For example:
      * <pre>
      * Block current = world.getBlockAt(100, 100, 100);
@@ -170,7 +170,7 @@ public interface Block {
      *
      * current.getFace(target) == BlockFace.Up;
      * </pre>
-     * <br />
+     * <br>
      * If the given block is not connected to this block, null may be returned
      *
      * @param block Block to compare against this block

@@ -157,7 +157,7 @@ public class Permission {
      *
      * The data may contain the following keys:
      * default: Boolean true or false. If not specified, false.
-     * children: Map<String, Boolean> of child permissions. If not specified, empty list.
+     * children: {@code Map<String, Boolean>} of child permissions. If not specified, empty list.
      * description: Short string containing a very small description of this description. If not specified, empty string.
      *
      * @param name Name of the permission

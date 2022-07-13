@@ -69,8 +69,6 @@ public interface Inventory {
 
     /**
      * Set the inventory's contents
-     *
-     * @return All the ItemStacks from all slots
      */
     public void setContents(ItemStack[] items);
 

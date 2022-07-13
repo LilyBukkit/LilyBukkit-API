@@ -1,5 +1,7 @@
 package org.bukkit.util;
 
+import java.util.Map;
+
 /**
  * A vector with a hash function that floors the X, Y, Z components, a la
  * BlockVector in WorldEdit. BlockVectors can be used in hash sets and
@@ -107,5 +109,24 @@ public class BlockVector extends Vector {
         v.y = y;
         v.z = z;
         return v;
+    }
+
+    // UPDATE 1.0.5
+    public static BlockVector deserialize(Map<String, Object> args) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        if (args.containsKey("x")) {
+            x = (Double) args.get("x");
+        }
+        if (args.containsKey("y")) {
+            y = (Double) args.get("y");
+        }
+        if (args.containsKey("z")) {
+            z = (Double) args.get("z");
+        }
+
+        return new BlockVector(x, y, z);
     }
 }

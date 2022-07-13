@@ -1,8 +1,12 @@
 package org.bukkit.util;
 
-import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Represents a mutable vector. Because the components of Vectors are mutable,
@@ -12,7 +16,7 @@ import org.bukkit.World;
  *
  * @author sk89q
  */
-public class Vector implements Cloneable {
+public class Vector implements Cloneable, ConfigurationSerializable {
     private static final long serialVersionUID = -2657651106777219169L;
 
     private static Random random = new Random();
@@ -274,9 +278,9 @@ public class Vector implements Cloneable {
     /**
      * Calculates the cross product of this vector with another. The cross
      * product is defined as:
-     *
-     * x = y1 * z2 - y2 * z1<br/>
-     * y = z1 * x2 - z2 * x1<br/>
+     * <p>
+     * x = y1 * z2 - y2 * z1<br>
+     * y = z1 * x2 - z2 * x1<br>
      * z = x1 * y2 - x2 * y1
      *
      * @param o
@@ -502,7 +506,7 @@ public class Vector implements Cloneable {
 
     /**
      * Checks to see if two objects are equal.
-     *
+     * <p>
      * Only two Vectors can ever return true. This method uses a fuzzy match
      * to account for floating point errors. The epsilon can be retrieved
      * with epsilon.
@@ -555,7 +559,6 @@ public class Vector implements Cloneable {
 
     /**
      * Returns this vector's components as x,y,z.
-     *
      */
     @Override
     public String toString() {
@@ -630,5 +633,34 @@ public class Vector implements Cloneable {
      */
     public static Vector getRandom() {
         return new Vector(random.nextDouble(), random.nextDouble(), random.nextDouble());
+    }
+
+    // UPDATE 1.0.5
+    public Map<String, Object> serialize() {
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+        result.put("x", getX());
+        result.put("y", getY());
+        result.put("z", getZ());
+
+        return result;
+    }
+
+    public static Vector deserialize(Map<String, Object> args) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        if (args.containsKey("x")) {
+            x = (Double) args.get("x");
+        }
+        if (args.containsKey("y")) {
+            y = (Double) args.get("y");
+        }
+        if (args.containsKey("z")) {
+            z = (Double) args.get("z");
+        }
+
+        return new Vector(x, y, z);
     }
 }

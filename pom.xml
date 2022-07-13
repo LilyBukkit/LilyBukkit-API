@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.vladthemountain</groupId>
     <artifactId>lilybukkit</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <name>LilyBukkit</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.7</version>
+            <version>1.9</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -71,8 +71,8 @@
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
-            <artifactId>guava-collections</artifactId>
-            <version>r03</version>
+            <artifactId>guava</artifactId>
+            <version>10.0</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

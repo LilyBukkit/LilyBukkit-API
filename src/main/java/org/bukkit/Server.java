@@ -1,6 +1,7 @@
 package org.bukkit;
 
 import org.bukkit.command.CommandException;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.generator.ChunkGenerator;
 import com.avaje.ebean.config.ServerConfig;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.Recipe;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 import org.bukkit.command.PluginCommand;
@@ -330,4 +332,124 @@ public interface Server {
      * @return whether this server allows PVP or not
      */
     public boolean getPVPEnabled();
+
+    // UPDATE 1.0.5
+    /**
+     * Used for all administrative messages, such as an operator using a command.
+     *
+     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
+     */
+    public static final String BROADCAST_CHANNEL_ADMINISTRATIVE = "bukkit.broadcast.admin";
+
+    /**
+     * Used for all announcement messages, such as informing users that a player has joined.
+     *
+     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
+     */
+    public static final String BROADCAST_CHANNEL_USERS = "bukkit.broadcast.user";
+
+    /**
+     * Sets the whitelist on or off
+     *
+     * @param value true if whitelist is on, otherwise false
+     */
+    public void setWhitelist(boolean value);
+
+    /**
+     * Gets a list of whitelisted players
+     *
+     * @return Set containing all whitelisted players
+     */
+    public Set<OfflinePlayer> getWhitelistedPlayers();
+
+    /**
+     * Reloads the whitelist from disk
+     */
+    public void reloadWhitelist();
+
+    /**
+     * Gets the player with the exact given name, case insensitive
+     *
+     * @param name Exact name of the player to retrieve
+     * @return Player object or null if not found
+     */
+    public Player getPlayerExact(String name);
+
+    /**
+     * Creates or loads a world with the given name using the specified options.
+     * <p>
+     * If the world is already loaded, it will just return the equivalent of
+     * getWorld(creator.name()).
+     *
+     * @param creator Options to use when creating the world
+     * @return Newly created or loaded world
+     */
+    public World createWorld(WorldCreator creator);
+
+    /**
+     * Shutdowns the server, stopping everything.
+     */
+    public void shutdown();
+
+    /**
+     * Broadcasts the specified message to every user with the given permission
+     *
+     * @param message Message to broadcast
+     * @param permission Permission the users must have to receive the broadcast
+     * @return Amount of users who received the message
+     */
+    public int broadcast(String message, String permission);
+
+    /**
+     * Gets the player by the given name, regardless if they are offline or online.
+     *
+     * This will return an object even if the player does not exist. To this method, all players will exist.
+     *
+     * @param name Name of the player to retrieve
+     * @return OfflinePlayer object
+     */
+    public OfflinePlayer getOfflinePlayer(String name);
+
+    /**
+     * Gets a set containing all current IPs that are banned
+     *
+     * @return Set containing banned IP addresses
+     */
+    public Set<String> getIPBans();
+
+    /**
+     * Bans the specified address from the server
+     *
+     * @param address IP address to ban
+     */
+    public void banIP(String address);
+
+    /**
+     * Unbans the specified address from the server
+     *
+     * @param address IP address to unban
+     */
+    public void unbanIP(String address);
+
+    /**
+     * Gets a set containing all banned players
+     *
+     * @return Set containing banned players
+     */
+    public Set<OfflinePlayer> getBannedPlayers();
+
+    /**
+     * Gets a set containing all player operators
+     *
+     * @return Set containing player operators
+     */
+    public Set<OfflinePlayer> getOperators();
+
+    /**
+     * Gets the {@link ConsoleCommandSender} that may be used as an input source
+     * for this server.
+     *
+     * @return The Console CommandSender
+     */
+    public ConsoleCommandSender getConsoleSender();
 }

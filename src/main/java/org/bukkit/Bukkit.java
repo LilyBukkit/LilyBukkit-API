@@ -9,7 +9,8 @@ public final class Bukkit {
     /**
      * Static class cannot be initialized.
      */
-    private Bukkit() {}
+    private Bukkit() {
+    }
 
     /**
      * Gets the current {@link Server} singleton
@@ -22,7 +23,7 @@ public final class Bukkit {
 
     /**
      * Attempts to set the {@link Server} singleton.
-     *
+     * <p>
      * This cannot be done if the Server is already set.
      *
      * @param server Server instance
@@ -33,5 +34,12 @@ public final class Bukkit {
         }
 
         Bukkit.server = server;
+        // Bukkit 1.8.1-R0
+        server.getLogger().info("This server is running " + server.getName() + " version " + server.getVersion() + " (Implementing API version " + getBukkitVersion() + ")");
+    }
+
+    //CUSTOM
+    public static String getBukkitVersion() {
+        return "lb-1.0.5";
     }
 }

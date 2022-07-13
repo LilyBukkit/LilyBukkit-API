@@ -52,7 +52,6 @@ public class RegisteredListener {
 
     /**
      * Calls the event executor
-     * @return Registered Priority
      */
     public void callEvent(Event event) {
         executor.execute(listener, event);
