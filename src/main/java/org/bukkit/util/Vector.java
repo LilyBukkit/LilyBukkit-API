@@ -2,7 +2,6 @@ package org.bukkit.util;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,7 +15,7 @@ import java.util.Random;
  *
  * @author sk89q
  */
-public class Vector implements Cloneable, ConfigurationSerializable {
+public class Vector implements Cloneable {
     private static final long serialVersionUID = -2657651106777219169L;
 
     private static Random random = new Random();
@@ -633,34 +632,5 @@ public class Vector implements Cloneable, ConfigurationSerializable {
      */
     public static Vector getRandom() {
         return new Vector(random.nextDouble(), random.nextDouble(), random.nextDouble());
-    }
-
-    // UPDATE 1.0.5
-    public Map<String, Object> serialize() {
-        Map<String, Object> result = new LinkedHashMap<String, Object>();
-
-        result.put("x", getX());
-        result.put("y", getY());
-        result.put("z", getZ());
-
-        return result;
-    }
-
-    public static Vector deserialize(Map<String, Object> args) {
-        double x = 0;
-        double y = 0;
-        double z = 0;
-
-        if (args.containsKey("x")) {
-            x = (Double) args.get("x");
-        }
-        if (args.containsKey("y")) {
-            y = (Double) args.get("y");
-        }
-        if (args.containsKey("z")) {
-            z = (Double) args.get("z");
-        }
-
-        return new Vector(x, y, z);
     }
 }
