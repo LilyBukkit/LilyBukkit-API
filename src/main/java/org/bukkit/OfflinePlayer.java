@@ -47,6 +47,13 @@ public interface OfflinePlayer extends ServerOperator {
     public void setWhitelisted(boolean value);
 
     /**
+     * Checks if this player's IP is whitelisted or not
+     *
+     * @return true if whitelisted
+     */
+    public boolean isIPWhitelisted();
+
+    /**
      * Sets if this player's IP is whitelisted or not
      *
      * @param value true if whitelisted
