@@ -1,10 +1,9 @@
 package org.bukkit;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 
-public interface OfflinePlayer extends ServerOperator, ConfigurationSerializable {
+public interface OfflinePlayer extends ServerOperator {
     /**
      * Checks if this player is currently online
      *
@@ -46,13 +45,20 @@ public interface OfflinePlayer extends ServerOperator, ConfigurationSerializable
      * @param value true if whitelisted
      */
     public void setWhitelisted(boolean value);
-    
+
+    /**
+     * Sets if this player's IP is whitelisted or not
+     *
+     * @param value true if whitelisted
+     */
+    public void setIPWhitelisted(boolean value);
+
     /**
      * Gets a {@link Player} object that this represents, if there is one
      * <p>
      * If the player is online, this will return that player. Otherwise,
      * it will return null.
-     * 
+     *
      * @return Online player
      */
     public Player getPlayer();

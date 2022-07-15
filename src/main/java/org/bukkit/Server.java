@@ -368,25 +368,6 @@ public interface Server {
     public void reloadWhitelist();
 
     /**
-     * Gets the player with the exact given name, case insensitive
-     *
-     * @param name Exact name of the player to retrieve
-     * @return Player object or null if not found
-     */
-    public Player getPlayerExact(String name);
-
-    /**
-     * Creates or loads a world with the given name using the specified options.
-     * <p>
-     * If the world is already loaded, it will just return the equivalent of
-     * getWorld(creator.name()).
-     *
-     * @param creator Options to use when creating the world
-     * @return Newly created or loaded world
-     */
-    public World createWorld(WorldCreator creator);
-
-    /**
      * Shutdowns the server, stopping everything.
      */
     public void shutdown();

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.vladthemountain</groupId>
     <artifactId>lilybukkit</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <name>LilyBukkit</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -597,6 +597,17 @@ public interface World {
     public boolean isWinter();
 
     /**
+     * Returns whether the world should be saved.
+     * @return if the world should be saved
+     */
+    public boolean getAutoSave();
+
+    /**
+     * Sets whether the world should be saved.
+     */
+    public void setAutoSave(boolean save);
+
+    /**
      * Represents various map environment types that a world may be
      */
     public enum Environment {
