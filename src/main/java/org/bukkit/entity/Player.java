@@ -4,13 +4,14 @@ import java.net.InetSocketAddress;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
  * Represents a player, connected or not
  *
  */
-public interface Player extends HumanEntity, CommandSender {
+public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     /**
      * Checks if this player is currently online
