@@ -65,7 +65,7 @@ public final class SimpleCommandMap implements CommandMap {
             }
         }
 
-        // Register to us so further updates of the commands label and aliases are postponed until its registered
+        // Register to us so further updates of the commands label and aliases are postponed until its reregistered
         command.register(this);
 
         return registeredPassedLabel;
