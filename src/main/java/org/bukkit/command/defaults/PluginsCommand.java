@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 public class PluginsCommand extends Command {
-    public PluginsCommand(String name) {
-        super(name);
+    public PluginsCommand() {
+        super("plugins");
         this.description = "Gets a list of plugins running on the server";
         this.usageMessage = "/plugins";
         this.setPermission("bukkit.command.plugins");

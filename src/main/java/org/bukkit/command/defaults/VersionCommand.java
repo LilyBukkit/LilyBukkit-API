@@ -10,8 +10,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 public class VersionCommand extends Command {
-    public VersionCommand(String name) {
-        super(name);
+    public VersionCommand() {
+        super("version");
         
         this.description = "Gets the version of this server including any plugins in use";
         this.usageMessage = "/version [plugin name]";

@@ -7,8 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class ReloadCommand extends Command {
-    public ReloadCommand(String name) {
-        super(name);
+    public ReloadCommand() {
+        super("reload");
         this.description = "Reloads the server configuration and plugins";
         this.usageMessage = "/reload";
         this.setPermission("bukkit.command.reload");

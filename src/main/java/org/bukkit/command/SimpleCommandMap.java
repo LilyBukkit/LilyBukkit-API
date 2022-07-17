@@ -29,9 +29,9 @@ public final class SimpleCommandMap implements CommandMap {
     }
 
     private void setDefaultCommands() {
-        register("bukkit", new VersionCommand("version"));
-        register("bukkit", new ReloadCommand("reload"));
-        register("bukkit", new PluginsCommand("plugins"));
+        register("bukkit", new VersionCommand());
+        register("bukkit", new ReloadCommand());
+        register("bukkit", new PluginsCommand());
     }
 
     /**
@@ -65,7 +65,7 @@ public final class SimpleCommandMap implements CommandMap {
             }
         }
 
-        // Register to us so further updates of the commands label and aliases are postponed until its reregistered
+        // Register to us so further updates of the commands label and aliases are postponed until its registered
         command.register(this);
 
         return registeredPassedLabel;
@@ -77,25 +77,25 @@ public final class SimpleCommandMap implements CommandMap {
      * @param fallbackPrefix a prefix which is prepended to the command with a ':' one or more times to make the command unique
      * @param command the command to register
      * @return true if command was registered with the passed in label, false otherwise.
-     * If isAlias was true a return of false indicates no command was registerd
+     * If isAlias was true a return of false indicates no command was registered
      * If isAlias was false a return of false indicates the fallbackPrefix was used one or more times to create a unique name for the command
      */
     private synchronized boolean register(String label, String fallbackPrefix, Command command, boolean isAlias) {
         String lowerLabel = label.trim().toLowerCase();
 
         if (isAlias && knownCommands.containsKey(lowerLabel)) {
-            // Request is for an alias and it conflicts with a existing command or previous alias ignore it
+            // Request is for an alias, and it conflicts with a existing command or previous alias ignore it
             // Note: This will mean it gets removed from the commands list of active aliases
             return false;
         }
 
         String lowerPrefix = fallbackPrefix.trim().toLowerCase();
-        boolean registerdPassedLabel = true;
+        boolean registeredPassedLabel = true;
 
         // If the command exists but is an alias we overwrite it, otherwise we rename it based on the fallbackPrefix
         while (knownCommands.containsKey(lowerLabel) && !aliases.contains(lowerLabel)) {
             lowerLabel = lowerPrefix + ":" + lowerLabel;
-            registerdPassedLabel = false;
+            registeredPassedLabel = false;
         }
 
         if (isAlias) {
@@ -107,7 +107,7 @@ public final class SimpleCommandMap implements CommandMap {
         }
         knownCommands.put(lowerLabel, command);
 
-        return registerdPassedLabel;
+        return registeredPassedLabel;
     }
 
     /**
@@ -127,7 +127,7 @@ public final class SimpleCommandMap implements CommandMap {
         }
 
         try {
-            // Note: we don't return the result of target.execute as thats success / failure, we return handled (true) or not handled (false)
+            // Note: we don't return the result of target.execute as that's success / failure, we return handled (true) or not handled (false)
             target.execute(sender, sentCommandLabel, Arrays_copyOfRange(args, 1, args.length));
         } catch (CommandException ex) {
             throw ex;
@@ -171,7 +171,7 @@ public final class SimpleCommandMap implements CommandMap {
                 }
             }
 
-            // We register these as commands so they have absolute priority.
+            // We register these as commands, so they have absolute priority.
 
             if (targets.size() > 0) {
                 knownCommands.put(alias.toLowerCase(), new MultipleCommandAlias(alias.toLowerCase(), targets.toArray(new Command[0])));
