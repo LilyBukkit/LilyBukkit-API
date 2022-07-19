@@ -10,8 +10,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 public class VersionCommand extends Command {
-    public VersionCommand() {
-        super("version");
+    public VersionCommand(String name) {
+        super(name);
         
         this.description = "Gets the version of this server including any plugins in use";
         this.usageMessage = "/version [plugin name]";
@@ -24,7 +24,7 @@ public class VersionCommand extends Command {
         if (!testPermission(sender)) return true;
         
         if (args.length == 0) {
-            sender.sendMessage("This server is running " + ChatColor.GREEN + Bukkit.getServer().getName() + ChatColor.WHITE + " version " + ChatColor.GREEN + Bukkit.getServer().getVersion());
+            sender.sendMessage("This server is running " + ChatColor.GREEN + Bukkit.getName() + ChatColor.WHITE + " version " + ChatColor.GREEN + Bukkit.getServer().getVersion());
             sender.sendMessage("This server is also sporting some funky dev build of Bukkit!");
         } else {
             StringBuilder name = new StringBuilder();
@@ -37,7 +37,7 @@ public class VersionCommand extends Command {
                 name.append(arg);
             }
 
-            Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name.toString());
+            Plugin plugin = Bukkit.getPluginManager().getPlugin(name.toString());
 
             if (plugin != null) {
                 PluginDescriptionFile desc = plugin.getDescription();

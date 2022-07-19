@@ -26,7 +26,7 @@ public class ListCommand extends VanillaCommand {
             players.append(player.getDisplayName());
         }
 
-        sender.sendMessage("Connected players: " + players.toString());
+        sender.sendMessage("Connected players: " + players.toString().toString());
 
         return true;
     }

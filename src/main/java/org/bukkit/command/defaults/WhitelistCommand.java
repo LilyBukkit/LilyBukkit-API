@@ -21,19 +21,19 @@ public class WhitelistCommand extends VanillaCommand {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (badPerm(sender, "reload")) return true;
 
-                Bukkit.getServer().reloadWhitelist();
+                Bukkit.reloadWhitelist();
                 Command.broadcastCommandMessage(sender, "Reloaded white-list from file");
                 return true;
             } else if (args[0].equalsIgnoreCase("on")) {
                 if (badPerm(sender, "enable")) return true;
 
-                Bukkit.getServer().setWhitelist(true);
+                Bukkit.setWhitelist(true);
                 Command.broadcastCommandMessage(sender, "Turned on white-listing");
                 return true;
             } else if (args[0].equalsIgnoreCase("off")) {
                 if (badPerm(sender, "disable")) return true;
 
-                Bukkit.getServer().setWhitelist(false);
+                Bukkit.setWhitelist(false);
                 Command.broadcastCommandMessage(sender, "Turned off white-listing");
                 return true;
             } else if (args[0].equalsIgnoreCase("list")) {
@@ -41,7 +41,7 @@ public class WhitelistCommand extends VanillaCommand {
 
                 StringBuilder result = new StringBuilder();
 
-                for (OfflinePlayer player : Bukkit.getServer().getWhitelistedPlayers()) {
+                for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
                     if (result.length() > 0) {
                         result.append(" ");
                     }
@@ -56,14 +56,14 @@ public class WhitelistCommand extends VanillaCommand {
             if (args[0].equalsIgnoreCase("add")) {
                 if (badPerm(sender, "add")) return true;
 
-                Bukkit.getServer().getOfflinePlayer(args[1]).setWhitelisted(true);
+                Bukkit.getOfflinePlayer(args[1]).setWhitelisted(true);
 
                 Command.broadcastCommandMessage(sender, "Added " + args[1] + " to white-list");
                 return true;
             } else if (args[0].equalsIgnoreCase("remove")) {
                 if (badPerm(sender, "remove")) return true;
 
-                Bukkit.getServer().getOfflinePlayer(args[1]).setWhitelisted(false);
+                Bukkit.getOfflinePlayer(args[1]).setWhitelisted(false);
 
                 Command.broadcastCommandMessage(sender, "Removed " + args[1] + " from white-list");
                 return true;
@@ -72,13 +72,13 @@ public class WhitelistCommand extends VanillaCommand {
             else if (args[0].equalsIgnoreCase("add-ip")) {
                 if (badPerm(sender, "add-ip")) return true;
 
-                Bukkit.getServer().getOfflinePlayer(args[1]).setIPWhitelisted(true);
+                Bukkit.getOfflinePlayer(args[1]).setIPWhitelisted(true);
 
                 Command.broadcastCommandMessage(sender, "Added " + args[1] + "'s IP to whitelist");
             } else if (args[0].equalsIgnoreCase("remove-ip")) {
                 if (badPerm(sender, "remove-ip")) return true;
 
-                Bukkit.getServer().getOfflinePlayer(args[1]).setIPWhitelisted(false);
+                Bukkit.getOfflinePlayer(args[1]).setIPWhitelisted(false);
 
                 Command.broadcastCommandMessage(sender, "Removed " + args[1] + "'s IP from the whitelist");
             }

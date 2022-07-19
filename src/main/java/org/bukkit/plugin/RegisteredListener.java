@@ -52,6 +52,7 @@ public class RegisteredListener {
 
     /**
      * Calls the event executor
+     * @param event The event
      */
     public void callEvent(Event event) {
         executor.execute(listener, event);

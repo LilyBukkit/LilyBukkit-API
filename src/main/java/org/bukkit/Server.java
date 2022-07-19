@@ -1,28 +1,42 @@
 package org.bukkit;
 
-import org.bukkit.command.CommandException;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.generator.ChunkGenerator;
 import com.avaje.ebean.config.ServerConfig;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.scheduler.BukkitScheduler;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
-import org.bukkit.command.PluginCommand;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
-import org.bukkit.scheduler.BukkitScheduler;
 
 /**
  * Represents a server implementation
  */
 public interface Server {
+
+    /**
+     * Used for all administrative messages, such as an operator using a command.
+     * <p>
+     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
+     */
+    public static final String BROADCAST_CHANNEL_ADMINISTRATIVE = "bukkit.broadcast.admin";
+
+    /**
+     * Used for all announcement messages, such as informing users that a player has joined.
+     * <p>
+     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
+     */
+    public static final String BROADCAST_CHANNEL_USERS = "bukkit.broadcast.user";
 
     /**
      * Gets the name of this server implementation
@@ -96,7 +110,28 @@ public interface Server {
     public boolean hasWhitelist();
 
     /**
+     * Sets the whitelist on or off
+     *
+     * @param value true if whitelist is on, otherwise false
+     */
+    public void setWhitelist(boolean value);
+
+    /**
+     * Gets a list of whitelisted players
+     *
+     * @return Set containing all whitelisted players
+     */
+    public Set<OfflinePlayer> getWhitelistedPlayers();
+
+    /**
+     * Reloads the whitelist from disk
+     */
+    public void reloadWhitelist();
+
+    /**
      * Broadcast a message to all players.
+     * <p>
+     * This is the same as calling {@link #broadcast(java.lang.String, java.lang.String)} to {@link #BROADCAST_CHANNEL_USERS}
      *
      * @param message the message
      * @return the number of players
@@ -106,14 +141,24 @@ public interface Server {
     /**
      * Gets the name of the update folder. The update folder is used to safely update
      * plugins at the right moment on a plugin load.
+     * <p>
+     * The update folder name is relative to the plugins folder.
      *
      * @return The name of the update folder
      */
     public String getUpdateFolder();
 
     /**
-     * Gets a player object by the given username
+     * Gets the update folder. The update folder is used to safely update
+     * plugins at the right moment on a plugin load.
      *
+     * @return The name of the update folder
+     */
+    public File getUpdateFolderFile();
+
+    /**
+     * Gets a player object by the given username
+     * <p>
      * This method may not return objects for offline players
      *
      * @param name Name to look up
@@ -122,9 +167,17 @@ public interface Server {
     public Player getPlayer(String name);
 
     /**
+     * Gets the player with the exact given name, case insensitive
+     *
+     * @param name Exact name of the player to retrieve
+     * @return Player object or null if not found
+     */
+    public Player getPlayerExact(String name);
+
+    /**
      * Attempts to match any players with the given name, and returns a list
      * of all possibly matches
-     *
+     * <p>
      * This list is not sorted in any particular order. If an exact match is found,
      * the returned list will only contain a single result.
      *
@@ -166,7 +219,7 @@ public interface Server {
      * If the world is already loaded, it will just return the equivalent of
      * getWorld(name)
      *
-     * @param name Name of the world to load
+     * @param name        Name of the world to load
      * @param environment Environment type of the world
      * @return Newly created or loaded World
      */
@@ -177,9 +230,9 @@ public interface Server {
      * If the world is already loaded, it will just return the equivalent of
      * getWorld(name)
      *
-     * @param name Name of the world to load
+     * @param name        Name of the world to load
      * @param environment Environment type of the world
-     * @param seed Seed value to create the world with
+     * @param seed        Seed value to create the world with
      * @return Newly created or loaded World
      */
     public World createWorld(String name, World.Environment environment, long seed);
@@ -189,9 +242,9 @@ public interface Server {
      * If the world is already loaded, it will just return the equivalent of
      * getWorld(name)
      *
-     * @param name Name of the world to load
+     * @param name        Name of the world to load
      * @param environment Environment type of the world
-     * @param generator ChunkGenerator to use in the construction of the new world
+     * @param generator   ChunkGenerator to use in the construction of the new world
      * @return Newly created or loaded World
      */
     public World createWorld(String name, World.Environment environment, ChunkGenerator generator);
@@ -201,15 +254,26 @@ public interface Server {
      * If the world is already loaded, it will just return the equivalent of
      * getWorld(name)
      *
-     * @param name Name of the world to load
+     * @param name        Name of the world to load
      * @param environment Environment type of the world
-     * @param seed Seed value to create the world with
-     * @param generator ChunkGenerator to use in the construction of the new world
+     * @param seed        Seed value to create the world with
+     * @param generator   ChunkGenerator to use in the construction of the new world
      * @return Newly created or loaded World
      */
     public World createWorld(String name, World.Environment environment, long seed, ChunkGenerator generator);
 
-     /**
+    /**
+     * Creates or loads a world with the given name using the specified options.
+     * <p>
+     * If the world is already loaded, it will just return the equivalent of
+     * getWorld(creator.name()).
+     *
+     * @param creator Options to use when creating the world
+     * @return Newly created or loaded world
+     */
+    public World createWorld(WorldCreator creator);
+
+    /**
      * Unloads a world with the given name.
      *
      * @param name Name of the world to unload
@@ -222,7 +286,7 @@ public interface Server {
      * Unloads the given world.
      *
      * @param world The world to unload
-     * @param save Whether to save the chunks before unloading.
+     * @param save  Whether to save the chunks before unloading.
      * @return Whether the action was Successful
      */
     public boolean unloadWorld(World world, boolean save);
@@ -271,11 +335,12 @@ public interface Server {
     /**
      * Dispatches a command on the server, and executes it if found.
      *
+     * @param sender The apparent sender of the command
      * @param commandLine command + arguments. Example: "test abc 123"
-     * @return targetFound returns false if no target is found.
+     * @return returns false if no target is found.
      * @throws CommandException Thrown when the executor for the given command fails with an unhandled exception
      */
-    public boolean dispatchCommand(CommandSender sender, String commandLine);
+    public boolean dispatchCommand(CommandSender sender, String commandLine) throws CommandException;
 
     /**
      * Populates a given {@link ServerConfig} with values attributes to this server
@@ -286,6 +351,7 @@ public interface Server {
 
     /**
      * Adds a recipe to the crafting manager.
+     *
      * @param recipe The recipe to add.
      * @return True to indicate that the recipe was added.
      */
@@ -327,47 +393,6 @@ public interface Server {
     public boolean getAllowFlight();
 
     /**
-     * I don't remember if it existed.<br>
-     * Gets whether this server allows PVP or not.
-     * @return whether this server allows PVP or not
-     */
-    public boolean getPVPEnabled();
-
-    // UPDATE 1.0.5
-    /**
-     * Used for all administrative messages, such as an operator using a command.
-     *
-     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
-     */
-    public static final String BROADCAST_CHANNEL_ADMINISTRATIVE = "bukkit.broadcast.admin";
-
-    /**
-     * Used for all announcement messages, such as informing users that a player has joined.
-     *
-     * For use in {@link #broadcast(java.lang.String, java.lang.String)}
-     */
-    public static final String BROADCAST_CHANNEL_USERS = "bukkit.broadcast.user";
-
-    /**
-     * Sets the whitelist on or off
-     *
-     * @param value true if whitelist is on, otherwise false
-     */
-    public void setWhitelist(boolean value);
-
-    /**
-     * Gets a list of whitelisted players
-     *
-     * @return Set containing all whitelisted players
-     */
-    public Set<OfflinePlayer> getWhitelistedPlayers();
-
-    /**
-     * Reloads the whitelist from disk
-     */
-    public void reloadWhitelist();
-
-    /**
      * Shutdowns the server, stopping everything.
      */
     public void shutdown();
@@ -375,7 +400,7 @@ public interface Server {
     /**
      * Broadcasts the specified message to every user with the given permission
      *
-     * @param message Message to broadcast
+     * @param message    Message to broadcast
      * @param permission Permission the users must have to receive the broadcast
      * @return Amount of users who received the message
      */
@@ -383,7 +408,7 @@ public interface Server {
 
     /**
      * Gets the player by the given name, regardless if they are offline or online.
-     *
+     * <p>
      * This will return an object even if the player does not exist. To this method, all players will exist.
      *
      * @param name Name of the player to retrieve

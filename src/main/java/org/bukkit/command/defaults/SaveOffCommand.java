@@ -19,7 +19,7 @@ public class SaveOffCommand extends VanillaCommand {
 
         Command.broadcastCommandMessage(sender, "Disabling level saving..");
 
-        for (World world : Bukkit.getServer().getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
             world.setAutoSave(false);
         }
 

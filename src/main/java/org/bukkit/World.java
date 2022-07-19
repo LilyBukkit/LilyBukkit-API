@@ -1,16 +1,21 @@
 package org.bukkit;
 
+import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import org.bukkit.block.Block;
-import org.bukkit.entity.*;
-import org.bukkit.generator.BlockPopulator;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 /**
  * Represents a world, which may contain entities, chunks and blocks
@@ -24,7 +29,7 @@ public interface World {
      * @param y Y-coordinate of the block
      * @param z Z-coordinate of the block
      * @return Block at the given coordinates
-     * @see #getBlockTypeIdAt(int, int, int) Returns the current type ID of the block
+     * @see #getBlockTypeIdAt(org.bukkit.Location) Returns the current type ID of the block
      */
     public Block getBlockAt(int x, int y, int z);
 
@@ -44,7 +49,7 @@ public interface World {
      * @param y Y-coordinate of the block
      * @param z Z-coordinate of the block
      * @return Type ID of the block at the given coordinates
-     * @see #getBlockAt(int, int, int) Returns a live Block object at the given location
+     * @see #getBlockAt(org.bukkit.Location) Returns a live Block object at the given location
      */
     public int getBlockTypeIdAt(int x, int y, int z);
 
@@ -79,7 +84,6 @@ public interface World {
      *
      * @param x X-coordinate of the block
      * @param z Z-coordinate of the block
-     *
      * @return Highest non-empty block
      */
     public Block getHighestBlockAt(int x, int z);
@@ -88,7 +92,6 @@ public interface World {
      * Gets the highest non-empty block at the given coordinates
      *
      * @param location Coordinates to get the highest block
-     *
      * @return Highest non-empty block
      */
     public Block getHighestBlockAt(Location location);
@@ -151,7 +154,7 @@ public interface World {
 
     /**
      * Loads the {@link Chunk} at the specified coordinates
-     *
+     * <p>
      * If the chunk does not exist, it will be generated.
      * This method is analogous to {@link #loadChunk(int, int, boolean)} where generate is true.
      *
@@ -163,8 +166,8 @@ public interface World {
     /**
      * Loads the {@link Chunk} at the specified coordinates
      *
-     * @param x X-coordinate of the chunk
-     * @param z Z-coordinate of the chunk
+     * @param x        X-coordinate of the chunk
+     * @param z        Z-coordinate of the chunk
      * @param generate Whether or not to generate a chunk if it doesn't already exist
      * @return true if the chunk has loaded successfully, otherwise false
      */
@@ -172,7 +175,7 @@ public interface World {
 
     /**
      * Safely unloads and saves the {@link Chunk} at the specified coordinates
-     *
+     * <p>
      * This method is analogous to {@link #unloadChunk(int, int, boolean, boolean)} where safe and saveis true
      *
      * @param chunk the chunk to unload
@@ -182,7 +185,7 @@ public interface World {
 
     /**
      * Safely unloads and saves the {@link Chunk} at the specified coordinates
-     *
+     * <p>
      * This method is analogous to {@link #unloadChunk(int, int, boolean, boolean)} where safe and saveis true
      *
      * @param x X-coordinate of the chunk
@@ -193,11 +196,11 @@ public interface World {
 
     /**
      * Safely unloads and optionally saves the {@link Chunk} at the specified coordinates
-     *
+     * <p>
      * This method is analogous to {@link #unloadChunk(int, int, boolean, boolean)} where save is true
      *
-     * @param x X-coordinate of the chunk
-     * @param z Z-coordinate of the chunk
+     * @param x    X-coordinate of the chunk
+     * @param z    Z-coordinate of the chunk
      * @param save Whether or not to save the chunk
      * @return true if the chunk has unloaded successfully, otherwise false
      */
@@ -206,8 +209,8 @@ public interface World {
     /**
      * Unloads and optionally saves the {@link Chunk} at the specified coordinates
      *
-     * @param x X-coordinate of the chunk
-     * @param z Z-coordinate of the chunk
+     * @param x    X-coordinate of the chunk
+     * @param z    Z-coordinate of the chunk
      * @param save Controls whether the chunk is saved
      * @param safe Controls whether to unload the chunk when players are nearby
      * @return true if the chunk has unloaded successfully, otherwise false
@@ -216,7 +219,7 @@ public interface World {
 
     /**
      * Safely queues the {@link Chunk} at the specified coordinates for unloading
-     *
+     * <p>
      * This method is analogous to {@link #unloadChunkRequest(int, int, boolean)} where safe is true
      *
      * @param x X-coordinate of the chunk
@@ -228,8 +231,8 @@ public interface World {
     /**
      * Queues the {@link Chunk} at the specified coordinates for unloading
      *
-     * @param x X-coordinate of the chunk
-     * @param z Z-coordinate of the chunk
+     * @param x    X-coordinate of the chunk
+     * @param z    Z-coordinate of the chunk
      * @param safe Controls whether to queue the chunk when players are nearby
      * @return Whether the chunk was actually queued
      */
@@ -257,7 +260,7 @@ public interface World {
      * Drops an item at the specified {@link Location}
      *
      * @param location Location to drop the item
-     * @param item ItemStack to drop
+     * @param item     ItemStack to drop
      * @return ItemDrop entity created as a result of this method
      */
     public Item dropItem(Location location, ItemStack item);
@@ -266,7 +269,7 @@ public interface World {
      * Drops an item at the specified {@link Location} with a random offset
      *
      * @param location Location to drop the item
-     * @param item ItemStack to drop
+     * @param item     ItemStack to drop
      * @return ItemDrop entity created as a result of this method
      */
     public Item dropItemNaturally(Location location, ItemStack item);
@@ -276,8 +279,8 @@ public interface World {
      *
      * @param location Location to spawn the arrow
      * @param velocity Velocity to shoot the arrow in
-     * @param speed Speed of the arrow. A recommend speed is 0.6
-     * @param spread Spread of the arrow. A recommend spread is 12
+     * @param speed    Speed of the arrow. A recommend speed is 0.6
+     * @param spread   Spread of the arrow. A recommend spread is 12
      * @return Arrow entity spawned as a result of this method
      */
     public Arrow spawnArrow(Location location, Vector velocity, float speed, float spread);
@@ -286,7 +289,7 @@ public interface World {
      * Creates a tree at the given {@link Location}
      *
      * @param location Location to spawn the tree
-     * @param type Type of the tree to create
+     * @param type     Type of the tree to create
      * @return true if the tree was created successfully, otherwise false
      */
     public boolean generateTree(Location location, TreeType type);
@@ -294,8 +297,8 @@ public interface World {
     /**
      * Creates a tree at the given {@link Location}
      *
-     * @param loc Location to spawn the tree
-     * @param type Type of the tree to create
+     * @param loc      Location to spawn the tree
+     * @param type     Type of the tree to create
      * @param delegate A class to call for each block changed as a result of this method
      * @return true if the tree was created successfully, otherwise false
      */
@@ -304,7 +307,7 @@ public interface World {
     /**
      * Creates a creature at the given {@link Location}
      *
-     * @param loc The location to spawn the creature
+     * @param loc  The location to spawn the creature
      * @param type The creature to spawn
      * @return Resulting LivingEntity of this method, or null if it was unsuccessful
      */
@@ -348,12 +351,12 @@ public interface World {
 
     /**
      * Gets a semi-unique identifier for this world.
-     *
+     * <p>
      * While it is highly unlikely that this may be shared with another World,
      * it is not guaranteed to be unique
      *
-     * @deprecated Replaced with {@link #getUID()}
      * @return Id of this world
+     * @deprecated Replaced with {@link #getUID()}
      */
     @Deprecated
     public long getId();
@@ -368,16 +371,16 @@ public interface World {
     /**
      * Sets the spawn location of the world
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
      * @return True if it was successfully set.
      */
     public boolean setSpawnLocation(int x, int y, int z);
 
     /**
      * Gets the relative in-game time of this world.
-     *
+     * <p>
      * The relative time is analogous to hours * 1000
      *
      * @return The current relative time
@@ -387,7 +390,7 @@ public interface World {
 
     /**
      * Sets the relative in-game time on the server.
-     *
+     * <p>
      * The relative time is analogous to hours * 1000
      * <br><br>
      * Note that setting the relative time below the current relative time will
@@ -421,9 +424,9 @@ public interface World {
     /**
      * Creates explosion at given coordinates with given power
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x     X coordinate
+     * @param y     Y coordinate
+     * @param z     Z coordinate
      * @param power The power of explosion, where 4F is TNT
      * @return false if explosion was canceled, otherwise true
      */
@@ -433,10 +436,10 @@ public interface World {
      * Creates explosion at given coordinates with given power and optionally setting
      * blocks on fire.
      *
-     * @param x
-     * @param y
-     * @param z
-     * @param power The power of explosion, where 4F is TNT
+     * @param x       X coordinate
+     * @param y       Y coordinate
+     * @param z       Z coordinate
+     * @param power   The power of explosion, where 4F is TNT
      * @param setFire Whether or not to set blocks on fire
      * @return false if explosion was canceled, otherwise true
      */
@@ -445,7 +448,7 @@ public interface World {
     /**
      * Creates explosion at given coordinates with given power
      *
-     * @param loc
+     * @param loc   Location to blow up
      * @param power The power of explosion, where 4F is TNT
      * @return false if explosion was canceled, otherwise true
      */
@@ -455,8 +458,8 @@ public interface World {
      * Creates explosion at given coordinates with given power and optionally setting
      * blocks on fire.
      *
-     * @param loc
-     * @param power The power of explosion, where 4F is TNT
+     * @param loc     Location to blow up
+     * @param power   The power of explosion, where 4F is TNT
      * @param setFire Whether or not to set blocks on fire
      * @return false if explosion was canceled, otherwise true
      */
@@ -478,12 +481,14 @@ public interface World {
 
     /**
      * Gets the current PVP setting for this world.
-     * @return
+     *
+     * @return True if PVP is enabled
      */
     public boolean getPVP();
 
     /**
      * Sets the PVP setting for this world.
+     *
      * @param pvp True/False whether PVP should be Enabled.
      */
     public void setPVP(boolean pvp);
@@ -511,7 +516,8 @@ public interface World {
      * Spawn an entity of a specific class at the given {@link Location}
      *
      * @param location the {@link Location} to spawn the entity at
-     * @param clazz the class of the {@link Entity} to spawn
+     * @param clazz    the class of the {@link Entity} to spawn
+     * @param <T>      the class of the {@link Entity} to spawn
      * @return an instance of the spawned {@link Entity}
      * @throws IllegalArgumentException if either parameter is null or the {@link Entity} requested cannot be spawned
      */
@@ -521,8 +527,8 @@ public interface World {
      * Plays an effect to all players within a default radius around a given location.
      *
      * @param location the {@link Location} around which players must be to hear the sound
-     * @param effect the {@link Effect}
-     * @param data a data bit needed for the RECORD_PLAY, SMOKE, and STEP_SOUND sounds
+     * @param effect   the {@link Effect}
+     * @param data     a data bit needed for the RECORD_PLAY, SMOKE, and STEP_SOUND sounds
      */
     public void playEffect(Location location, Effect effect, int data);
 
@@ -530,15 +536,16 @@ public interface World {
      * Plays an effect to all players within a given radius around a location.
      *
      * @param location the {@link Location} around which players must be to hear the effect
-     * @param effect the {@link Effect}
-     * @param data a data bit needed for the RECORD_PLAY, SMOKE, and STEP effects
-     * @param radius the radius around the location
+     * @param effect   the {@link Effect}
+     * @param data     a data bit needed for the RECORD_PLAY, SMOKE, and STEP effects
+     * @param radius   the radius around the location
      */
     public void playEffect(Location location, Effect effect, int data, int radius);
 
     /**
      * Get empty chunk snapshot (equivalent to all air blocks)
      * data.  Used for representing an ungenerated chunk.
+     *
      * @param x - chunk x coordinate
      * @param z - chunk z coordinate
      */
@@ -548,7 +555,7 @@ public interface World {
      * Sets the spawn flags for this.
      *
      * @param allowMonsters - if true, monsters are allowed to spawn in this world.
-     * @param allowAnimals - if true, animals are allowed to spawn in this world.
+     * @param allowAnimals  - if true, animals are allowed to spawn in this world.
      */
     public void setSpawnFlags(boolean allowMonsters, boolean allowAnimals);
 
@@ -568,12 +575,21 @@ public interface World {
 
     /**
      * Gets the maximum height of this world.
-     *
+     * <p>
      * If the max height is 100, there are only blocks from y=0 to y=99.
      *
      * @return Maximum height of the world
      */
     public int getMaxHeight();
+
+    /**
+     * Gets the sea level for this world.
+     * <p>
+     * This is often half of {@link #getMaxHeight()}
+     *
+     * @return Sea level
+     */
+    public int getSeaLevel();
 
     /**
      * Gets whether the world's spawn area should be kept loaded into memory or not.
@@ -583,29 +599,40 @@ public interface World {
     public boolean getKeepSpawnInMemory();
 
     /**
-    * Sets whether the world's spawn area should be kept loaded into memory or not.
-    *
-    * @param keepLoaded if true then the world's spawn area will be kept loaded into memory.
-    */
+     * Sets whether the world's spawn area should be kept loaded into memory or not.
+     *
+     * @param keepLoaded if true then the world's spawn area will be kept loaded into memory.
+     */
     public void setKeepSpawnInMemory(boolean keepLoaded);
 
     /**
-     * Returns whether the world is covered with snow
+     * Gets whether or not the world will automatically save
      *
-     * @return if the world is covered with snow
+     * @return true if the world will automatically save, otherwise false
      */
-    public boolean isWinter();
+    public boolean isAutoSave();
+
+    /**
+     * Sets whether or not the world will automatically save
+     *
+     * @param value true if the world should automatically save, otherwise false
+     */
+    public void setAutoSave(boolean value);
 
     /**
      * Returns whether the world should be saved.
-     * @return if the world should be saved
+     * Sets the Difficulty of the world.
+     *
+     * @param difficulty the new difficulty you want to set the world to
      */
-    public boolean getAutoSave();
+    public void setDifficulty(Difficulty difficulty);
 
     /**
-     * Sets whether the world should be saved.
+     * Gets the Difficulty of the world.
+     *
+     * @return The difficulty of the world.
      */
-    public void setAutoSave(boolean save);
+    public Difficulty getDifficulty();
 
     /**
      * Represents various map environment types that a world may be
@@ -650,4 +677,11 @@ public interface World {
             }
         }
     }
+
+    /**
+     * Returns whether the world is covered with snow
+     *
+     * @return if the world is covered with snow
+     */
+    public boolean isWinter();
 }

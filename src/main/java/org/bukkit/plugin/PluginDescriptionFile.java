@@ -1,17 +1,17 @@
 package org.bukkit.plugin;
 
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 /**
  * Provides access to a Plugins description file, plugin.yaml
@@ -25,11 +25,12 @@ public final class PluginDescriptionFile {
     private String version = null;
     private Object commands = null;
     private String description = null;
-    private ArrayList<String> authors = new ArrayList<String>();
+    private ArrayList<String> authors = new ArrayList<>();
     private String website = null;
     private boolean database = false;
     private PluginLoadOrder order = PluginLoadOrder.POSTWORLD;
-    private ArrayList<Permission> permissions = new ArrayList<Permission>();
+    private List<Permission> permissions = new ArrayList<>();
+    private PermissionDefault defaultPerm = PermissionDefault.OP;
 
     @SuppressWarnings("unchecked")
     public PluginDescriptionFile(final InputStream stream) throws InvalidDescriptionException {
@@ -38,7 +39,9 @@ public final class PluginDescriptionFile {
 
     /**
      * Loads a PluginDescriptionFile from the specified reader
-     * @param reader
+     *
+     * @param reader The reader
+     * @throws InvalidDescriptionException If the PluginDescriptionFile is invalid
      */
     @SuppressWarnings("unchecked")
     public PluginDescriptionFile(final Reader reader) throws InvalidDescriptionException {
@@ -48,8 +51,9 @@ public final class PluginDescriptionFile {
     /**
      * Creates a new PluginDescriptionFile with the given detailed
      *
-     * @param pluginName Name of this plugin
-     * @param mainClass Full location of the main class of this plugin
+     * @param pluginName    Name of this plugin
+     * @param pluginVersion Version of this plugin
+     * @param mainClass     Full location of the main class of this plugin
      */
     public PluginDescriptionFile(final String pluginName, final String pluginVersion, final String mainClass) {
         name = pluginName;
@@ -121,7 +125,7 @@ public final class PluginDescriptionFile {
     /**
      * Gets the description of this plugin
      *
-     * return Description of this plugin
+     * @return Description of this plugin
      */
     public String getDescription() {
         return description;
@@ -143,8 +147,12 @@ public final class PluginDescriptionFile {
         this.database = database;
     }
 
-    public ArrayList<Permission> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
+    }
+
+    public PermissionDefault getPermissionDefault() {
+        return defaultPerm;
     }
 
     private void loadMap(Map<String, Object> map) throws InvalidDescriptionException {
@@ -229,7 +237,7 @@ public final class PluginDescriptionFile {
 
         if (map.containsKey("load")) {
             try {
-                order = PluginLoadOrder.valueOf(((String)map.get("load")).toUpperCase().replaceAll("\\W", ""));
+                order = PluginLoadOrder.valueOf(((String) map.get("load")).toUpperCase().replaceAll("\\W", ""));
             } catch (ClassCastException ex) {
                 throw new InvalidDescriptionException(ex, "load is of wrong type");
             } catch (IllegalArgumentException ex) {
@@ -257,11 +265,21 @@ public final class PluginDescriptionFile {
             }
         }
 
+        if (map.containsKey("default-permission")) {
+            try {
+                defaultPerm = defaultPerm.getByName((String) map.get("default-permission"));
+            } catch (ClassCastException ex) {
+                throw new InvalidDescriptionException(ex, "default-permission is of wrong type");
+            } catch (IllegalArgumentException ex) {
+                throw new InvalidDescriptionException(ex, "default-permission is not a valid choice");
+            }
+        }
+
         if (map.containsKey("permissions")) {
             try {
-                 Map<String, Map<String, Object>> perms = (Map<String, Map<String, Object>>) map.get("permissions");
+                Map<String, Map<String, Object>> perms = (Map<String, Map<String, Object>>) map.get("permissions");
 
-                 loadPermissions(perms);
+                permissions = Permission.loadPermissions(perms, "Permission node '%s' in plugin description file for " + getFullName() + " is invalid", defaultPerm);
             } catch (ClassCastException ex) {
                 throw new InvalidDescriptionException(ex, "permissions are of wrong type");
             }
@@ -269,13 +287,14 @@ public final class PluginDescriptionFile {
     }
 
     private Map<String, Object> saveMap() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         map.put("name", name);
         map.put("main", main);
         map.put("version", version);
         map.put("database", database);
         map.put("order", order.toString());
+        map.put("default-permission", defaultPerm.toString());
 
         if (commands != null) {
             map.put("command", commands);
@@ -300,17 +319,5 @@ public final class PluginDescriptionFile {
         }
 
         return map;
-    }
-
-    private void loadPermissions(Map<String, Map<String, Object>> perms) {
-        Set<String> keys = perms.keySet();
-
-        for (String name : keys) {
-            try {
-                permissions.add(Permission.loadPermission(name, perms.get(name)));
-            } catch (Throwable ex) {
-                Bukkit.getServer().getLogger().log(Level.SEVERE, "Permission node '" + name + "' in plugin description file for " + getFullName() + " is invalid", ex);
-            }
-        }
     }
 }

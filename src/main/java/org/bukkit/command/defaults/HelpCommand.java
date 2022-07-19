@@ -33,7 +33,7 @@ public class HelpCommand extends VanillaCommand {
             //Array of Vanilla commands
             VanillaCommand[] vanillaCommands = new VanillaCommand[]{new HelpCommand(), new KickCommand(), new BanCommand(), new BanIpCommand(), new PardonCommand(), new PardonIpCommand(), new OpCommand(), new DeopCommand(), new TeleportCommand(), new GiveCommand(), new TellCommand(), new StopCommand(), new SaveCommand(), new SaveOnCommand(), new SaveOffCommand(), new ListCommand(), new SayCommand(), new MeCommand(), new WhitelistCommand()};
             //Array of built-in Bukkit commands
-            Command[] defaultCommands = new Command[]{new VersionCommand(), new PluginsCommand(), new ReloadCommand()};
+            Command[] defaultCommands = new Command[]{new VersionCommand("version"), new PluginsCommand("plugins"), new ReloadCommand("reload")};
             //Array of plugins' commands
             List<PluginCommand> pluginCommands = new ArrayList<>();
             //Filling the array. Yeah...

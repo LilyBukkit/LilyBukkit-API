@@ -25,7 +25,7 @@ public class OpCommand extends VanillaCommand {
 
         Command.broadcastCommandMessage(sender, "Opping " + args[0]);
 
-        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(args[0]);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
         player.setOp(true);
 
         if (player instanceof Player) {

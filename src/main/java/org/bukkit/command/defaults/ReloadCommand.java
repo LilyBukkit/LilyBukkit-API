@@ -7,8 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class ReloadCommand extends Command {
-    public ReloadCommand() {
-        super("reload");
+    public ReloadCommand(String name) {
+        super(name);
         this.description = "Reloads the server configuration and plugins";
         this.usageMessage = "/reload";
         this.setPermission("bukkit.command.reload");
@@ -19,7 +19,7 @@ public class ReloadCommand extends Command {
     public boolean execute(CommandSender sender, String currentAlias, String[] args) {
         if (!testPermission(sender)) return true;
 
-        Bukkit.getServer().reload();
+        Bukkit.reload();
         sender.sendMessage(ChatColor.GREEN + "Reload complete.");
 
         return true;

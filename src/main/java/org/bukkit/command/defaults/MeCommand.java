@@ -15,21 +15,19 @@ public class MeCommand extends VanillaCommand {
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args) {
         if (!testPermission(sender)) return true;
-        if (args.length < 1)  {
+        if (args.length < 1) {
             sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);
             return false;
         }
 
         StringBuilder message = new StringBuilder();
-        message.append(sender.getName());
-        if (args.length > 0) {
-	        for (int i = 0; i < args.length; i++) {
-	            message.append(" ");
-	            message.append(args[i]);
-	        }
+
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0) message.append(" ");
+            message.append(args[i]);
         }
 
-        Bukkit.getServer().broadcastMessage("* " + message.toString());
+        Bukkit.broadcastMessage("* " + message.toString().toString());
 
         return true;
     }

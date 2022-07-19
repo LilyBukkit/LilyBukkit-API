@@ -6,18 +6,25 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.util.config.Configuration;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a Java plugin
@@ -34,6 +41,8 @@ public abstract class JavaPlugin implements Plugin {
     private Configuration config = null;
     private boolean naggable = true;
     private EbeanServer ebean = null;
+    private FileConfiguration newConfig = null;
+    private File configFile = null;
 
     public JavaPlugin() {}
 
@@ -41,7 +50,7 @@ public abstract class JavaPlugin implements Plugin {
      * Returns the folder that the plugin data's files are located in. The
      * folder may not yet exist.
      *
-     * @return
+     * @return The folder.
      */
     public File getDataFolder() {
         return dataFolder;
@@ -98,10 +107,30 @@ public abstract class JavaPlugin implements Plugin {
      * does not exist and it cannot be loaded, no error will be emitted and
      * the configuration file will have no values.
      *
-     * @return
+     * @return The configuration.
      */
     public Configuration getConfiguration() {
         return config;
+    }
+
+    public FileConfiguration getConfig() {
+        return newConfig;
+    }
+
+    public void saveConfig() {
+        try {
+            newConfig.save(configFile);
+        } catch (IOException ex) {
+            Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + configFile, ex);
+        }
+    }
+
+    public InputStream getResource(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException("Filename cannot be null");
+        }
+
+        return getClassLoader().getResourceAsStream(filename);
     }
 
     /**
@@ -135,16 +164,16 @@ public abstract class JavaPlugin implements Plugin {
      *
      * This method should never be called manually.
      *
-     * @param loader PluginLoader that is responsible for this plugin
-     * @param server Server instance that is running this plugin
+     * @param loader      PluginLoader that is responsible for this plugin
+     * @param server      Server instance that is running this plugin
      * @param description PluginDescriptionFile containing metadata on this plugin
-     * @param dataFolder Folder containing the plugin's data
-     * @param file File containing this plugin
+     * @param dataFolder  Folder containing the plugin's data
+     * @param file        File containing this plugin
      * @param classLoader ClassLoader which holds this plugin
      */
     protected final void initialize(PluginLoader loader, Server server,
-            PluginDescriptionFile description, File dataFolder, File file,
-            ClassLoader classLoader) {
+                                    PluginDescriptionFile description, File dataFolder, File file,
+                                    ClassLoader classLoader) {
         if (!initialized) {
             this.initialized = true;
             this.loader = loader;
@@ -153,8 +182,17 @@ public abstract class JavaPlugin implements Plugin {
             this.description = description;
             this.dataFolder = dataFolder;
             this.classLoader = classLoader;
-            this.config = new Configuration(new File(dataFolder, "config.yml"));
+            this.configFile = new File(dataFolder, "config.yml");
+            this.config = new Configuration(configFile);
             this.config.load();
+            this.newConfig = YamlConfiguration.loadConfiguration(configFile);
+
+            InputStream defConfigStream = getResource("config.yml");
+            if (defConfigStream != null) {
+                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+
+                newConfig.setDefaults(defConfig);
+            }
 
             if (description.isDatabaseEnabled()) {
                 ServerConfig db = new ServerConfig();

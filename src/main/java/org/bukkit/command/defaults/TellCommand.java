@@ -22,7 +22,7 @@ public class TellCommand extends VanillaCommand {
             return false;
         }
 
-        Player player = Bukkit.getServer().getPlayer(args[0]);
+        Player player = Bukkit.getPlayerExact(args[0]);
 
         if (player == null) {
             sender.sendMessage("There's no player by that name online.");
@@ -37,8 +37,8 @@ public class TellCommand extends VanillaCommand {
             String result = ChatColor.GRAY + sender.getName() + " whispers " + message;
 
             if (sender instanceof ConsoleCommandSender) {
-                Bukkit.getServer().getLogger().info("[" + sender.getName() + "->" + player.getName() + "] " + message);
-                Bukkit.getServer().getLogger().info(result);
+                Bukkit.getLogger().info("[" + sender.getName() + "->" + player.getName() + "] " + message);
+                Bukkit.getLogger().info(result);
             }
 
             player.sendMessage(result);

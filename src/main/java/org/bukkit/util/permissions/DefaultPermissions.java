@@ -1,15 +1,16 @@
 package org.bukkit.util.permissions;
 
-import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import java.util.Map;
 
 public final class DefaultPermissions {
     private static final String ROOT = "craftbukkit";
     private static final String PREFIX = ROOT + ".";
     private static final String LEGACY_PREFIX = "craft";
-    
+
     private DefaultPermissions() {}
 
     public static Permission registerPermission(Permission perm) {
@@ -20,9 +21,9 @@ public final class DefaultPermissions {
         Permission result = perm;
 
         try {
-            Bukkit.getServer().getPluginManager().addPermission(perm);
+            Bukkit.getPluginManager().addPermission(perm);
         } catch (IllegalArgumentException ex) {
-            result = Bukkit.getServer().getPluginManager().getPermission(perm.getName());
+            result = Bukkit.getPluginManager().getPermission(perm.getName());
         }
 
         if (withLegacy) {

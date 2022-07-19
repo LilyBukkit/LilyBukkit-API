@@ -21,7 +21,7 @@ public class BanIpCommand extends VanillaCommand {
             return false;
         }
 
-        Bukkit.getServer().banIP(args[0]);
+        Bukkit.banIP(args[0]);
         Command.broadcastCommandMessage(sender, "Banning ip " + args[0]);
 
         return true;

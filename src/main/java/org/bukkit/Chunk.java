@@ -42,25 +42,37 @@ public interface Chunk {
 
     /**
      * Capture thread-safe read-only snapshot of chunk data
+     *
      * @return ChunkSnapshot
      */
     ChunkSnapshot getChunkSnapshot();
 
     /**
      * Capture thread-safe read-only snapshot of chunk data
+     *
      * @param includeMaxblocky - if true, snapshot includes per-coordinate maximum Y values
      * @return ChunkSnapshot
      */
     ChunkSnapshot getChunkSnapshot(boolean includeMaxblocky);
 
+    /**
+     * Get a list of all entities in the chunk.
+     *
+     * @return The entities.
+     */
     Entity[] getEntities();
 
+    /**
+     * Get a list of all tile entities in the chunk.
+     *
+     * @return The tile entities.
+     */
     BlockState[] getTileEntities();
 
     /**
      * Checks if the chunk is loaded.
      *
-     * @return
+     * @return True if it is loaded.
      */
     boolean isLoaded();
 

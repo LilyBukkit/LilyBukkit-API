@@ -21,7 +21,7 @@ public class KillCommand extends VanillaCommand {
             Player player = (Player)sender;
 
             EntityDamageEvent ede = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, 1000);
-            Bukkit.getServer().getPluginManager().callEvent(ede);
+            Bukkit.getPluginManager().callEvent(ede);
             if (ede.isCancelled()) return true;
 
             player.damage(ede.getDamage());

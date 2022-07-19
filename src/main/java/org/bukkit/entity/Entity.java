@@ -92,6 +92,7 @@ public interface Entity {
     /**
      * Sets the entity's current fire ticks (ticks before the entity stops being on fire).
      *
+     * @param ticks Current ticks remaining
      */
     public void setFireTicks(int ticks);
 
@@ -102,6 +103,8 @@ public interface Entity {
 
     /**
      * Returns true if this entity has been marked for removal.
+     *
+     * @return True if it is dead.
      */
     public boolean isDead();
 
@@ -123,47 +126,56 @@ public interface Entity {
     /**
      * Set the passenger of a vehicle.
      *
+     * @param passenger The new passenger.
      * @return false if it could not be done for whatever reason
      */
     public abstract boolean setPassenger(Entity passenger);
 
     /**
-     * Returns true if the vehicle has no passengers.
+     * Check if a vehicle has passengers.
      *
-     * @return
+     * @return True if the vehicle has no passengers.
      */
     public abstract boolean isEmpty();
 
     /**
-     * Eject any passenger. True if there was a passenger.
+     * Eject any passenger.
      *
+     * @return True if there was a passenger.
      */
     public abstract boolean eject();
 
     /**
      * Returns the distance this entity has fallen
+     *
+     * @return The distance.
      */
     public float getFallDistance();
 
     /**
      * Sets the fall distance for this entity
+     *
+     * @param distance The new distance.
      */
     public void setFallDistance(float distance);
 
     /**
      * Record the last {@link EntityDamageEvent} inflicted on this entity
+     *
      * @param event a {@link EntityDamageEvent}
      */
     public void setLastDamageCause(EntityDamageEvent event);
 
     /**
      * Retrieve the last {@link EntityDamageEvent} inflicted on this entity. This event may have been cancelled.
+     *
      * @return the last known {@link EntityDamageEvent} or null if hitherto unharmed
      */
     public EntityDamageEvent getLastDamageCause();
 
     /**
      * Returns a unique and persistent id for this entity
+     *
      * @return unique id
      */
     public UUID getUniqueId();

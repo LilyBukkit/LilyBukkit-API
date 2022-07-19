@@ -1,44 +1,129 @@
 package org.bukkit.plugin.java;
 
+import org.bukkit.Server;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.CustomEventListener;
+import org.bukkit.event.Event;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockCanBuildEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockGreenstoneEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.SafeCodeInputEvent;
+import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.event.inventory.InventoryListener;
+import org.bukkit.event.painting.PaintingBreakEvent;
+import org.bukkit.event.painting.PaintingPlaceEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCheatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDashEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInventoryEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.server.ServerListener;
+import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
+import org.bukkit.event.vehicle.VehicleCreateEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.event.vehicle.VehicleListener;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.event.vehicle.VehicleUpdateEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.SpawnChangeEvent;
+import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.event.world.WorldListener;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.plugin.EventExecutor;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
+import org.bukkit.plugin.UnknownDependencyException;
+import org.bukkit.plugin.UnknownSoftDependencyException;
+import org.yaml.snakeyaml.error.YAMLException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
-import org.bukkit.Server;
-import org.bukkit.event.CustomEventListener;
-import org.bukkit.event.Event;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
-import org.bukkit.event.painting.*;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.*;
-import org.bukkit.event.server.*;
-import org.bukkit.event.vehicle.*;
-import org.bukkit.event.world.*;
-import org.bukkit.event.inventory.*;
-import org.bukkit.plugin.*;
-import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Represents a Java plugin loader, allowing plugins in the form of .jar
  */
-public final class JavaPluginLoader implements PluginLoader {
+public class JavaPluginLoader implements PluginLoader {
     private final Server server;
-    private final Pattern[] fileFilters = new Pattern[] {
-        Pattern.compile("\\.jar$"),
+    protected final Pattern[] fileFilters = new Pattern[]{
+            Pattern.compile("\\.jar$"),
     };
-    private final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
-    private final Map<String, PluginClassLoader> loaders = new HashMap<String, PluginClassLoader>();
+    protected final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
+    protected final Map<String, PluginClassLoader> loaders = new HashMap<String, PluginClassLoader>();
 
     public JavaPluginLoader(Server instance) {
         server = instance;
@@ -83,31 +168,31 @@ public final class JavaPluginLoader implements PluginLoader {
             // They are equal -- nothing needs to be done!
         } else if (dataFolder.isDirectory() && oldDataFolder.isDirectory()) {
             server.getLogger().log(Level.INFO, String.format(
-                "While loading %s (%s) found old-data folder: %s next to the new one: %s",
-                description.getName(),
-                file,
-                oldDataFolder,
-                dataFolder
+                    "While loading %s (%s) found old-data folder: %s next to the new one: %s",
+                    description.getName(),
+                    file,
+                    oldDataFolder,
+                    dataFolder
             ));
         } else if (oldDataFolder.isDirectory() && !dataFolder.exists()) {
             if (!oldDataFolder.renameTo(dataFolder)) {
                 throw new InvalidPluginException(new Exception("Unable to rename old data folder: '" + oldDataFolder + "' to: '" + dataFolder + "'"));
             }
             server.getLogger().log(Level.INFO, String.format(
-                "While loading %s (%s) renamed data folder: '%s' to '%s'",
-                description.getName(),
-                file,
-                oldDataFolder,
-                dataFolder
+                    "While loading %s (%s) renamed data folder: '%s' to '%s'",
+                    description.getName(),
+                    file,
+                    oldDataFolder,
+                    dataFolder
             ));
         }
 
         if (dataFolder.exists() && !dataFolder.isDirectory()) {
             throw new InvalidPluginException(new Exception(String.format(
-                "Projected datafolder: '%s' for %s (%s) exists and is not a directory",
-                dataFolder,
-                description.getName(),
-                file
+                    "Projected datafolder: '%s' for %s (%s) exists and is not a directory",
+                    dataFolder,
+                    description.getName(),
+                    file
             )));
         }
 
@@ -176,12 +261,12 @@ public final class JavaPluginLoader implements PluginLoader {
             throw new InvalidPluginException(ex);
         }
 
-        loaders.put(description.getName(), (PluginClassLoader) loader);
+        loaders.put(description.getName(), loader);
 
-        return (Plugin) result;
+        return result;
     }
 
-    private File getDataFolder(File file) {
+    protected File getDataFolder(File file) {
         File dataFolder = null;
 
         String filename = file.getName();
@@ -216,7 +301,8 @@ public final class JavaPluginLoader implements PluginLoader {
 
                 try {
                     cachedClass = loader.findClass(name, false);
-                } catch (ClassNotFoundException ignored) {}
+                } catch (ClassNotFoundException ignored) {
+                }
                 if (cachedClass != null) {
                     return cachedClass;
                 }
@@ -228,6 +314,19 @@ public final class JavaPluginLoader implements PluginLoader {
     public void setClass(final String name, final Class<?> clazz) {
         if (!classes.containsKey(name)) {
             classes.put(name, clazz);
+            if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
+                Class<? extends ConfigurationSerializable> serializable = (Class<? extends ConfigurationSerializable>) clazz;
+                ConfigurationSerialization.registerClass(serializable);
+            }
+        }
+    }
+
+    public void removeClass(String name) {
+        Class<?> clazz = classes.remove(name);
+
+        if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
+            Class<? extends ConfigurationSerializable> serializable = (Class<? extends ConfigurationSerializable>) clazz;
+            ConfigurationSerialization.unregisterClass(serializable);
         }
     }
 
@@ -235,534 +334,534 @@ public final class JavaPluginLoader implements PluginLoader {
         // TODO: remove multiple Listener type and hence casts
 
         switch (type) {
-        // Player Events
-
-        case PLAYER_JOIN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerJoin((PlayerJoinEvent) event);
-                }
-            };
-
-        case PLAYER_QUIT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerQuit((PlayerQuitEvent) event);
-                }
-            };
-
-        case PLAYER_RESPAWN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerRespawn((PlayerRespawnEvent) event);
-                }
-            };
-
-        case PLAYER_KICK:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerKick((PlayerKickEvent) event);
-                }
-            };
-
-        case PLAYER_COMMAND_PREPROCESS:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerCommandPreprocess((PlayerCommandPreprocessEvent) event);
-                }
-            };
-
-        case PLAYER_CHAT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerChat((PlayerChatEvent) event);
-                }
-            };
-
-        case PLAYER_MOVE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerMove((PlayerMoveEvent) event);
-                }
-            };
-
-        case PLAYER_VELOCITY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerVelocity((PlayerVelocityEvent) event);
-                }
-            };
-
-        case PLAYER_TELEPORT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerTeleport((PlayerTeleportEvent) event);
-                }
-            };
-
-        case PLAYER_INTERACT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerInteract((PlayerInteractEvent) event);
-                }
-            };
-
-        case PLAYER_INTERACT_ENTITY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerInteractEntity((PlayerInteractEntityEvent) event);
-                }
-            };
-
-        case PLAYER_LOGIN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerLogin((PlayerLoginEvent) event);
-                }
-            };
-
-        case PLAYER_PRELOGIN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerPreLogin((PlayerPreLoginEvent) event);
-                }
-            };
-
-        case PLAYER_ANIMATION:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerAnimation((PlayerAnimationEvent) event);
-                }
-            };
-
-        case INVENTORY_OPEN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onInventoryOpen((PlayerInventoryEvent) event);
-                }
-            };
-
-        case PLAYER_ITEM_HELD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onItemHeldChange((PlayerItemHeldEvent) event);
-                }
-            };
-
-        case PLAYER_DROP_ITEM:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerDropItem((PlayerDropItemEvent) event);
-                }
-            };
-
-        case PLAYER_PICKUP_ITEM:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerPickupItem((PlayerPickupItemEvent) event);
-                }
-            };
-
-        case PLAYER_TOGGLE_SNEAK:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerToggleSneak((PlayerToggleSneakEvent) event);
-                }
-            };
-
-        case PLAYER_BUCKET_EMPTY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerBucketEmpty((PlayerBucketEmptyEvent) event);
-                }
-            };
-
-        case PLAYER_BUCKET_FILL:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
-                }
-            };
-
-        case PLAYER_BED_ENTER:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerBedEnter((PlayerBedEnterEvent) event);
-                }
-            };
-
-        case PLAYER_BED_LEAVE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerBedLeave((PlayerBedLeaveEvent) event);
-                }
-            };
-
-        // Block Events
-        case BLOCK_PHYSICS:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockPhysics((BlockPhysicsEvent) event);
-                }
-            };
-
-        case BLOCK_CANBUILD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockCanBuild((BlockCanBuildEvent) event);
-                }
-            };
-
-        case BLOCK_PLACE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockPlace((BlockPlaceEvent) event);
-                }
-            };
-
-        case BLOCK_DAMAGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockDamage((BlockDamageEvent) event);
-                }
-            };
-
-        case BLOCK_FROMTO:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockFromTo((BlockFromToEvent) event);
-                }
-            };
-
-        case LEAVES_DECAY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onLeavesDecay((LeavesDecayEvent) event);
-                }
-            };
-
-        case SIGN_CHANGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onSignChange((SignChangeEvent) event);
-                }
-            };
-
-        case BLOCK_IGNITE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockIgnite((BlockIgniteEvent) event);
-                }
-            };
-
-        case GREENSTONE_CHANGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockGreenstoneChange((BlockGreenstoneEvent) event);
-                }
-            };
-
-        case BLOCK_BURN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockBurn((BlockBurnEvent) event);
-                }
-            };
-
-        case BLOCK_BREAK:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockBreak((BlockBreakEvent) event);
-                }
-            };
-
-        case BLOCK_FORM:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockForm((BlockFormEvent) event);
-                }
-            };
-
-        case BLOCK_SPREAD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockSpread((BlockSpreadEvent) event);
-                }
-            };
-
-
-        case BLOCK_FADE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockFade((BlockFadeEvent) event);
-                }
-            };
-
-        case BLOCK_DISPENSE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((BlockListener) listener).onBlockDispense((BlockDispenseEvent) event);
-                }
-            };
-
-        // Server Events
-        case PLUGIN_ENABLE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((ServerListener) listener).onPluginEnable((PluginEnableEvent) event);
-                }
-            };
-
-        case PLUGIN_DISABLE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((ServerListener) listener).onPluginDisable((PluginDisableEvent) event);
-                }
-            };
-
-        case SERVER_COMMAND:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((ServerListener) listener).onServerCommand((ServerCommandEvent) event);
-                }
-            };
-
-        // World Events
-        case CHUNK_LOAD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onChunkLoad((ChunkLoadEvent) event);
-                }
-            };
-
-        case CHUNK_POPULATED:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onChunkPopulate((ChunkPopulateEvent) event);
-                }
-            };
-
-        case CHUNK_UNLOAD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onChunkUnload((ChunkUnloadEvent) event);
-                }
-            };
-
-        case SPAWN_CHANGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onSpawnChange((SpawnChangeEvent) event);
-                }
-            };
-
-        case WORLD_SAVE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onWorldSave((WorldSaveEvent) event);
-                }
-            };
-
-        case WORLD_INIT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onWorldInit((WorldInitEvent) event);
-                }
-            };
-
-        case WORLD_LOAD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onWorldLoad((WorldLoadEvent) event);
-                }
-            };
-
-        case WORLD_UNLOAD:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((WorldListener) listener).onWorldUnload((WorldUnloadEvent) event);
-                }
-            };
-
-        // Painting Events
-        case PAINTING_PLACE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onPaintingPlace((PaintingPlaceEvent) event);
-                }
-            };
-
-        case PAINTING_BREAK:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onPaintingBreak((PaintingBreakEvent) event);
-                }
-            };
-
-        // Entity Events
-        case ENTITY_DAMAGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityDamage((EntityDamageEvent) event);
-                }
-            };
-
-        case ENTITY_DEATH:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityDeath((EntityDeathEvent) event);
-                }
-            };
-
-        case ENTITY_COMBUST:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityCombust((EntityCombustEvent) event);
-                }
-            };
-
-        case ENTITY_EXPLODE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityExplode((EntityExplodeEvent) event);
-                }
-            };
-
-        case EXPLOSION_PRIME:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onExplosionPrime((ExplosionPrimeEvent) event);
-                }
-            };
-
-        case ENTITY_TARGET:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityTarget((EntityTargetEvent) event);
-                }
-            };
-
-        case ENTITY_INTERACT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityInteract((EntityInteractEvent) event);
-                }
-            };
-
-        case CREATURE_SPAWN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onCreatureSpawn((CreatureSpawnEvent) event);
-                }
-            };
-
-        case ITEM_SPAWN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onItemSpawn((ItemSpawnEvent) event);
-                }
-            };
-
-        case ENTITY_REGAIN_HEALTH:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onEntityRegainHealth((EntityRegainHealthEvent) event);
-                }
-            };
-
-        case PROJECTILE_HIT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((EntityListener) listener).onProjectileHit((ProjectileHitEvent) event);
-                }
-            };
-
-        // Vehicle Events
-        case VEHICLE_CREATE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleCreate((VehicleCreateEvent) event);
-                }
-            };
-
-        case VEHICLE_DAMAGE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleDamage((VehicleDamageEvent) event);
-                }
-            };
-
-        case VEHICLE_DESTROY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleDestroy((VehicleDestroyEvent) event);
-                }
-            };
-
-        case VEHICLE_COLLISION_BLOCK:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleBlockCollision((VehicleBlockCollisionEvent) event);
-                }
-            };
-
-        case VEHICLE_COLLISION_ENTITY:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleEntityCollision((VehicleEntityCollisionEvent) event);
-                }
-            };
-
-        case VEHICLE_ENTER:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleEnter((VehicleEnterEvent) event);
-                }
-            };
-
-        case VEHICLE_EXIT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleExit((VehicleExitEvent) event);
-                }
-            };
-
-        case VEHICLE_MOVE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleMove((VehicleMoveEvent) event);
-                }
-            };
-
-        case VEHICLE_UPDATE:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((VehicleListener) listener).onVehicleUpdate((VehicleUpdateEvent) event);
-                }
-            };
-
-        // Inventory Events
-        case FURNACE_SMELT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((InventoryListener) listener).onFurnaceSmelt((FurnaceSmeltEvent) event);
-                }
-            };
-        case FURNACE_BURN:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((InventoryListener) listener).onFurnaceBurn((FurnaceBurnEvent) event);
-                }
-            };
-
-        //Lilypad Events
-        case PLAYER_DASH:
-            return new EventExecutor() {
-                @Override
-                public void execute(Listener listener, Event event) {
-                    ((PlayerListener) listener).onPlayerDash((PlayerDashEvent) event);
-                }
-            };
+            // Player Events
+
+            case PLAYER_JOIN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerJoin((PlayerJoinEvent) event);
+                    }
+                };
+
+            case PLAYER_QUIT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerQuit((PlayerQuitEvent) event);
+                    }
+                };
+
+            case PLAYER_RESPAWN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerRespawn((PlayerRespawnEvent) event);
+                    }
+                };
+
+            case PLAYER_KICK:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerKick((PlayerKickEvent) event);
+                    }
+                };
+
+            case PLAYER_COMMAND_PREPROCESS:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerCommandPreprocess((PlayerCommandPreprocessEvent) event);
+                    }
+                };
+
+            case PLAYER_CHAT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerChat((PlayerChatEvent) event);
+                    }
+                };
+
+            case PLAYER_MOVE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerMove((PlayerMoveEvent) event);
+                    }
+                };
+
+            case PLAYER_VELOCITY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerVelocity((PlayerVelocityEvent) event);
+                    }
+                };
+
+            case PLAYER_TELEPORT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerTeleport((PlayerTeleportEvent) event);
+                    }
+                };
+
+            case PLAYER_INTERACT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerInteract((PlayerInteractEvent) event);
+                    }
+                };
+
+            case PLAYER_INTERACT_ENTITY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerInteractEntity((PlayerInteractEntityEvent) event);
+                    }
+                };
+
+            case PLAYER_LOGIN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerLogin((PlayerLoginEvent) event);
+                    }
+                };
+
+            case PLAYER_PRELOGIN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerPreLogin((PlayerPreLoginEvent) event);
+                    }
+                };
+
+            case PLAYER_ANIMATION:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerAnimation((PlayerAnimationEvent) event);
+                    }
+                };
+
+            case INVENTORY_OPEN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onInventoryOpen((PlayerInventoryEvent) event);
+                    }
+                };
+
+            case PLAYER_ITEM_HELD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onItemHeldChange((PlayerItemHeldEvent) event);
+                    }
+                };
+
+            case PLAYER_DROP_ITEM:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerDropItem((PlayerDropItemEvent) event);
+                    }
+                };
+
+            case PLAYER_PICKUP_ITEM:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerPickupItem((PlayerPickupItemEvent) event);
+                    }
+                };
+
+            case PLAYER_BUCKET_EMPTY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerBucketEmpty((PlayerBucketEmptyEvent) event);
+                    }
+                };
+
+            case PLAYER_BUCKET_FILL:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
+                    }
+                };
+
+            case PLAYER_BED_ENTER:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerBedEnter((PlayerBedEnterEvent) event);
+                    }
+                };
+
+            case PLAYER_BED_LEAVE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerBedLeave((PlayerBedLeaveEvent) event);
+                    }
+                };
+
+            case PLAYER_CHANGED_WORLD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerChangedWorld((PlayerChangedWorldEvent) event);
+                    }
+                };
+
+            // Block Events
+            case BLOCK_PHYSICS:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockPhysics((BlockPhysicsEvent) event);
+                    }
+                };
+
+            case BLOCK_CANBUILD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockCanBuild((BlockCanBuildEvent) event);
+                    }
+                };
+
+            case BLOCK_PLACE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockPlace((BlockPlaceEvent) event);
+                    }
+                };
+
+            case BLOCK_DAMAGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockDamage((BlockDamageEvent) event);
+                    }
+                };
+
+            case BLOCK_FROMTO:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockFromTo((BlockFromToEvent) event);
+                    }
+                };
+
+            case LEAVES_DECAY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onLeavesDecay((LeavesDecayEvent) event);
+                    }
+                };
+
+            case SIGN_CHANGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onSignChange((SignChangeEvent) event);
+                    }
+                };
+
+            case BLOCK_IGNITE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockIgnite((BlockIgniteEvent) event);
+                    }
+                };
+
+            case GREENSTONE_CHANGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockGreenstoneChange((BlockGreenstoneEvent) event);
+                    }
+                };
+
+            case BLOCK_BURN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockBurn((BlockBurnEvent) event);
+                    }
+                };
+
+            case BLOCK_BREAK:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockBreak((BlockBreakEvent) event);
+                    }
+                };
+
+            case BLOCK_FORM:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockForm((BlockFormEvent) event);
+                    }
+                };
+
+            case BLOCK_SPREAD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockSpread((BlockSpreadEvent) event);
+                    }
+                };
+
+
+            case BLOCK_FADE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockFade((BlockFadeEvent) event);
+                    }
+                };
+
+            case BLOCK_DISPENSE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((BlockListener) listener).onBlockDispense((BlockDispenseEvent) event);
+                    }
+                };
+
+            // Server Events
+            case PLUGIN_ENABLE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((ServerListener) listener).onPluginEnable((PluginEnableEvent) event);
+                    }
+                };
+
+            case PLUGIN_DISABLE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((ServerListener) listener).onPluginDisable((PluginDisableEvent) event);
+                    }
+                };
+
+            case SERVER_COMMAND:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((ServerListener) listener).onServerCommand((ServerCommandEvent) event);
+                    }
+                };
+
+            // World Events
+            case CHUNK_LOAD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onChunkLoad((ChunkLoadEvent) event);
+                    }
+                };
+
+            case CHUNK_POPULATED:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onChunkPopulate((ChunkPopulateEvent) event);
+                    }
+                };
+
+            case CHUNK_UNLOAD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onChunkUnload((ChunkUnloadEvent) event);
+                    }
+                };
+
+            case SPAWN_CHANGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onSpawnChange((SpawnChangeEvent) event);
+                    }
+                };
+
+            case WORLD_SAVE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onWorldSave((WorldSaveEvent) event);
+                    }
+                };
+
+            case WORLD_INIT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onWorldInit((WorldInitEvent) event);
+                    }
+                };
+
+            case WORLD_LOAD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onWorldLoad((WorldLoadEvent) event);
+                    }
+                };
+
+            case WORLD_UNLOAD:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((WorldListener) listener).onWorldUnload((WorldUnloadEvent) event);
+                    }
+                };
+
+            // Painting Events
+            case PAINTING_PLACE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onPaintingPlace((PaintingPlaceEvent) event);
+                    }
+                };
+
+            case PAINTING_BREAK:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onPaintingBreak((PaintingBreakEvent) event);
+                    }
+                };
+
+            // Entity Events
+            case ENTITY_DAMAGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityDamage((EntityDamageEvent) event);
+                    }
+                };
+
+            case ENTITY_DEATH:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityDeath((EntityDeathEvent) event);
+                    }
+                };
+
+            case ENTITY_COMBUST:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityCombust((EntityCombustEvent) event);
+                    }
+                };
+
+            case ENTITY_EXPLODE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityExplode((EntityExplodeEvent) event);
+                    }
+                };
+
+            case EXPLOSION_PRIME:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onExplosionPrime((ExplosionPrimeEvent) event);
+                    }
+                };
+
+            case ENTITY_TARGET:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityTarget((EntityTargetEvent) event);
+                    }
+                };
+
+            case ENTITY_INTERACT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityInteract((EntityInteractEvent) event);
+                    }
+                };
+
+            case CREATURE_SPAWN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onCreatureSpawn((CreatureSpawnEvent) event);
+                    }
+                };
+
+            case ITEM_SPAWN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onItemSpawn((ItemSpawnEvent) event);
+                    }
+                };
+
+            case ENTITY_REGAIN_HEALTH:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onEntityRegainHealth((EntityRegainHealthEvent) event);
+                    }
+                };
+
+            case PROJECTILE_HIT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((EntityListener) listener).onProjectileHit((ProjectileHitEvent) event);
+                    }
+                };
+
+            // Vehicle Events
+            case VEHICLE_CREATE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleCreate((VehicleCreateEvent) event);
+                    }
+                };
+
+            case VEHICLE_DAMAGE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleDamage((VehicleDamageEvent) event);
+                    }
+                };
+
+            case VEHICLE_DESTROY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleDestroy((VehicleDestroyEvent) event);
+                    }
+                };
+
+            case VEHICLE_COLLISION_BLOCK:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleBlockCollision((VehicleBlockCollisionEvent) event);
+                    }
+                };
+
+            case VEHICLE_COLLISION_ENTITY:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleEntityCollision((VehicleEntityCollisionEvent) event);
+                    }
+                };
+
+            case VEHICLE_ENTER:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleEnter((VehicleEnterEvent) event);
+                    }
+                };
+
+            case VEHICLE_EXIT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleExit((VehicleExitEvent) event);
+                    }
+                };
+
+            case VEHICLE_MOVE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleMove((VehicleMoveEvent) event);
+                    }
+                };
+
+            case VEHICLE_UPDATE:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((VehicleListener) listener).onVehicleUpdate((VehicleUpdateEvent) event);
+                    }
+                };
+
+            // Inventory Events
+            case FURNACE_SMELT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((InventoryListener) listener).onFurnaceSmelt((FurnaceSmeltEvent) event);
+                    }
+                };
+            case FURNACE_BURN:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((InventoryListener) listener).onFurnaceBurn((FurnaceBurnEvent) event);
+                    }
+                };
+
+            //Lilypad Events
+            case PLAYER_DASH:
+                return new EventExecutor() {
+                    @Override
+                    public void execute(Listener listener, Event event) {
+                        ((PlayerListener) listener).onPlayerDash((PlayerDashEvent) event);
+                    }
+                };
 
             case PLAYER_CHEAT:
                 return new EventExecutor() {
@@ -780,13 +879,13 @@ public final class JavaPluginLoader implements PluginLoader {
                     }
                 };
 
-        // Custom Events
-        case CUSTOM_EVENT:
-            return new EventExecutor() {
-                public void execute(Listener listener, Event event) {
-                    ((CustomEventListener) listener).onCustomEvent(event);
-                }
-            };
+            // Custom Events
+            case CUSTOM_EVENT:
+                return new EventExecutor() {
+                    public void execute(Listener listener, Event event) {
+                        ((CustomEventListener) listener).onCustomEvent(event);
+                    }
+                };
         }
 
         throw new IllegalArgumentException("Event " + type + " is not supported");
@@ -842,7 +941,7 @@ public final class JavaPluginLoader implements PluginLoader {
                 Set<String> names = loader.getClasses();
 
                 for (String name : names) {
-                    classes.remove(name);
+                    removeClass(name);
                 }
             }
         }

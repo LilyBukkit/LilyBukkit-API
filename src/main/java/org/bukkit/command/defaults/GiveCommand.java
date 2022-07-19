@@ -24,7 +24,7 @@ public class GiveCommand extends VanillaCommand {
             return false;
         }
 
-        Player player = Bukkit.getServer().getPlayer(args[0]);
+        Player player = Bukkit.getPlayerExact(args[0]);
 
         if (player != null) {
             Material material = Material.matchMaterial(args[1]);

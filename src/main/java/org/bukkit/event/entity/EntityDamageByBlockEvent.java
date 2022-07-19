@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 /**
  * Called when an entity is damaged by a block
  */
-public class EntityDamageByBlockEvent extends EntityDamageEvent implements Cancellable {
+public class EntityDamageByBlockEvent extends EntityDamageEvent {
 
     private Block damager;
 

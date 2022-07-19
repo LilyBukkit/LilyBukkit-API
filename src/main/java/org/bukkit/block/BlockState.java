@@ -7,7 +7,7 @@ import org.bukkit.material.MaterialData;
 
 /**
  * Represents a captured state of a block, which will not change automatically.
- *
+ * <p>
  * Unlike Block, which only one object can exist per coordinate, BlockState can
  * exist multiple times for any given Block. Note that another plugin may change
  * the state of the block and you will not know, or they may change the block to
@@ -103,6 +103,7 @@ public interface BlockState {
      * Sets the type-id of this block
      *
      * @param type Type-Id to change this block to
+     * @return Whether it worked?
      */
     boolean setTypeId(int type);
 
@@ -116,7 +117,7 @@ public interface BlockState {
      * eventuality.
      *
      * @return true if the update was successful, otherwise false
-     * @see BlockState#update(boolean force)
+     * @see #update(boolean)
      */
     boolean update();
 

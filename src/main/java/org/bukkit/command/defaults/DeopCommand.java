@@ -25,7 +25,7 @@ public class DeopCommand extends VanillaCommand {
 
         Command.broadcastCommandMessage(sender, "De-opping " + args[0]);
 
-        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(args[0]);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
         player.setOp(false);
 
         if (player instanceof Player) {

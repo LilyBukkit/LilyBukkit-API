@@ -156,14 +156,6 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Called when a player toggles sneak mode
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-    }
-
-    /**
      * Called when a player fills a bucket
      *
      * @param event Relevant event details
@@ -194,6 +186,13 @@ public class PlayerListener implements Listener {
      */
     public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
     }
+
+    /**
+     * Called after a player changes to a new world
+     *
+     * @param event Relevant event details
+     */
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {}
 
     /**
      * Called when a player dashes

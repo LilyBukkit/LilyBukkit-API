@@ -19,9 +19,9 @@ public class SaveCommand extends VanillaCommand {
 
         Command.broadcastCommandMessage(sender, "Forcing save..");
 
-        Bukkit.getServer().savePlayers();
+        Bukkit.savePlayers();
 
-        for (World world : Bukkit.getServer().getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
             world.save();
         }
 

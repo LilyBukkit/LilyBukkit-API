@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import org.bukkit.Server;
@@ -40,16 +41,16 @@ import org.bukkit.util.FileUtil;
  */
 public final class SimplePluginManager implements PluginManager {
     private final Server server;
-    private final Map<Pattern, PluginLoader> fileAssociations = new HashMap<Pattern, PluginLoader>();
-    private final List<Plugin> plugins = new ArrayList<Plugin>();
-    private final Map<String, Plugin> lookupNames = new HashMap<String, Plugin>();
-    private final Map<Event.Type, SortedSet<RegisteredListener>> listeners = new EnumMap<Event.Type, SortedSet<RegisteredListener>>(Event.Type.class);
+    private final Map<Pattern, PluginLoader> fileAssociations = new HashMap<>();
+    private final List<Plugin> plugins = new ArrayList<>();
+    private final Map<String, Plugin> lookupNames = new HashMap<>();
+    private final Map<Event.Type, SortedSet<RegisteredListener>> listeners = new EnumMap<>(Event.Type.class);
     private static File updateDirectory = null;
     private final SimpleCommandMap commandMap;
-    private final Map<String, Permission> permissions = new HashMap<String, Permission>();
-    private final Map<Boolean, Set<Permission>> defaultPerms = new LinkedHashMap<Boolean, Set<Permission>>();
-    private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<String, Map<Permissible, Boolean>>();
-    private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<Boolean, Map<Permissible, Boolean>>();
+    private final Map<String, Permission> permissions = new HashMap<>();
+    private final Map<Boolean, Set<Permission>> defaultPerms = new LinkedHashMap<>();
+    private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<>();
+    private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<>();
     private final Comparator<RegisteredListener> comparer = new Comparator<RegisteredListener>() {
         public int compare(RegisteredListener i, RegisteredListener j) {
             int result = i.getPriority().compareTo(j.getPriority());
@@ -66,8 +67,8 @@ public final class SimplePluginManager implements PluginManager {
         server = instance;
         this.commandMap = commandMap;
 
-        defaultPerms.put(true, new HashSet<Permission>());
-        defaultPerms.put(false, new HashSet<Permission>());
+        defaultPerms.put(true, new HashSet<>());
+        defaultPerms.put(false, new HashSet<>());
     }
 
     /**
@@ -112,7 +113,7 @@ public final class SimplePluginManager implements PluginManager {
      * @return A list of all plugins loaded
      */
     public Plugin[] loadPlugins(File directory) {
-        List<Plugin> result = new ArrayList<Plugin>();
+        List<Plugin> result = new ArrayList<>();
         File[] files = directory.listFiles();
 
         boolean allFailed = false;
@@ -134,7 +135,6 @@ public final class SimplePluginManager implements PluginManager {
 
                 try {
                     plugin = loadPlugin(file, finalPass);
-                    itr.remove();
                 } catch (UnknownDependencyException ex) {
                     if (finalPass) {
                         server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "': " + ex.getMessage(), ex);
@@ -154,6 +154,7 @@ public final class SimplePluginManager implements PluginManager {
                     result.add(plugin);
                     allFailed = false;
                     finalPass = false;
+                    itr.remove();
                 }
             }
             if (finalPass) {
@@ -175,6 +176,7 @@ public final class SimplePluginManager implements PluginManager {
      * @return The Plugin loaded, or null if it was invalid
      * @throws InvalidPluginException Thrown when the specified file is not a valid plugin
      * @throws InvalidDescriptionException Thrown when the specified file contains an invalid description
+     * @throws UnknownDependencyException If a required dependency could not be found
      */
     public synchronized Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
         return loadPlugin(file, true);
@@ -190,6 +192,7 @@ public final class SimplePluginManager implements PluginManager {
      * @return The Plugin loaded, or null if it was invalid
      * @throws InvalidPluginException Thrown when the specified file is not a valid plugin
      * @throws InvalidDescriptionException Thrown when the specified file contains an invalid description
+     * @throws UnknownDependencyException If a required dependency could not be found
      */
     public synchronized Plugin loadPlugin(File file, boolean ignoreSoftDependencies) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
         File updateFile = null;
@@ -324,7 +327,7 @@ public final class SimplePluginManager implements PluginManager {
     }
 
     /**
-     * Calls a player related event with the given details
+     * Calls an event with the given details
      *
      * @param event Event details
      */
@@ -406,7 +409,7 @@ public final class SimplePluginManager implements PluginManager {
             return eventListeners;
         }
 
-        eventListeners = new TreeSet<RegisteredListener>(comparer);
+        eventListeners = new TreeSet<>(comparer);
         listeners.put(type, eventListeners);
         return eventListeners;
     }
@@ -448,15 +451,13 @@ public final class SimplePluginManager implements PluginManager {
     }
 
     private void calculatePermissionDefault(Permission perm) {
-        if (!perm.getChildren().isEmpty()) {
-            if ((perm.getDefault() == PermissionDefault.OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
-                defaultPerms.get(true).add(perm);
-                dirtyPermissibles(true);
-            }
-            if ((perm.getDefault() == PermissionDefault.NOT_OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
-                defaultPerms.get(false).add(perm);
-                dirtyPermissibles(false);
-            }
+        if ((perm.getDefault() == PermissionDefault.OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
+            defaultPerms.get(true).add(perm);
+            dirtyPermissibles(true);
+        }
+        if ((perm.getDefault() == PermissionDefault.NOT_OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
+            defaultPerms.get(false).add(perm);
+            dirtyPermissibles(false);
         }
     }
 
@@ -473,7 +474,7 @@ public final class SimplePluginManager implements PluginManager {
         Map<Permissible, Boolean> map = permSubs.get(name);
 
         if (map == null) {
-            map = new MapMaker().weakKeys().makeMap();
+            map = new WeakHashMap<>();
             permSubs.put(name, map);
         }
 
@@ -508,7 +509,7 @@ public final class SimplePluginManager implements PluginManager {
         Map<Permissible, Boolean> map = defSubs.get(op);
 
         if (map == null) {
-            map = new MapMaker().weakKeys().makeMap();
+            map = new WeakHashMap<>();
             defSubs.put(op, map);
         }
 
@@ -535,5 +536,9 @@ public final class SimplePluginManager implements PluginManager {
         } else {
             return ImmutableSet.copyOf(map.keySet());
         }
+    }
+
+    public Set<Permission> getPermissions() {
+        return new HashSet<>(permissions.values());
     }
 }

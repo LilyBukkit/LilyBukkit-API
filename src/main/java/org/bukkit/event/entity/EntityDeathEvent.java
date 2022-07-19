@@ -2,6 +2,7 @@ package org.bukkit.event.entity;
 
 import java.util.List;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -11,7 +12,7 @@ public class EntityDeathEvent extends EntityEvent {
     private List<ItemStack> drops;
 
     public EntityDeathEvent(final Entity what, final List<ItemStack> drops) {
-        super(Type.ENTITY_DEATH, what);
+        super(Event.Type.ENTITY_DEATH, what);
         this.drops = drops;
     }
 

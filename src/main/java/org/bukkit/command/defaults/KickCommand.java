@@ -22,7 +22,7 @@ public class KickCommand extends VanillaCommand {
             return false;
         }
 
-        Player player = Bukkit.getServer().getPlayer(args[0]);
+        Player player = Bukkit.getPlayerExact(args[0]);
 
         if (player != null) {
             Command.broadcastCommandMessage(sender, "Kicking " + player.getName());

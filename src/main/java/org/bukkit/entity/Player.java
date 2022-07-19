@@ -1,28 +1,21 @@
 package org.bukkit.entity;
 
-import java.net.InetSocketAddress;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import java.net.InetSocketAddress;
+
 /**
  * Represents a player, connected or not
- *
  */
 public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     /**
-     * Checks if this player is currently online
-     *
-     * @return true if they are online
-     */
-    public boolean isOnline();
-
-    /**
      * Gets the "friendly" name to display of this player. This may include color.
-     *
+     * <p>
      * Note that this name will not be displayed in game, only in chat and places
      * defined by plugins
      *
@@ -32,18 +25,46 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     /**
      * Sets the "friendly" name to display of this player. This may include color.
-     *
+     * <p>
      * Note that this name will not be displayed in game, only in chat and places
      * defined by plugins
      *
-     * @param name
+     * @param name The new display name.
      */
     public void setDisplayName(String name);
 
     /**
+     * Gets the name that is shown on the player list.
+     *
+     * @return the player list name
+     */
+    public String getPlayerListName();
+
+    /**
+     * Sets the name that is shown on the in-game player list.
+     * <p>
+     * The name cannot be longer than 16 characters, but {@link org.bukkit.ChatColor} is supported.
+     * <p>
+     * If the value is null, the name will be identical to {@link #getName()}.
+     * <p>
+     * This name is case sensitive and unique, two names with different casing will
+     * appear as two different people. If a player joins afterwards with
+     * a name that conflicts with a player's custom list name, the
+     * joining player's player list name will have a random number appended to it
+     * (1-2 characters long in the default implementation). If the joining
+     * player's name is 15 or 16 characters long, part of the name will
+     * be truncated at the end to allow the addition of the two digits.
+     *
+     * @param name new player list name
+     * @throws IllegalArgumentException if the name is already used by someone else
+     * @throws IllegalArgumentException if the length of the name is too long
+     */
+    public void setPlayerListName(String name);
+
+    /**
      * Set the target of the player's compass.
      *
-     * @param loc
+     * @param loc Location to point to
      */
     public void setCompassTarget(Location loc);
 
@@ -56,6 +77,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     /**
      * Gets the socket address of this player
+     *
      * @return the player's address
      */
     public InetSocketAddress getAddress();
@@ -96,7 +118,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     /**
      * Loads the players current location, health, inventory, motion, and other information from the username.dat file, in the world/player folder
-     *
+     * <p>
      * Note: This will overwrite the players current inventory, health, motion, etc, with the state from the saved dat file.
      */
     public void loadData();
@@ -104,9 +126,9 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     /**
      * Plays an effect to just this player.
      *
-     * @param loc the player to play the effect for
+     * @param loc    the location to play the effect at
      * @param effect the {@link Effect}
-     * @param data a data bit needed for the RECORD_PLAY, SMOKE, and STEP_SOUND sounds
+     * @param data   a data bit needed for the RECORD_PLAY, SMOKE, and STEP_SOUND sounds
      */
     public void playEffect(Location loc, Effect effect, int data);
 
@@ -114,9 +136,9 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * Send a block change. This fakes a block change packet for a user at
      * a certain location. This will not actually change the world in any way.
      *
-     * @param loc
-     * @param material
-     * @param data
+     * @param loc      The location of the changed block
+     * @param material The new block
+     * @param data     The block data
      */
     public void sendBlockChange(Location loc, Material material, byte data);
 
@@ -124,17 +146,16 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * Send a chunk change. This fakes a chunk change packet for a user at
      * a certain location. The updated cuboid must be entirely within a single
      * chunk.  This will not actually change the world in any way.
-     *
+     * <p>
      * At least one of the dimensions of the cuboid must be even. The size of the
      * data buffer must be 2.5*sx*sy*sz and formatted in accordance with the Packet51
      * format.
      *
-     * @param loc The location of the cuboid
-     * @param sx The x size of the cuboid
-     * @param sy The y size of the cuboid
-     * @param sz The z size of the cuboid
+     * @param loc  The location of the cuboid
+     * @param sx   The x size of the cuboid
+     * @param sy   The y size of the cuboid
+     * @param sz   The z size of the cuboid
      * @param data The data to be sent
-     *
      * @return true if the chunk change packet was sent
      */
     public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data);
@@ -160,11 +181,11 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     /**
      * Sets the current time on the player's client. When relative is true the player's time
      * will be kept synchronized to its world time with the specified offset.
-     *
+     * <p>
      * When using non relative time the player's time will stay fixed at the specified time parameter. It's up to
      * the caller to continue updating the player's time. To restore player time to normal use resetPlayerTime().
      *
-     * @param time The current player's perceived time or the player's time offset from the server time.
+     * @param time     The current player's perceived time or the player's time offset from the server time.
      * @param relative When true the player time is kept relative to its world time.
      */
     public void setPlayerTime(long time, boolean relative);
@@ -172,7 +193,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     /**
      * Returns the player's current timestamp.
      *
-     * @return
+     * @return The player's time
      */
     public long getPlayerTime();
 
@@ -180,7 +201,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * Returns the player's current time offset relative to server time, or the current player's fixed time
      * if the player's time is absolute.
      *
-     * @return
+     * @return The player's time
      */
     public long getPlayerTimeOffset();
 

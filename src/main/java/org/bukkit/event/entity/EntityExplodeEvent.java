@@ -1,10 +1,11 @@
 package org.bukkit.event.entity;
 
-import java.util.List;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
+
+import java.util.List;
 
 /**
  * Called when an entity explodes
@@ -33,6 +34,8 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
     /**
      * Returns the list of blocks that would have been removed or were
      * removed from the explosion event.
+     *
+     * @return All blown-up blocks
      */
     public List<Block> blockList() {
         return blocks;
@@ -42,6 +45,8 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
      * Returns the location where the explosion happened.
      * It is not possible to get this value from the Entity as
      * the Entity no longer exists in the world.
+     *
+     * @return The location of the explosion
      */
     public Location getLocation() {
         return location;
@@ -50,7 +55,7 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
     /**
      * Returns the percentage of blocks to drop from this explosion
      *
-     * @return
+     * @return The yield.
      */
     public float getYield() {
         return yield;
@@ -58,6 +63,8 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
 
     /**
      * Sets the percentage of blocks to drop from this explosion
+     *
+     * @param yield The new yield percentage
      */
     public void setYield(float yield) {
         this.yield = yield;

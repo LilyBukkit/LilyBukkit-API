@@ -1,5 +1,7 @@
 package org.bukkit.util;
 
+import org.bukkit.configuration.serialization.SerializableAs;
+
 import java.util.Map;
 
 /**
@@ -10,6 +12,7 @@ import java.util.Map;
  *
  * @author sk89q
  */
+@SerializableAs("BlockVector")
 public class BlockVector extends Vector {
 
     /**
@@ -23,6 +26,7 @@ public class BlockVector extends Vector {
 
     /**
      * Construct the vector with another vector.
+     * @param vec The other vector.
      */
     public BlockVector(Vector vec) {
         this.x = vec.getX();
@@ -33,9 +37,9 @@ public class BlockVector extends Vector {
     /**
      * Construct the vector with provided integer components.
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X component
+     * @param y Y component
+     * @param z Z component
      */
     public BlockVector(int x, int y, int z) {
         this.x = x;
@@ -46,9 +50,9 @@ public class BlockVector extends Vector {
     /**
      * Construct the vector with provided double components.
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X component
+     * @param y Y component
+     * @param z Z component
      */
     public BlockVector(double x, double y, double z) {
         this.x = x;
@@ -59,9 +63,9 @@ public class BlockVector extends Vector {
     /**
      * Construct the vector with provided float components.
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X component
+     * @param y Y component
+     * @param z Z component
      */
     public BlockVector(float x, float y, float z) {
         this.x = x;
@@ -72,7 +76,7 @@ public class BlockVector extends Vector {
     /**
      * Checks if another object is equivalent.
      *
-     * @param obj
+     * @param obj The other object
      * @return whether the other object is equivalent
      */
     @Override
@@ -111,7 +115,6 @@ public class BlockVector extends Vector {
         return v;
     }
 
-    // UPDATE 1.0.5
     public static BlockVector deserialize(Map<String, Object> args) {
         double x = 0;
         double y = 0;

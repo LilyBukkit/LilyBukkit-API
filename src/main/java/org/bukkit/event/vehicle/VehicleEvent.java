@@ -11,7 +11,7 @@ import org.bukkit.event.Event;
 public class VehicleEvent extends Event {
     protected Vehicle vehicle;
 
-    public VehicleEvent(final Type type, final Vehicle vehicle) {
+    public VehicleEvent(final Event.Type type, final Vehicle vehicle) {
         super(type);
         this.vehicle = vehicle;
     }

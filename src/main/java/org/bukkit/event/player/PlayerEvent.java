@@ -9,7 +9,7 @@ import org.bukkit.event.Event;
 public class PlayerEvent extends Event {
     protected Player player;
 
-    public PlayerEvent(final Type type, final Player who) {
+    public PlayerEvent(final Event.Type type, final Player who) {
         super(type);
         player = who;
     }

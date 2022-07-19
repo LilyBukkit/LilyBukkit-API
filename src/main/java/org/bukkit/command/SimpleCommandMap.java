@@ -18,20 +18,43 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import static org.bukkit.util.Java15Compat.Arrays_copyOfRange;
 
 public final class SimpleCommandMap implements CommandMap {
-    private final Map<String, Command> knownCommands = new HashMap<String, Command>();
-    private final Set<String> aliases = new HashSet<String>();
+    protected final Map<String, Command> knownCommands = new HashMap<>();
+    protected final Set<String> aliases = new HashSet<>();
     private final Server server;
+    protected static final Set<VanillaCommand> fallbackCommands = new HashSet<>();
+
+    static {
+        fallbackCommands.add(new ListCommand());
+        fallbackCommands.add(new StopCommand());
+        fallbackCommands.add(new SaveCommand());
+        fallbackCommands.add(new SaveOnCommand());
+        fallbackCommands.add(new SaveOffCommand());
+        fallbackCommands.add(new OpCommand());
+        fallbackCommands.add(new DeopCommand());
+        fallbackCommands.add(new BanIpCommand());
+        fallbackCommands.add(new PardonIpCommand());
+        fallbackCommands.add(new BanCommand());
+        fallbackCommands.add(new PardonCommand());
+        fallbackCommands.add(new KickCommand());
+        fallbackCommands.add(new TeleportCommand());
+        fallbackCommands.add(new GiveCommand());
+        fallbackCommands.add(new SayCommand());
+        fallbackCommands.add(new WhitelistCommand());
+        fallbackCommands.add(new TellCommand());
+        fallbackCommands.add(new MeCommand());
+        fallbackCommands.add(new KillCommand());
+        fallbackCommands.add(new HelpCommand());
+    }
 
     public SimpleCommandMap(final Server server) {
         this.server = server;
-        setVanillaCommands();
-        setDefaultCommands();
+        setDefaultCommands(server);
     }
 
-    private void setDefaultCommands() {
-        register("bukkit", new VersionCommand());
-        register("bukkit", new ReloadCommand());
-        register("bukkit", new PluginsCommand());
+    private void setDefaultCommands(final Server server) {
+        register("bukkit", new VersionCommand("version"));
+        register("bukkit", new ReloadCommand("reload"));
+        register("bukkit", new PluginsCommand("plugins"));
     }
 
     /**
@@ -110,6 +133,16 @@ public final class SimpleCommandMap implements CommandMap {
         return registeredPassedLabel;
     }
 
+    protected Command getFallback(String label) {
+        for (VanillaCommand cmd : fallbackCommands) {
+            if (cmd.matches(label)) {
+                return cmd;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -122,6 +155,9 @@ public final class SimpleCommandMap implements CommandMap {
 
         String sentCommandLabel = args[0].toLowerCase();
         Command target = getCommand(sentCommandLabel);
+        if (target == null) {
+            target = getFallback(commandLine.toLowerCase());
+        }
         if (target == null) {
             return false;
         }
@@ -145,8 +181,7 @@ public final class SimpleCommandMap implements CommandMap {
         }
         knownCommands.clear();
         aliases.clear();
-        setDefaultCommands();
-        setVanillaCommands(); //LilyBukkit
+        setDefaultCommands(server);
     }
 
     public Command getCommand(String name) {
@@ -158,7 +193,7 @@ public final class SimpleCommandMap implements CommandMap {
 
         for (String alias : values.keySet()) {
             String[] targetNames = values.get(alias);
-            List<Command> targets = new ArrayList<Command>();
+            List<Command> targets = new ArrayList<>();
             String bad = "";
 
             for (String name : targetNames) {
@@ -184,28 +219,5 @@ public final class SimpleCommandMap implements CommandMap {
                 server.getLogger().warning("The following command(s) could not be aliased under '" + alias + "' because they do not exist: " + bad);
             }
         }
-    }
-
-    //LilyBukkit
-    private void setVanillaCommands(){
-        register("minecraft", new HelpCommand());
-        register("minecraft", new KickCommand());
-        register("minecraft", new BanCommand());
-        register("minecraft", new BanIpCommand());
-        register("minecraft", new PardonCommand());
-        register("minecraft", new PardonIpCommand());
-        register("minecraft", new OpCommand());
-        register("minecraft", new DeopCommand());
-        register("minecraft", new TeleportCommand());
-        register("minecraft", new GiveCommand());
-        register("minecraft", new TellCommand());
-        register("minecraft", new StopCommand());
-        register("minecraft", new SaveCommand());
-        register("minecraft", new SaveOffCommand());
-        register("minecraft", new SaveOnCommand());
-        register("minecraft", new ListCommand());
-        register("minecraft", new SayCommand());
-        register("minecraft", new MeCommand());
-        register("minecraft", new WhitelistCommand());
     }
 }

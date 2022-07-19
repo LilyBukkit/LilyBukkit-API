@@ -22,19 +22,17 @@ public class SayCommand extends VanillaCommand {
         }
 
         StringBuilder message = new StringBuilder();
-        if (args.length > 0) {
-	        message.append(args[0]);
-	        for (int i = 1; i < args.length; i++) {
-	            message.append(" ");
-	            message.append(args[i]);
-	        }
+        message.append(args[0]);
+        for (int i = 1; i < args.length; i++) {
+            message.append(" ");
+            message.append(args[i]);
         }
 
         if (!(sender instanceof ConsoleCommandSender)) {
-            Bukkit.getServer().getLogger().info("[" + sender.getName() + "] " + message);
+            Bukkit.getLogger().info("[" + sender.getName() + "] " + message);
         }
 
-        Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + "[Server] " + message);
+        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "[Server] " + message);
 
         return true;
     }

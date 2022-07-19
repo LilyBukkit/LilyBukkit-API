@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 public class PluginsCommand extends Command {
-    public PluginsCommand() {
-        super("plugins");
+    public PluginsCommand(String name) {
+        super(name);
         this.description = "Gets a list of plugins running on the server";
         this.usageMessage = "/plugins";
         this.setPermission("bukkit.command.plugins");
@@ -26,7 +26,7 @@ public class PluginsCommand extends Command {
 
     private String getPluginList() {
         StringBuilder pluginList = new StringBuilder();
-        Plugin[] plugins = Bukkit.getServer().getPluginManager().getPlugins();
+        Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
         
         for (Plugin plugin : plugins) {
             if (pluginList.length() > 0) {

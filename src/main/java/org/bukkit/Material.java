@@ -1,6 +1,23 @@
 package org.bukkit;
 
-import org.bukkit.material.*;
+import org.bukkit.material.Button;
+import org.bukkit.material.Coal;
+import org.bukkit.material.Crops;
+import org.bukkit.material.Door;
+import org.bukkit.material.Furnace;
+import org.bukkit.material.GreenstoneTorch;
+import org.bukkit.material.GreenstoneWire;
+import org.bukkit.material.Ladder;
+import org.bukkit.material.Lever;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.PressurePlate;
+import org.bukkit.material.Rails;
+import org.bukkit.material.Sign;
+import org.bukkit.material.Stairs;
+import org.bukkit.material.Step;
+import org.bukkit.material.Torch;
+import org.bukkit.material.Tree;
+import org.bukkit.material.Wool;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -82,7 +99,7 @@ public enum Material {
     CACTUS(81, MaterialData.class),
     CLAY(82),
     SUGAR_CANE_BLOCK(83, MaterialData.class),
-    JUKEBOX(84, Jukebox.class),
+    JUKEBOX(84),
     FENCE(85),
     QUAD_WINDOW_GLASS(90),
     PILLAR(91),
@@ -293,7 +310,7 @@ public enum Material {
      * @return MaterialData associated with this Material
      */
     public Class<? extends MaterialData> getData() {
-        return data;
+        return (data == null) ? MaterialData.class : data;
     }
 
     /**
@@ -305,7 +322,7 @@ public enum Material {
      */
     public MaterialData getNewData(final byte raw) {
         if (data == null) {
-            return null;
+            return new MaterialData(id, raw);
         }
 
         try {

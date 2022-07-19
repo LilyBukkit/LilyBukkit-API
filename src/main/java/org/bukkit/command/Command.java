@@ -21,6 +21,7 @@ public abstract class Command {
     private CommandMap commandMap = null;
     protected String description = "";
     protected String usageMessage;
+    private String permission;
 
     protected Command(String name) {
         this(name, "", "/" + name, new ArrayList<String>());
@@ -56,6 +57,41 @@ public abstract class Command {
     }
 
     /**
+     * Gets the permission required by users to be able to perform this command
+     *
+     * @return Permission name, or null if none
+     */
+    public String getPermission() {
+        return permission;
+    }
+
+    /**
+     * Sets the permission required by users to be able to perform this command
+     *
+     * @param permission Permission name or null
+     */
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    /**
+     * Tests the given {@link CommandSender} to see if they can perform this command.
+     * <p>
+     * If they do not have permission, they will be informed that they cannot do this.
+     *
+     * @param target User to test
+     * @return true if they can use it, otherwise false
+     */
+    public boolean testPermission(CommandSender target) {
+        if ((permission == null) || (permission.length() == 0) || (target.hasPermission(permission))) {
+            return true;
+        }
+
+        target.sendMessage(ChatColor.RED + "Bukkit sad. Bukkit want you to access command, but Bukkit cannot let you. Bukkit will leak tears :'(");
+        return false;
+    }
+
+    /**
      * Returns the current lable for this command
      *
      * @return Label of this command or null if not registered
@@ -69,6 +105,7 @@ public abstract class Command {
      * If the command is currently registered the label change will only take effect after
      * its been reregistered e.g. after a /reload
      *
+     * @param name The command's name
      * @return returns true if the name change happened instantly or false if it was scheduled for reregistration
      */
     public boolean setLabel(String name) {
@@ -190,46 +227,8 @@ public abstract class Command {
         return this;
     }
 
-    // UPDATE 1.0.5
-    private String permission;
-
-    /**
-     * Gets the permission required by users to be able to perform this command
-     *
-     * @return Permission name, or null if none
-     */
-    public String getPermission() {
-        return permission;
-    }
-
-    /**
-     * Sets the permission required by users to be able to perform this command
-     *
-     * @param permission Permission name or null
-     */
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    /**
-     * Tests the given {@link CommandSender} to see if they can perform this command.
-     * <p>
-     * If they do not have permission, they will be informed that they cannot do this.
-     *
-     * @param target User to test
-     * @return true if they can use it, otherwise false
-     */
-    public boolean testPermission(CommandSender target) {
-        if ((permission == null) || (permission.length() == 0) || (target.hasPermission(permission))) {
-            return true;
-        }
-
-        target.sendMessage(ChatColor.RED + "Bukkit sad. Bukkit want you to access command, but Bukkit cannot let you. Bukkit will leak tears :'(");
-        return false;
-    }
-
     public static void broadcastCommandMessage(CommandSender source, String message) {
-        Set<Permissible> users = Bukkit.getServer().getPluginManager().getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
+        Set<Permissible> users = Bukkit.getPluginManager().getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
         String result = source.getName() + ": " + message;
         String colored = ChatColor.GRAY + "(" + result + ")";
 

@@ -19,7 +19,6 @@ public interface CommandSender extends Permissible {
      */
     public Server getServer();
 
-    // UPDATE 1.0.5
     /**
      * Gets the name of this command sender
      *

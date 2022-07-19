@@ -24,11 +24,16 @@ public final class PluginCommand extends Command {
      * @param args All arguments passed to the command, split via ' '
      * @return true if the command was successful, otherwise false
      */
+    @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         boolean success = false;
 
         if (!owningPlugin.isEnabled()) {
             return false;
+        }
+
+        if (!testPermission(sender)) {
+            return true;
         }
 
         try {

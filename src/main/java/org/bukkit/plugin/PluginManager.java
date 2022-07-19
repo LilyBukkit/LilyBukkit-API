@@ -1,13 +1,13 @@
 package org.bukkit.plugin;
 
-import java.io.File;
-import java.util.Set;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+
+import java.io.File;
+import java.util.Set;
 
 /**
  * Handles all plugin management from the Server
@@ -64,8 +64,9 @@ public interface PluginManager {
      *
      * @param file File containing the plugin to load
      * @return The Plugin loaded, or null if it was invalid
-     * @throws InvalidPluginException Thrown when the specified file is not a valid plugin
+     * @throws InvalidPluginException      Thrown when the specified file is not a valid plugin
      * @throws InvalidDescriptionException Thrown when the specified file contains an invalid description
+     * @throws UnknownDependencyException  If a required dependency could not be resolved
      */
     public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException;
 
@@ -88,7 +89,7 @@ public interface PluginManager {
     public void clearPlugins();
 
     /**
-     * Calls a player related event with the given details
+     * Calls an event with the given details
      *
      * @param event Event details
      */
@@ -97,21 +98,21 @@ public interface PluginManager {
     /**
      * Registers the given event to the specified listener
      *
-     * @param type EventType to register
+     * @param type     EventType to register
      * @param listener Listener to register
      * @param priority Priority of this event
-     * @param plugin Plugin to register
+     * @param plugin   Plugin to register
      */
     public void registerEvent(Event.Type type, Listener listener, Priority priority, Plugin plugin);
 
     /**
      * Registers the given event to the specified executor
      *
-     * @param type EventType to register
+     * @param type     EventType to register
      * @param listener Listener to register
      * @param executor EventExecutor to register
      * @param priority Priority of this event
-     * @param plugin Plugin to register
+     * @param plugin   Plugin to register
      */
     public void registerEvent(Event.Type type, Listener listener, EventExecutor executor, Priority priority, Plugin plugin);
 
@@ -178,6 +179,7 @@ public interface PluginManager {
      * Gets the default permissions for the given op status
      *
      * @param op Which set of default permissions to get
+     * @return The default permissions
      */
     public Set<Permission> getDefaultPermissions(boolean op);
 
@@ -195,7 +197,7 @@ public interface PluginManager {
      *
      * If the specified Permission changes in any form, the Permissible will be asked to recalculate.
      *
-     * @param permission Permission to subscribe to
+     * @param permission  Permission to subscribe to
      * @param permissible Permissible subscribing
      */
     public void subscribeToPermission(String permission, Permissible permissible);
@@ -203,7 +205,7 @@ public interface PluginManager {
     /**
      * Unsubscribes the given Permissible for information about the requested Permission, by name.
      *
-     * @param permission Permission to unsubscribe from
+     * @param permission  Permission to unsubscribe from
      * @param permissible Permissible subscribing
      */
     public void unsubscribeFromPermission(String permission, Permissible permissible);
@@ -221,7 +223,7 @@ public interface PluginManager {
      *
      * If the specified defaults change in any form, the Permissible will be asked to recalculate.
      *
-     * @param op Default list to subscribe to
+     * @param op          Default list to subscribe to
      * @param permissible Permissible subscribing
      */
     public void subscribeToDefaultPerms(boolean op, Permissible permissible);
@@ -229,7 +231,7 @@ public interface PluginManager {
     /**
      * Unsubscribes from the given Default permissions by operator status
      *
-     * @param op Default list to unsubscribe from
+     * @param op          Default list to unsubscribe from
      * @param permissible Permissible subscribing
      */
     public void unsubscribeFromDefaultPerms(boolean op, Permissible permissible);
@@ -241,4 +243,13 @@ public interface PluginManager {
      * @return Set containing all subscribed permissions
      */
     public Set<Permissible> getDefaultPermSubscriptions(boolean op);
+
+    /**
+     * Gets a set of all registered permissions.
+     *
+     * This set is a copy and will not be modified live.
+     *
+     * @return Set containing all current registered permissions
+     */
+    public Set<Permission> getPermissions();
 }

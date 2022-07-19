@@ -1,7 +1,6 @@
 package org.bukkit.event;
 
 import org.bukkit.entity.Projectile;
-import org.bukkit.event.block.BlockGreenstoneEvent;
 import org.bukkit.generator.BlockPopulator;
 
 import java.io.Serializable;
@@ -79,7 +78,6 @@ public abstract class Event implements Serializable {
         Highest,
         /**
          * Event is listened to purely for monitoring the outcome of an event.
-         * <p>
          * No modifications to the event should be made under this priority
          */
         Monitor
@@ -93,7 +91,7 @@ public abstract class Event implements Serializable {
         /**
          * Represents Player-based events
          *
-         * @see Category#LIVING_ENTITY
+         * @see #LIVING_ENTITY
          */
         PLAYER,
         /**
@@ -132,8 +130,6 @@ public abstract class Event implements Serializable {
 
     /**
      * Provides a lookup for all core events
-     *
-     * @see org.bukkit.event
      */
     public enum Type {
 
@@ -209,12 +205,6 @@ public abstract class Event implements Serializable {
          */
         PLAYER_ANIMATION(Category.PLAYER),
         /**
-         * Called when a player toggles sneak mode
-         *
-         * @see org.bukkit.event.player.PlayerToggleSneakEvent
-         */
-        PLAYER_TOGGLE_SNEAK(Category.PLAYER),
-        /**
          * Called when a player interacts with an object or air
          *
          * @see org.bukkit.event.player.PlayerInteractEvent
@@ -281,6 +271,12 @@ public abstract class Event implements Serializable {
          */
         PLAYER_BED_LEAVE(Category.PLAYER),
         /**
+         * Called after a player has changed to a new world
+         *
+         * @see org.bukkit.event.player.PlayerChangedWorldEvent
+         */
+        PLAYER_CHANGED_WORLD(Category.PLAYER),
+        /**
          * Called when a player dashes
          *
          * @see org.bukkit.event.player.PlayerDashEvent
@@ -306,7 +302,6 @@ public abstract class Event implements Serializable {
         /**
          * Called when a block is undergoing a universe physics
          * check on whether it can be built
-         * <p>
          * For example, cacti cannot be built on grass unless overridden here
          *
          * @see org.bukkit.event.block.BlockCanBuildEvent
@@ -328,7 +323,6 @@ public abstract class Event implements Serializable {
         BLOCK_IGNITE(Category.BLOCK),
         /**
          * Called when a block undergoes a physics check
-         * <p>
          * A physics check is commonly called when an adjacent block changes
          * type
          *
@@ -370,7 +364,7 @@ public abstract class Event implements Serializable {
          * that are actually capable of transmitting or carrying a Greenstone
          * current
          *
-         * @see BlockGreenstoneEvent
+         * @see org.bukkit.event.block.BlockGreenstoneEvent
          */
         GREENSTONE_CHANGE(Category.BLOCK),
         /**
@@ -467,6 +461,12 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.server.ServerCommandEvent
          */
         SERVER_COMMAND(Category.SERVER),
+        /**
+         * Called when a client pings a server.
+         *
+         * @see org.bukkit.event.server.ServerListPingEvent
+         */
+        SERVER_LIST_PING(Category.SERVER),
 
         /**
          * WORLD EVENTS
@@ -474,7 +474,7 @@ public abstract class Event implements Serializable {
 
         /**
          * Called when a chunk is loaded
-         * <p>
+         *
          * If a new chunk is being generated for loading, it will call
          * Type.CHUNK_GENERATION and then Type.CHUNK_LOADED upon completion
          *
@@ -489,8 +489,8 @@ public abstract class Event implements Serializable {
         CHUNK_UNLOAD(Category.WORLD),
         /**
          * Called when a newly created chunk has been populated.
-         * <p>
-         * If your intent is to populate the chunk using this event, please see {@link BlockPopulator}
+         *
+         * If your intent is to populate the chunk using this event, please see {@link org.bukkit.generator.BlockPopulator}
          *
          * @see org.bukkit.event.world.ChunkPopulateEvent
          */
@@ -586,10 +586,10 @@ public abstract class Event implements Serializable {
         ENTITY_EXPLODE(Category.LIVING_ENTITY),
         /**
          * Called when an entity has made a decision to explode.
-         * <p>
+         *
          * Provides an opportunity to act on the entity, change the explosion radius,
          * or to change the fire-spread flag.
-         * <p>
+         *
          * Canceling the event negates the entity's decision to explode.
          * For EntityCreeper, this resets the fuse but does not kill the Entity.
          * For EntityFireball and EntityTNTPrimed....?
@@ -616,6 +616,13 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.entity.ProjectileHitEvent
          */
         PROJECTILE_HIT(Category.ENTITY),
+
+        /**
+         * Called when a Slime splits into smaller Slimes upon death
+         *
+         * @see org.bukkit.event.entity.SlimeSplitEvent
+         */
+        SLIME_SPLIT (Category.LIVING_ENTITY),
 
         /**
          * Called when a LivingEntity is regains health

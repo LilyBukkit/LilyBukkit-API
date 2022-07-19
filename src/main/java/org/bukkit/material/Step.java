@@ -1,18 +1,19 @@
 package org.bukkit.material;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 
 /**
  * Represents the different types of steps.
  */
-public class Step extends MaterialData {
-    private static HashSet<Material> stepTypes = new HashSet<Material>();
+public class Step extends TexturedMaterial {
+    private static final List<Material> textures = new ArrayList<Material>();
     static {
-        stepTypes.add(Material.WOOD);
-        stepTypes.add(Material.COBBLESTONE);
-        stepTypes.add(Material.STONE);
+        textures.add(Material.WOOD);
+        textures.add(Material.COBBLESTONE);
+        textures.add(Material.STONE);
     }
 
     public Step() {
@@ -24,8 +25,8 @@ public class Step extends MaterialData {
     }
 
     public Step(final Material type) {
-        super((stepTypes.contains(type)) ? Material.STEP : type);
-        if (stepTypes.contains(type)) {
+        super((textures.contains(type)) ? Material.STEP : type);
+        if (textures.contains(type)) {
             setMaterial(type);
         }
     }
@@ -38,48 +39,8 @@ public class Step extends MaterialData {
         super(type, data);
     }
 
-    /**
-     * Gets the current Material this step is made of
-     *
-     * @return Material of this step
-     */
-    public Material getMaterial() {
-        switch ((int) getData()) {
-        case 2:
-            return Material.WOOD;
-
-        case 3:
-            return Material.COBBLESTONE;
-
-        case 0:
-        default:
-            return Material.STONE;
-        }
-    }
-
-    /**
-     * Sets the material this step is made of
-     *
-     * @param material New material of this step
-     */
-    public void setMaterial(Material material) {
-        switch (material) {
-        case WOOD:
-            setData((byte) 0x2);
-            break;
-
-        case COBBLESTONE:
-            setData((byte) 0x3);
-            break;
-
-        case STONE:
-        default:
-            setData((byte) 0x0);
-        }
-    }
-
     @Override
-    public String toString() {
-        return getMaterial() + " " + super.toString();
+    public List<Material> getTextures() {
+        return textures;
     }
 }

@@ -21,7 +21,7 @@ public class PardonIpCommand extends VanillaCommand {
             return false;
         }
 
-        Bukkit.getServer().unbanIP(args[0]);
+        Bukkit.unbanIP(args[0]);
         Command.broadcastCommandMessage(sender, "Pardoning ip " + args[0]);
 
         return true;

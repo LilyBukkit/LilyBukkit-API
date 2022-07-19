@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 /**
  * Called when an entity is damaged by an entity
  */
-public class EntityDamageByEntityEvent extends EntityDamageEvent implements Cancellable {
+public class EntityDamageByEntityEvent extends EntityDamageEvent {
 
     private Entity damager;
 

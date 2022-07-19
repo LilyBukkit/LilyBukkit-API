@@ -35,6 +35,8 @@ public class ServerCommandEvent extends ServerEvent {
 
     /**
      * Get the command sender.
+     *
+     * @return The sender
      */
     public CommandSender getSender() {
         return sender;
