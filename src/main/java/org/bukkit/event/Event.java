@@ -461,12 +461,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.server.ServerCommandEvent
          */
         SERVER_COMMAND(Category.SERVER),
-        /**
-         * Called when a client pings a server.
-         *
-         * @see org.bukkit.event.server.ServerListPingEvent
-         */
-        SERVER_LIST_PING(Category.SERVER),
 
         /**
          * WORLD EVENTS
@@ -617,12 +611,6 @@ public abstract class Event implements Serializable {
          */
         PROJECTILE_HIT(Category.ENTITY),
 
-        /**
-         * Called when a Slime splits into smaller Slimes upon death
-         *
-         * @see org.bukkit.event.entity.SlimeSplitEvent
-         */
-        SLIME_SPLIT (Category.LIVING_ENTITY),
 
         /**
          * Called when a LivingEntity is regains health

@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -53,21 +53,14 @@ import org.yaml.snakeyaml.representer.Representer;
  *
  * <p>This class is currently incomplete. It is not yet possible to get a node.
  * </p>
- *
- * @deprecated See {@link YamlConfiguration}
  */
-@Deprecated
 public class Configuration extends ConfigurationNode {
-    private Yaml yaml;
-    private File file;
+    private final Yaml yaml;
+    private final File file;
     private String header = null;
 
-    /**
-     * @deprecated See {@link YamlConfiguration}
-     */
-    @Deprecated
     public Configuration(File file) {
-        super(new HashMap<String, Object>());
+        super(new HashMap<>());
 
         DumperOptions options = new DumperOptions();
 
@@ -83,21 +76,11 @@ public class Configuration extends ConfigurationNode {
      * Loads the configuration file. All errors are thrown away.
      */
     public void load() {
-        FileInputStream stream = null;
 
-        try {
-            stream = new FileInputStream(file);
+        try (FileInputStream stream = new FileInputStream(file)) {
             read(yaml.load(new UnicodeReader(stream)));
-        } catch (IOException e) {
-            root = new HashMap<String, Object>();
-        } catch (ConfigurationException e) {
-            root = new HashMap<String, Object>();
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException ignored) {}
+        } catch (IOException | ConfigurationException e) {
+            root = new HashMap<>();
         }
     }
 
@@ -157,7 +140,7 @@ public class Configuration extends ConfigurationNode {
 
         try {
             stream = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(stream, "UTF-8");
+            OutputStreamWriter writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
             if (header != null) {
                 writer.append(header);
                 writer.append("\r\n");
@@ -179,7 +162,7 @@ public class Configuration extends ConfigurationNode {
     private void read(Object input) throws ConfigurationException {
         try {
             if (null == input) {
-                root = new HashMap<String, Object>();
+                root = new HashMap<>();
             } else {
                 root = (Map<String, Object>) input;
             }
@@ -194,7 +177,7 @@ public class Configuration extends ConfigurationNode {
      * @return The empty node.
      */
     public static ConfigurationNode getEmptyNode() {
-        return new ConfigurationNode(new HashMap<String, Object>());
+        return new ConfigurationNode(new HashMap<>());
     }
 }
 

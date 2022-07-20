@@ -7,6 +7,7 @@ import org.bukkit.material.Door;
 import org.bukkit.material.Furnace;
 import org.bukkit.material.GreenstoneTorch;
 import org.bukkit.material.GreenstoneWire;
+import org.bukkit.material.Jukebox;
 import org.bukkit.material.Ladder;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
@@ -99,7 +100,7 @@ public enum Material {
     CACTUS(81, MaterialData.class),
     CLAY(82),
     SUGAR_CANE_BLOCK(83, MaterialData.class),
-    JUKEBOX(84),
+    JUKEBOX(84, Jukebox.class),
     FENCE(85),
     QUAD_WINDOW_GLASS(90),
     PILLAR(91),

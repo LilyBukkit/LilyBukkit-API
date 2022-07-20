@@ -120,11 +120,4 @@ public class EntityListener implements Listener {
      */
     public void onProjectileHit(ProjectileHitEvent event) {
     }
-
-    /**
-     * Called when a Slime splits into smaller Slimes upon death
-     *
-     * @param event Relevant event details
-     */
-    public void onSlimeSplit(SlimeSplitEvent event) {}
 }

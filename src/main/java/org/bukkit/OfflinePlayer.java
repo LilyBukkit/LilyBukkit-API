@@ -1,10 +1,8 @@
 package org.bukkit;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 
-public interface OfflinePlayer extends ServerOperator, ConfigurationSerializable {
+public interface OfflinePlayer extends ServerOperator {
     /**
      * Checks if this player is currently online
      *

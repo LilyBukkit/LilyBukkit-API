@@ -263,17 +263,6 @@ public interface Server {
     public World createWorld(String name, World.Environment environment, long seed, ChunkGenerator generator);
 
     /**
-     * Creates or loads a world with the given name using the specified options.
-     * <p>
-     * If the world is already loaded, it will just return the equivalent of
-     * getWorld(creator.name()).
-     *
-     * @param creator Options to use when creating the world
-     * @return Newly created or loaded world
-     */
-    public World createWorld(WorldCreator creator);
-
-    /**
      * Unloads a world with the given name.
      *
      * @param name Name of the world to unload

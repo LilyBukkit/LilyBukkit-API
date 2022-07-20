@@ -583,15 +583,6 @@ public interface World {
     public int getMaxHeight();
 
     /**
-     * Gets the sea level for this world.
-     * <p>
-     * This is often half of {@link #getMaxHeight()}
-     *
-     * @return Sea level
-     */
-    public int getSeaLevel();
-
-    /**
      * Gets whether the world's spawn area should be kept loaded into memory or not.
      *
      * @return true if the world's spawn area will be kept loaded into memory.
