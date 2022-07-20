@@ -1,8 +1,6 @@
 package org.bukkit.plugin.java;
 
 import org.bukkit.Server;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.CustomEventListener;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -314,19 +312,6 @@ public class JavaPluginLoader implements PluginLoader {
     public void setClass(final String name, final Class<?> clazz) {
         if (!classes.containsKey(name)) {
             classes.put(name, clazz);
-            if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
-                Class<? extends ConfigurationSerializable> serializable = (Class<? extends ConfigurationSerializable>) clazz;
-                ConfigurationSerialization.registerClass(serializable);
-            }
-        }
-    }
-
-    public void removeClass(String name) {
-        Class<?> clazz = classes.remove(name);
-
-        if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
-            Class<? extends ConfigurationSerializable> serializable = (Class<? extends ConfigurationSerializable>) clazz;
-            ConfigurationSerialization.unregisterClass(serializable);
         }
     }
 
@@ -941,7 +926,7 @@ public class JavaPluginLoader implements PluginLoader {
                 Set<String> names = loader.getClasses();
 
                 for (String name : names) {
-                    removeClass(name);
+                    classes.remove(name);
                 }
             }
         }

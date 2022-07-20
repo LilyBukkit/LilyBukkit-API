@@ -1,7 +1,6 @@
 package org.bukkit.inventory;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.material.MaterialData;
 
 import java.io.Serializable;
@@ -11,7 +10,7 @@ import java.util.Map;
 /**
  * Represents a stack of items
  */
-public class ItemStack implements Serializable, ConfigurationSerializable {
+public class ItemStack implements Serializable {
     private int type;
     private int amount = 0;
     private MaterialData data = null;

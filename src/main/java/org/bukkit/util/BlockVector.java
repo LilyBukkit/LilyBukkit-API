@@ -1,7 +1,5 @@
 package org.bukkit.util;
 
-import org.bukkit.configuration.serialization.SerializableAs;
-
 import java.util.Map;
 
 /**
@@ -12,7 +10,6 @@ import java.util.Map;
  *
  * @author sk89q
  */
-@SerializableAs("BlockVector")
 public class BlockVector extends Vector {
 
     /**
@@ -26,6 +23,7 @@ public class BlockVector extends Vector {
 
     /**
      * Construct the vector with another vector.
+     *
      * @param vec The other vector.
      */
     public BlockVector(Vector vec) {
@@ -113,23 +111,5 @@ public class BlockVector extends Vector {
         v.y = y;
         v.z = z;
         return v;
-    }
-
-    public static BlockVector deserialize(Map<String, Object> args) {
-        double x = 0;
-        double y = 0;
-        double z = 0;
-
-        if (args.containsKey("x")) {
-            x = (Double) args.get("x");
-        }
-        if (args.containsKey("y")) {
-            y = (Double) args.get("y");
-        }
-        if (args.containsKey("z")) {
-            z = (Double) args.get("z");
-        }
-
-        return new BlockVector(x, y, z);
     }
 }
