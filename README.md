@@ -28,6 +28,6 @@ dependencies {
 ```
 Add the following code to your `gradle.properties`:
 ```groovy
-gpr.user=/*your GitHub username*/
-gpr.key=/*your GitHub Personal Access Token*/
+org.gradle.project.gpr.user=/*your GitHub username*/
+org.gradle.project.key=/*your GitHub Personal Access Token*/
 ```
