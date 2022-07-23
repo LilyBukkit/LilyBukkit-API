@@ -9,6 +9,7 @@ Wiki: [https://github.com/Vladg24YT/LilyBukkit-API/wiki](https://github.com/Vlad
 
 ## Installation
 ### Using precompiled `jar`s
+Download the latest `jar` from [Releases](https://github.com/Vladg24YT/LilyBukkit-API/releases/latest), then follow one of the instructions below.  
 **Maven**:  
 Add the following code to your `pom.xml`:
 ```xml
