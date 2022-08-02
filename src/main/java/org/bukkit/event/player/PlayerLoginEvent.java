@@ -100,6 +100,21 @@ public class PlayerLoginEvent extends PlayerEvent {
         /**
          * The player is not allowed to log in, for reasons undefined
          */
-        KICK_OTHER
+        KICK_OTHER,
+
+        // LILYPAD/ROSEPAD \\
+
+        /**
+         * The player is not allowed to log in, due to illegal characters in their name
+         */
+        KICK_USERNAME,
+        /**
+         * The player is not allowed to log in, due to a Rosepad extension/script mismatch
+         */
+        KICK_ROSEPAD,
+        /**
+         * The player is not allowed to log in, because they were already authenticated through ULPP
+         */
+        KICK_ULPP
     }
 }
