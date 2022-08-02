@@ -28,7 +28,7 @@ public class HelpCommand extends VanillaCommand {
 
         // LilyBukkit start
         Configuration config = new Configuration(new File("config/lilybukkit.yml"));
-        boolean vanillaBehaviour = config.getBoolean("lilybukkit.vanilla-help", true);
+        boolean vanillaBehaviour = config.getBoolean("lilybukkit.vanilla-help", false); //until I figure out how to do this, the default should remain false
         if (!vanillaBehaviour) {
             //Array of Vanilla commands
             VanillaCommand[] vanillaCommands = new VanillaCommand[]{new HelpCommand(), new KickCommand(), new BanCommand(), new BanIpCommand(), new PardonCommand(), new PardonIpCommand(), new OpCommand(), new DeopCommand(), new TeleportCommand(), new GiveCommand(), new TellCommand(), new StopCommand(), new SaveCommand(), new SaveOnCommand(), new SaveOffCommand(), new ListCommand(), new SayCommand(), new MeCommand(), new WhitelistCommand()};
