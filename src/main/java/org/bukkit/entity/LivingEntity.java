@@ -150,21 +150,6 @@ public interface LivingEntity extends Entity {
     public void setMaximumNoDamageTicks(int ticks);
 
     /**
-     * Returns the entities lastDamage taken in the current noDamageTicks time.
-     * Only damage higher than this amount will further damage the entity.
-     *
-     * @return lastDamage
-     */
-    public int getLastDamage();
-
-    /**
-     * Sets the entities current maximum noDamageTicks
-     *
-     * @param damage last damage
-     */
-    public void setLastDamage(int damage);
-
-    /**
      * Returns the entities current noDamageTicks
      *
      * @return noDamageTicks
