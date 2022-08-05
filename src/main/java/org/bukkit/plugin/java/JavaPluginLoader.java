@@ -39,8 +39,6 @@ import org.bukkit.event.inventory.InventoryListener;
 import org.bukkit.event.painting.PaintingBreakEvent;
 import org.bukkit.event.painting.PaintingPlaceEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -458,20 +456,6 @@ public class JavaPluginLoader implements PluginLoader {
                 return new EventExecutor() {
                     public void execute(Listener listener, Event event) {
                         ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
-                    }
-                };
-
-            case PLAYER_BED_ENTER:
-                return new EventExecutor() {
-                    public void execute(Listener listener, Event event) {
-                        ((PlayerListener) listener).onPlayerBedEnter((PlayerBedEnterEvent) event);
-                    }
-                };
-
-            case PLAYER_BED_LEAVE:
-                return new EventExecutor() {
-                    public void execute(Listener listener, Event event) {
-                        ((PlayerListener) listener).onPlayerBedLeave((PlayerBedLeaveEvent) event);
                     }
                 };
 

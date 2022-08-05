@@ -172,22 +172,6 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Called when a player enters a bed
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-    }
-
-    /**
-     * Called when a player leaves a bed
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
-    }
-
-    /**
      * Called after a player changes to a new world
      *
      * @param event Relevant event details

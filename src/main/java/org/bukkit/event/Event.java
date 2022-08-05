@@ -259,18 +259,6 @@ public abstract class Event implements Serializable {
          */
         PLAYER_INVENTORY(Category.PLAYER),
         /**
-         * Called when a player enter a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedEnterEvent
-         */
-        PLAYER_BED_ENTER(Category.PLAYER),
-        /**
-         * Called when a player leaves a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedLeaveEvent
-         */
-        PLAYER_BED_LEAVE(Category.PLAYER),
-        /**
          * Called after a player has changed to a new world
          *
          * @see org.bukkit.event.player.PlayerChangedWorldEvent

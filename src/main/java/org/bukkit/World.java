@@ -548,6 +548,7 @@ public interface World {
      *
      * @param x - chunk x coordinate
      * @param z - chunk z coordinate
+     * @return an empty ChunkSnapshot
      */
     public ChunkSnapshot getEmptyChunkSnapshot(int x, int z);
 
