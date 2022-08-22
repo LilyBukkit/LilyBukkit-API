@@ -6,3 +6,7 @@ LilyBukkit-API is based off `1.7.3-R3` Bukkit build for Minecraft Beta 1.7.3.
 
 Bugs and suggestions: [Issues](https://github.com/Vladg24YT/LilyBukkit-API/issues) and [Discord](https://discord.gg/qzKFJZW6bZ)
 
+# Documentation
+- [Entites API](entity-api.md)
+- [Server API](server-api.md)
+- [World API](world-api.md)
