@@ -177,20 +177,4 @@ public class PlayerListener implements Listener {
      * @param event Relevant event details
      */
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {}
-
-    /**
-     * Called when a player dashes
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerDash(PlayerDashEvent event) {
-    }
-
-    /**
-     * Called when a player uses cheats
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerCheat(PlayerCheatEvent event) {
-    }
 }

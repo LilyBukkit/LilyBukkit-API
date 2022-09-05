@@ -264,18 +264,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.player.PlayerChangedWorldEvent
          */
         PLAYER_CHANGED_WORLD(Category.PLAYER),
-        /**
-         * Called when a player dashes
-         *
-         * @see org.bukkit.event.player.PlayerDashEvent
-         */
-        PLAYER_DASH(Category.PLAYER),
-        /**
-         * Called when player uses cheats
-         *
-         * @see org.bukkit.event.player.PlayerCheatEvent
-         */
-        PLAYER_CHEAT(Category.PLAYER),
 
         /**
          * BLOCK EVENTS
