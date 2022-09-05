@@ -1,6 +1,7 @@
 package org.bukkit.event.block;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 /**
@@ -11,9 +12,11 @@ import org.bukkit.event.Cancellable;
 public class SafeCodeInputEvent extends BlockEvent implements Cancellable {
 
     private boolean cancelled;
+    private Player player;
 
-    public SafeCodeInputEvent(Block theBlock) {
+    public SafeCodeInputEvent(Block theBlock, Player author) {
         super(Type.CODE_INPUT, theBlock);
+        this.player = author;
     }
 
     /**
@@ -36,5 +39,14 @@ public class SafeCodeInputEvent extends BlockEvent implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    /**
+     * Gets the player that triggered the event
+     *
+     * @return player that triggered the event
+     */
+    public Player getPlayer() {
+        return this.player;
     }
 }
