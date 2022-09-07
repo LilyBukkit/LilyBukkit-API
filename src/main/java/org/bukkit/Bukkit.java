@@ -262,6 +262,6 @@ public final class Bukkit {
 
     //CUSTOM
     public static String getBukkitVersion() {
-        return "lb-1.1.1";
+        return "lb-1.1.2";
     }
 }

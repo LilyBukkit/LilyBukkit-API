@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ru.vladthemountain</groupId>
   <artifactId>lilybukkit-api</artifactId>
-  <name>LilyBukkit</name>
-  <version>1.1.1</version>
+  <name>LilyBukkit-API</name>
+  <version>1.1.2</version>
   <url>https://vladg24yt.github.io/LilyBukkit-API</url>
   <scm>
     <connection>scm:git:git://github.com/Vladg24YT/LilyBukkit-API.git</connection>
