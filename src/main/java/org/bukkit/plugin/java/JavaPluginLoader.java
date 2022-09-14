@@ -19,7 +19,6 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.block.SafeCodeInputEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -536,10 +535,6 @@ public class JavaPluginLoader implements PluginLoader {
                 return (listener14, event) -> ((InventoryListener) listener14).onFurnaceSmelt((FurnaceSmeltEvent) event);
             case FURNACE_BURN:
                 return (listener13, event) -> ((InventoryListener) listener13).onFurnaceBurn((FurnaceBurnEvent) event);
-
-            //Lilypad Events
-            case CODE_INPUT:
-                return (listener12, event) -> ((BlockListener) listener12).onCodeInput((SafeCodeInputEvent) event);
 
             // Custom Events
             case CUSTOM_EVENT:

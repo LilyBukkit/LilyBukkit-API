@@ -655,16 +655,6 @@ public abstract class Event implements Serializable {
         VEHICLE_UPDATE(Category.VEHICLE),
 
         /**
-         * LILYPAD-SPECIFIC EVENTS
-         */
-        /**
-         * Called when a player inputs a code into the Safe Block
-         *
-         * @see org.bukkit.event.block.SafeCodeInputEvent
-         */
-        CODE_INPUT(Category.BLOCK),
-
-        /**
          * MISCELLANEOUS EVENTS
          */
 

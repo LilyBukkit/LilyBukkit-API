@@ -125,14 +125,6 @@ public enum Material {
     BLUE_WOOL(110),
     GREEN_WOOL(111),
     BLACK_WOOL(112),
-    DBG(113, MaterialData.class),
-    SALT(114),
-    GLOWING_FLOWER(115),
-    BLUE_FLAME(116, MaterialData.class),
-    INFUSED_GLOWING_FLOWER(117),
-    GOLD_INFUSED_GLOWING_FLOWER(118),
-    OBSIDIAN_INFUSED_GLOWING_FLOWER(119),
-    SAFE_BLOCK(120),
     // ----- Item Separator -----
     IRON_SPADE(256, 1, 250),
     IRON_PICKAXE(257, 1, 250),
@@ -238,9 +230,6 @@ public enum Material {
     GREEN_DYE(357),
     BLUE_DYE(358),
     PINK_DYE(359),
-    FRYSHROOM(360),
-    EDIBLE_FLAME(361),
-    FLAMEBERGE(362, 1),
     HIDDEN_DEN_RECORD(2256, 1),
     LEMURIA_RECORD(2257, 1);
 

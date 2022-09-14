@@ -173,10 +173,4 @@ public class BlockListener implements Listener {
      * @param event Relevant event details
      */
     public void onBlockDispense(BlockDispenseEvent event) {}
-
-    /**
-     * Called when a player inputs a code into the Safe block
-     * @param event Relevant event details
-     */
-    public void onCodeInput(SafeCodeInputEvent event){}
 }
