@@ -3,26 +3,26 @@ package org.bukkit.material;
 import org.bukkit.Material;
 
 /**
- * Represents a Greenstone torch
+ * Represents a Redstone torch
  */
-public class GreenstoneTorch extends Torch implements Greenstone {
-    public GreenstoneTorch() {
-        super(Material.GREENSTONE_TORCH_ON);
+public class RedstoneTorch extends Torch implements Redstone {
+    public RedstoneTorch() {
+        super(Material.Redstone_TORCH_ON);
     }
 
-    public GreenstoneTorch(final int type) {
+    public RedstoneTorch(final int type) {
         super(type);
     }
 
-    public GreenstoneTorch(final Material type) {
+    public RedstoneTorch(final Material type) {
         super(type);
     }
 
-    public GreenstoneTorch(final int type, final byte data) {
+    public RedstoneTorch(final int type, final byte data) {
         super(type, data);
     }
 
-    public GreenstoneTorch(final Material type, final byte data) {
+    public RedstoneTorch(final Material type, final byte data) {
         super(type, data);
     }
 
@@ -33,7 +33,7 @@ public class GreenstoneTorch extends Torch implements Greenstone {
      * @return true if powered, otherwise false
      */
     public boolean isPowered() {
-        return getItemType() == Material.GREENSTONE_TORCH_ON;
+        return getItemType() == Material.Redstone_TORCH_ON;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.bukkit.command.defaults;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,7 +13,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 public class VersionCommand extends Command {
     public VersionCommand(String name) {
         super(name);
-        
+
         this.description = "Gets the version of this server including any plugins in use";
         this.usageMessage = "/version [plugin name]";
         this.setPermission("bukkit.command.version");
@@ -22,7 +23,7 @@ public class VersionCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args) {
         if (!testPermission(sender)) return true;
-        
+
         if (args.length == 0) {
             sender.sendMessage("This server is running " + ChatColor.GREEN + Bukkit.getName() + ChatColor.WHITE + " version " + ChatColor.GREEN + Bukkit.getServer().getVersion());
             sender.sendMessage("This server is also sporting some funky dev build of Bukkit!");
@@ -33,7 +34,7 @@ public class VersionCommand extends Command {
                 if (name.length() > 0) {
                     name.append(' ');
                 }
-                
+
                 name.append(arg);
             }
 
@@ -84,7 +85,7 @@ public class VersionCommand extends Command {
             result.append(ChatColor.GREEN);
             result.append(authors.get(i));
         }
-        
+
         return result.toString();
     }
 }

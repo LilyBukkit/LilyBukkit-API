@@ -4,12 +4,12 @@
   <groupId>ru.vladthemountain</groupId>
   <artifactId>lilybukkit-api</artifactId>
   <name>LilyBukkit-API</name>
-  <version>1.1.2</version>
-  <url>https://vladg24yt.github.io/LilyBukkit-API</url>
+  <version>2.0.0</version>
+  <url>https://lilybukkit.github.io/</url>
   <scm>
-    <connection>scm:git:git://github.com/Vladg24YT/LilyBukkit-API.git</connection>
-    <developerConnection>scm:git:git@github.com:Vladg24YT/LilyBukkit-API.git</developerConnection>
-    <url>https://github.com/Vladg24YT/LilyBukkit-API/tree/master/</url>
+    <connection>scm:git:git://github.com/LilyBukkit/LilyBukkit-API.git</connection>
+    <developerConnection>scm:git:git@github.com:LilyBukkit/LilyBukkit-API.git</developerConnection>
+    <url>https://github.com/LilyBukkit/LilyBukkit-API/tree/master/</url>
   </scm>
   <build>
     <plugins>
@@ -38,8 +38,8 @@
   <distributionManagement>
     <repository>
       <id>github</id>
-      <name>GitHub Vladg24YT Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/Vladg24YT/LilyBukkit-API</url>
+      <name>GitHub LilyBukkit Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/LilyBukkit/LilyBukkit-API</url>
     </repository>
   </distributionManagement>
   <properties>

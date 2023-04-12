@@ -43,6 +43,6 @@ public interface HumanEntity extends LivingEntity, Permissible {
      *
      * @param index The new index to use, only valid ones are 0-8.
      *
-     public void selectItemInHand(int index);
+    public void selectItemInHand(int index);
      */
 }

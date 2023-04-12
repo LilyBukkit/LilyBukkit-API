@@ -3,6 +3,7 @@ package org.bukkit.event.block;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.Cancellable;
+
 /**
  * Called when a block fades, melts or disappears based on world conditions
  * <br>

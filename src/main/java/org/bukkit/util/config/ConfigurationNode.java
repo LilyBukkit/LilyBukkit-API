@@ -40,17 +40,16 @@ public class ConfigurationNode {
         Map<String, Object> map = new TreeMap<>();
 
         Set<String> keys = node.keySet();
-        for( String k : keys ) {
+        for (String k : keys) {
             Object tmp = node.get(k);
-            if( tmp instanceof Map<?,?> ) {
-                Map<String, Object> rec = recursiveBuilder((Map <String,Object>) tmp);
+            if (tmp instanceof Map<?, ?>) {
+                Map<String, Object> rec = recursiveBuilder((Map<String, Object>) tmp);
 
                 Set<String> subkeys = rec.keySet();
-                for( String sk : subkeys ) {
+                for (String sk : subkeys) {
                     map.put(k + "." + sk, rec.get(sk));
                 }
-            }
-            else {
+            } else {
                 map.put(k, tmp);
             }
         }
@@ -107,7 +106,7 @@ public class ConfigurationNode {
      * Set the property at a location. This will override existing
      * configuration data to have it conform to key/value mappings.
      *
-     * @param path The property path
+     * @param path  The property path
      * @param value The property value
      */
     @SuppressWarnings("unchecked")
@@ -163,7 +162,7 @@ public class ConfigurationNode {
      * actually a string, it will be converted to its string representation.
      *
      * @param path path to node (dot notation)
-     * @param def default value
+     * @param def  default value
      * @return string or default
      */
     public String getString(String path, String def) {
@@ -183,7 +182,7 @@ public class ConfigurationNode {
      * number types will be casted to an integer.
      *
      * @param path path to node (dot notation)
-     * @param def default value
+     * @param def  default value
      * @return int or default
      */
     public int getInt(String path, int def) {
@@ -204,7 +203,7 @@ public class ConfigurationNode {
      * number types will be casted to an double.
      *
      * @param path path to node (dot notation)
-     * @param def default value
+     * @param def  default value
      * @return double or default
      */
     public double getDouble(String path, double def) {
@@ -224,7 +223,7 @@ public class ConfigurationNode {
      * actually a boolean, the default value will be returned.
      *
      * @param path path to node (dot notation)
-     * @param def default value
+     * @param def  default value
      * @return boolean or default
      */
     public boolean getBoolean(String path, boolean def) {
@@ -299,7 +298,7 @@ public class ConfigurationNode {
      * an actual list and not just a string.
      *
      * @param path path to node (dot notation)
-     * @param def default value or null for an empty list as default
+     * @param def  default value or null for an empty list as default
      * @return list of strings
      */
     public List<String> getStringList(String path, List<String> def) {
@@ -330,7 +329,7 @@ public class ConfigurationNode {
      * an actual list and not just an integer.
      *
      * @param path path to node (dot notation)
-     * @param def default value or null for an empty list as default
+     * @param def  default value or null for an empty list as default
      * @return list of integers
      */
     public List<Integer> getIntList(String path, List<Integer> def) {
@@ -361,7 +360,7 @@ public class ConfigurationNode {
      * an actual list and cannot be just a double.
      *
      * @param path path to node (dot notation)
-     * @param def default value or null for an empty list as default
+     * @param def  default value or null for an empty list as default
      * @return list of integers
      */
     public List<Double> getDoubleList(String path, List<Double> def) {
@@ -392,7 +391,7 @@ public class ConfigurationNode {
      * an actual list and cannot be just a boolean,
      *
      * @param path path to node (dot notation)
-     * @param def default value or null for an empty list as default
+     * @param def  default value or null for an empty list as default
      * @return list of integers
      */
     public List<Boolean> getBooleanList(String path, List<Boolean> def) {
@@ -423,7 +422,7 @@ public class ConfigurationNode {
      * an actual node and cannot be just a boolean,
      *
      * @param path path to node (dot notation)
-     * @param def default value or null for an empty list as default
+     * @param def  default value or null for an empty list as default
      * @return list of integers
      */
     @SuppressWarnings("unchecked")

@@ -176,5 +176,6 @@ public class PlayerListener implements Listener {
      *
      * @param event Relevant event details
      */
-    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {}
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+    }
 }

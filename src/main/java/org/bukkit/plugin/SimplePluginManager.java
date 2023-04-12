@@ -2,6 +2,7 @@ package org.bukkit.plugin;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.MapMaker;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -21,8 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
+
 import org.bukkit.Server;
+
 import java.util.regex.Pattern;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
@@ -169,14 +173,14 @@ public final class SimplePluginManager implements PluginManager {
 
     /**
      * Loads the plugin in the specified file
-     *
+     * <p>
      * File must be valid according to the current enabled Plugin interfaces
      *
      * @param file File containing the plugin to load
      * @return The Plugin loaded, or null if it was invalid
-     * @throws InvalidPluginException Thrown when the specified file is not a valid plugin
+     * @throws InvalidPluginException      Thrown when the specified file is not a valid plugin
      * @throws InvalidDescriptionException Thrown when the specified file contains an invalid description
-     * @throws UnknownDependencyException If a required dependency could not be found
+     * @throws UnknownDependencyException  If a required dependency could not be found
      */
     public synchronized Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
         return loadPlugin(file, true);
@@ -184,15 +188,15 @@ public final class SimplePluginManager implements PluginManager {
 
     /**
      * Loads the plugin in the specified file
-     *
+     * <p>
      * File must be valid according to the current enabled Plugin interfaces
      *
-     * @param file File containing the plugin to load
+     * @param file                   File containing the plugin to load
      * @param ignoreSoftDependencies Loader will ignore soft dependencies if this flag is set to true
      * @return The Plugin loaded, or null if it was invalid
-     * @throws InvalidPluginException Thrown when the specified file is not a valid plugin
+     * @throws InvalidPluginException      Thrown when the specified file is not a valid plugin
      * @throws InvalidDescriptionException Thrown when the specified file contains an invalid description
-     * @throws UnknownDependencyException If a required dependency could not be found
+     * @throws UnknownDependencyException  If a required dependency could not be found
      */
     public synchronized Plugin loadPlugin(File file, boolean ignoreSoftDependencies) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
         File updateFile = null;
@@ -227,7 +231,7 @@ public final class SimplePluginManager implements PluginManager {
 
     /**
      * Checks if the given plugin is loaded and returns it when applicable
-     *
+     * <p>
      * Please note that the name of the plugin is case-sensitive
      *
      * @param name Name of the plugin to check
@@ -243,7 +247,7 @@ public final class SimplePluginManager implements PluginManager {
 
     /**
      * Checks if the given plugin is enabled or not
-     *
+     * <p>
      * Please note that the name of the plugin is case-sensitive.
      *
      * @param name Name of the plugin to check
@@ -276,7 +280,7 @@ public final class SimplePluginManager implements PluginManager {
             if (!pluginCommands.isEmpty()) {
                 commandMap.registerAll(plugin.getDescription().getName(), pluginCommands);
             }
-            
+
             try {
                 plugin.getPluginLoader().enablePlugin(plugin);
             } catch (Throwable ex) {
@@ -286,7 +290,7 @@ public final class SimplePluginManager implements PluginManager {
     }
 
     public void disablePlugins() {
-        for (Plugin plugin: getPlugins()) {
+        for (Plugin plugin : getPlugins()) {
             disablePlugin(plugin);
         }
     }
@@ -350,10 +354,10 @@ public final class SimplePluginManager implements PluginManager {
                             author = plugin.getDescription().getAuthors().get(0);
                         }
                         server.getLogger().log(Level.SEVERE, String.format(
-                            "Nag author: '%s' of '%s' about the following: %s",
-                            author,
-                            plugin.getDescription().getName(),
-                            ex.getMessage()
+                                "Nag author: '%s' of '%s' about the following: %s",
+                                author,
+                                plugin.getDescription().getName(),
+                                ex.getMessage()
                         ));
                     }
                 } catch (Throwable ex) {
@@ -366,10 +370,10 @@ public final class SimplePluginManager implements PluginManager {
     /**
      * Registers the given event to the specified listener
      *
-     * @param type EventType to register
+     * @param type     EventType to register
      * @param listener PlayerListener to register
      * @param priority Priority of this event
-     * @param plugin Plugin to register
+     * @param plugin   Plugin to register
      */
     public void registerEvent(Event.Type type, Listener listener, Priority priority, Plugin plugin) {
         if (!plugin.isEnabled()) {
@@ -382,11 +386,11 @@ public final class SimplePluginManager implements PluginManager {
     /**
      * Registers the given event to the specified listener using a directly passed EventExecutor
      *
-     * @param type EventType to register
+     * @param type     EventType to register
      * @param listener PlayerListener to register
      * @param executor EventExecutor to register
      * @param priority Priority of this event
-     * @param plugin Plugin to register
+     * @param plugin   Plugin to register
      */
     public void registerEvent(Event.Type type, Listener listener, EventExecutor executor, Priority priority, Plugin plugin) {
         if (!plugin.isEnabled()) {

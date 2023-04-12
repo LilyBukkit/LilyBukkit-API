@@ -5,8 +5,8 @@ import org.bukkit.material.Coal;
 import org.bukkit.material.Crops;
 import org.bukkit.material.Door;
 import org.bukkit.material.Furnace;
-import org.bukkit.material.GreenstoneTorch;
-import org.bukkit.material.GreenstoneWire;
+import org.bukkit.material.RedstoneTorch;
+import org.bukkit.material.RedstoneWire;
 import org.bukkit.material.Jukebox;
 import org.bukkit.material.Ladder;
 import org.bukkit.material.Lever;
@@ -71,7 +71,7 @@ public enum Material {
     MOB_SPAWNER(52),
     WOOD_STAIRS(53, Stairs.class),
     CHEST(54),
-    GREENSTONE_WIRE(55, GreenstoneWire.class),
+    Redstone_WIRE(55, RedstoneWire.class),
     DIAMOND_ORE(56),
     DIAMOND_BLOCK(57),
     WORKBENCH(58),
@@ -89,10 +89,10 @@ public enum Material {
     STONE_PLATE(70, PressurePlate.class),
     IRON_DOOR_BLOCK(71, Door.class),
     WOOD_PLATE(72, PressurePlate.class),
-    GREENSTONE_ORE(73),
-    GLOWING_GREENSTONE_ORE(74),
-    GREENSTONE_TORCH_OFF(75, GreenstoneTorch.class),
-    GREENSTONE_TORCH_ON(76, GreenstoneTorch.class),
+    Redstone_ORE(73),
+    GLOWING_Redstone_ORE(74),
+    Redstone_TORCH_OFF(75, RedstoneTorch.class),
+    Redstone_TORCH_ON(76, RedstoneTorch.class),
     STONE_BUTTON(77, Button.class),
     SNOW(78),
     ICE(79),
@@ -209,7 +209,7 @@ public enum Material {
     MINECART(328, 1),
     SADDLE(329, 1),
     IRON_DOOR(330, 1),
-    GREENSTONE(331),
+    Redstone(331),
     SNOW_BALL(332, 16),
     BOAT(333, 1),
     LEATHER(334),

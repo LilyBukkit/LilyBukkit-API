@@ -3,26 +3,26 @@ package org.bukkit.material;
 import org.bukkit.Material;
 
 /**
- * Represents Greenstone wire
+ * Represents Redstone wire
  */
-public class GreenstoneWire extends MaterialData implements Greenstone {
-    public GreenstoneWire() {
-        super(Material.GREENSTONE_WIRE);
+public class RedstoneWire extends MaterialData implements Redstone {
+    public RedstoneWire() {
+        super(Material.Redstone_WIRE);
     }
 
-    public GreenstoneWire(final int type) {
+    public RedstoneWire(final int type) {
         super(type);
     }
 
-    public GreenstoneWire(final Material type) {
+    public RedstoneWire(final Material type) {
         super(type);
     }
 
-    public GreenstoneWire(final int type, final byte data) {
+    public RedstoneWire(final int type, final byte data) {
         super(type, data);
     }
 
-    public GreenstoneWire(final Material type, final byte data) {
+    public RedstoneWire(final Material type, final byte data) {
         super(type, data);
     }
 

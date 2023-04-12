@@ -164,9 +164,9 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * Send a block change. This fakes a block change packet for a user at
      * a certain location. This will not actually change the world in any way.
      *
-     * @param loc
-     * @param material
-     * @param data
+     * @param loc where the change occurred
+     * @param material block ID
+     * @param data block metadata
      */
     public void sendBlockChange(Location loc, int material, byte data);
 

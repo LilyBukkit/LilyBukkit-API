@@ -36,7 +36,8 @@ public abstract class JavaPlugin implements Plugin {
     private boolean naggable = true;
     private EbeanServer ebean = null;
 
-    public JavaPlugin() {}
+    public JavaPlugin() {
+    }
 
     /**
      * Returns the folder that the plugin data's files are located in. The
@@ -133,7 +134,7 @@ public abstract class JavaPlugin implements Plugin {
 
     /**
      * Initializes this plugin with the given variables.
-     *
+     * <p>
      * This method should never be called manually.
      *
      * @param loader      PluginLoader that is responsible for this plugin
@@ -232,7 +233,8 @@ public abstract class JavaPlugin implements Plugin {
         }
     }
 
-    public void onLoad() {} // Empty!
+    public void onLoad() {
+    } // Empty!
 
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         getServer().getLogger().severe("Plugin " + getDescription().getFullName() + " does not contain any generators that may be used in the default world!");

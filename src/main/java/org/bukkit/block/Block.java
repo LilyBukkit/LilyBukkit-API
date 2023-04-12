@@ -192,21 +192,21 @@ public interface Block {
     BlockState getState();
 
     /**
-     * Returns true if the block is being powered by Greenstone.
+     * Returns true if the block is being powered by Redstone.
      *
      * @return if block is powered
      */
     boolean isBlockPowered();
 
     /**
-     * Returns true if the block is being indirectly powered by Greenstone.
+     * Returns true if the block is being indirectly powered by Redstone.
      *
      * @return True if the block is indirectly powered.
      */
     boolean isBlockIndirectlyPowered();
 
     /**
-     * Returns true if the block face is being powered by Greenstone.
+     * Returns true if the block face is being powered by Redstone.
      *
      * @param face The block face
      * @return True if the block face is powered.
@@ -214,7 +214,7 @@ public interface Block {
     boolean isBlockFacePowered(BlockFace face);
 
     /**
-     * Returns true if the block face is being indirectly powered by Greenstone.
+     * Returns true if the block face is being indirectly powered by Redstone.
      *
      * @param face The block face
      * @return True if the block face is indirectly powered.
@@ -222,7 +222,7 @@ public interface Block {
     boolean isBlockFaceIndirectlyPowered(BlockFace face);
 
     /**
-     * Returns the Greenstone power being provided to this block face
+     * Returns the Redstone power being provided to this block face
      *
      * @param face the face of the block to query or BlockFace.SELF for the block itself
      * @return The power level.
@@ -230,9 +230,9 @@ public interface Block {
     int getBlockPower(BlockFace face);
 
     /**
-     * Returns the Greenstone power being provided to this block
+     * Returns the Redstone power being provided to this block
      *
-     * @return
+     * @return int, the power of the signal
      */
     int getBlockPower();
 

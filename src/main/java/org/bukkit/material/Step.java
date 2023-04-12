@@ -10,6 +10,7 @@ import org.bukkit.Material;
  */
 public class Step extends TexturedMaterial {
     private static final List<Material> textures = new ArrayList<Material>();
+
     static {
         textures.add(Material.WOOD);
         textures.add(Material.COBBLESTONE);

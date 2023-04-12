@@ -324,7 +324,7 @@ public interface Server {
     /**
      * Dispatches a command on the server, and executes it if found.
      *
-     * @param sender The apparent sender of the command
+     * @param sender      The apparent sender of the command
      * @param commandLine command + arguments. Example: "test abc 123"
      * @return returns false if no target is found.
      * @throws CommandException Thrown when the executor for the given command fails with an unhandled exception

@@ -414,7 +414,7 @@ public interface World {
      * Sets the in-game time on the server
      * <br><br>
      * Note that this sets the full time of the world, which may cause adverse
-     * effects such as breaking Greenstone clocks and any scheduled events
+     * effects such as breaking Redstone clocks and any scheduled events
      *
      * @param time The new absolute time to set this world to
      * @see #setTime(long) Sets the relative time of this world

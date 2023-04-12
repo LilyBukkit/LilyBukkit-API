@@ -6,6 +6,7 @@ import org.bukkit.Material;
 
 public class Jukebox extends MaterialData {
     private static HashSet<Material> recordTypes = new HashSet<Material>();
+
     static {
         recordTypes.add(Material.HIDDEN_DEN_RECORD);
         recordTypes.add(Material.LEMURIA_RECORD);

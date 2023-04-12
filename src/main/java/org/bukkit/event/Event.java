@@ -336,13 +336,13 @@ public abstract class Event implements Serializable {
          */
         SIGN_CHANGE(Category.BLOCK),
         /**
-         * Called when a block changes Greenstone current. Only triggered on blocks
-         * that are actually capable of transmitting or carrying a Greenstone
+         * Called when a block changes Redstone current. Only triggered on blocks
+         * that are actually capable of transmitting or carrying a Redstone
          * current
          *
-         * @see org.bukkit.event.block.BlockGreenstoneEvent
+         * @see org.bukkit.event.block.BlockRedstoneEvent
          */
-        GREENSTONE_CHANGE(Category.BLOCK),
+        Redstone_CHANGE(Category.BLOCK),
         /**
          * Called when a block is broken by a player
          *
@@ -374,31 +374,31 @@ public abstract class Event implements Serializable {
 
         /**
          * Called when a player opens an inventory
-         *
+         * <p>
          * todo: add javadoc see comment
          */
         INVENTORY_OPEN(Category.INVENTORY),
         /**
          * Called when a player closes an inventory
-         *
+         * <p>
          * todo: add javadoc see comment
          */
         INVENTORY_CLOSE(Category.INVENTORY),
         /**
          * Called when a player clicks on an inventory slot
-         *
+         * <p>
          * todo: add javadoc see comment
          */
         INVENTORY_CLICK(Category.INVENTORY),
         /**
          * Called when an inventory slot changes values or type
-         *
+         * <p>
          * todo: add javadoc see comment
          */
         INVENTORY_CHANGE(Category.INVENTORY),
         /**
          * Called when a player is attempting to perform an inventory transaction
-         *
+         * <p>
          * todo: add javadoc see comment
          */
         INVENTORY_TRANSACTION(Category.INVENTORY),
@@ -444,7 +444,7 @@ public abstract class Event implements Serializable {
 
         /**
          * Called when a chunk is loaded
-         *
+         * <p>
          * If a new chunk is being generated for loading, it will call
          * Type.CHUNK_GENERATION and then Type.CHUNK_LOADED upon completion
          *
@@ -459,7 +459,7 @@ public abstract class Event implements Serializable {
         CHUNK_UNLOAD(Category.WORLD),
         /**
          * Called when a newly created chunk has been populated.
-         *
+         * <p>
          * If your intent is to populate the chunk using this event, please see {@link org.bukkit.generator.BlockPopulator}
          *
          * @see org.bukkit.event.world.ChunkPopulateEvent
@@ -556,10 +556,10 @@ public abstract class Event implements Serializable {
         ENTITY_EXPLODE(Category.LIVING_ENTITY),
         /**
          * Called when an entity has made a decision to explode.
-         *
+         * <p>
          * Provides an opportunity to act on the entity, change the explosion radius,
          * or to change the fire-spread flag.
-         *
+         * <p>
          * Canceling the event negates the entity's decision to explode.
          * For EntityCreeper, this resets the fuse but does not kill the Entity.
          * For EntityFireball and EntityTNTPrimed....?

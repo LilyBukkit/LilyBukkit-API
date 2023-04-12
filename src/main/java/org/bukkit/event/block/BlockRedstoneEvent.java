@@ -3,14 +3,14 @@ package org.bukkit.event.block;
 import org.bukkit.block.Block;
 
 /**
- * Called when a Greenstone current changes
+ * Called when a Redstone current changes
  */
-public class BlockGreenstoneEvent extends BlockEvent {
+public class BlockRedstoneEvent extends BlockEvent {
     private int oldCurrent;
     private int newCurrent;
 
-    public BlockGreenstoneEvent(Block block, int oldCurrent, int newCurrent) {
-        super(Type.GREENSTONE_CHANGE, block);
+    public BlockRedstoneEvent(Block block, int oldCurrent, int newCurrent) {
+        super(Type.Redstone_CHANGE, block);
         this.oldCurrent = oldCurrent;
         this.newCurrent = newCurrent;
     }

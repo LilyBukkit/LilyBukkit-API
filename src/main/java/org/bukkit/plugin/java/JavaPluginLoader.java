@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockGreenstoneEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -405,8 +405,8 @@ public class JavaPluginLoader implements PluginLoader {
             case BLOCK_IGNITE:
                 return (listener145, event) -> ((BlockListener) listener145).onBlockIgnite((BlockIgniteEvent) event);
 
-            case GREENSTONE_CHANGE:
-                return (listener144, event) -> ((BlockListener) listener144).onBlockGreenstoneChange((BlockGreenstoneEvent) event);
+            case Redstone_CHANGE:
+                return (listener144, event) -> ((BlockListener) listener144).onBlockRedstoneChange((BlockRedstoneEvent) event);
 
             case BLOCK_BURN:
                 return (listener143, event) -> ((BlockListener) listener143).onBlockBurn((BlockBurnEvent) event);

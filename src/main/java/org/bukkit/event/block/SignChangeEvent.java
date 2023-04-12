@@ -54,7 +54,7 @@ public class SignChangeEvent extends BlockEvent implements Cancellable {
      * Sets a single line for the sign involved in this event
      *
      * @param index index of the line to set
-     * @param line text to set
+     * @param line  text to set
      * @throws IndexOutOfBoundsException thrown when the provided index is more than 4 and less than 0
      */
     public void setLine(int index, String line) throws IndexOutOfBoundsException {

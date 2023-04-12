@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Called when a block is placed by a player.
- *<br>
+ * <br>
  * If a Block Place event is cancelled, the block will not be placed.
  */
 public class BlockPlaceEvent extends BlockEvent implements Cancellable {

@@ -24,14 +24,14 @@ public class SimpleServicesManager implements ServicesManager {
     /**
      * Register a provider of a service.
      *
-     * @param <T> Provider
-     * @param service service class
+     * @param <T>      Provider
+     * @param service  service class
      * @param provider provider to register
-     * @param plugin plugin with the provider
+     * @param plugin   plugin with the provider
      * @param priority priority of the provider
      */
     public <T> void register(Class<T> service, T provider,
-            Plugin plugin, ServicePriority priority) {
+                             Plugin plugin, ServicePriority priority) {
 
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
@@ -79,14 +79,15 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException ignored) {}
+            } catch (NoSuchElementException ignored) {
+            }
         }
     }
 
     /**
      * Unregister a particular provider for a particular service.
      *
-     * @param service The service interface
+     * @param service  The service interface
      * @param provider The service provider implementation
      */
     public void unregister(Class<?> service, Object provider) {
@@ -120,7 +121,8 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException ignored) {}
+            } catch (NoSuchElementException ignored) {
+            }
         }
     }
 
@@ -154,7 +156,8 @@ public class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException ignored) {}
+            } catch (NoSuchElementException ignored) {
+            }
         }
     }
 
@@ -162,7 +165,7 @@ public class SimpleServicesManager implements ServicesManager {
      * Queries for a provider. This may return if no provider has been
      * registered for a service. The highest priority provider is returned.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return provider or null
      */
@@ -184,7 +187,7 @@ public class SimpleServicesManager implements ServicesManager {
      * Queries for a provider registration. This may return if no provider
      * has been registered for a service.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return provider registration or null
      */
@@ -228,7 +231,7 @@ public class SimpleServicesManager implements ServicesManager {
      * Get registrations of providers for a service. The returned list is
      * unmodifiable.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return list of registrations
      */
@@ -266,7 +269,7 @@ public class SimpleServicesManager implements ServicesManager {
      * check this first only to call <code>load(service)</code> later, as that
      * would be a non-thread safe situation.
      *
-     * @param <T> service
+     * @param <T>     service
      * @param service service to check
      * @return whether there has been a registered provider
      */

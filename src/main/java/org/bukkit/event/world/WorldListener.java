@@ -13,37 +13,42 @@ public class WorldListener implements Listener {
      *
      * @param event Relevant event details
      */
-    public void onChunkLoad(ChunkLoadEvent event) {}
+    public void onChunkLoad(ChunkLoadEvent event) {
+    }
 
     /**
      * Called when a newly created chunk has been populated.
-     *
+     * <p>
      * If your intent is to populate the chunk using this event, please see {@link org.bukkit.generator.BlockPopulator}
      *
      * @param event Relevant event details
      */
-    public void onChunkPopulate(ChunkPopulateEvent event) {}
+    public void onChunkPopulate(ChunkPopulateEvent event) {
+    }
 
     /**
      * Called when a chunk is unloaded
      *
      * @param event Relevant event details
      */
-    public void onChunkUnload(ChunkUnloadEvent event) {}
+    public void onChunkUnload(ChunkUnloadEvent event) {
+    }
 
     /**
      * Called when a World's spawn is changed
      *
      * @param event Relevant event details
      */
-    public void onSpawnChange(SpawnChangeEvent event) {}
+    public void onSpawnChange(SpawnChangeEvent event) {
+    }
 
     /**
      * Called when a world is saved
      *
      * @param event Relevant event details
      */
-    public void onWorldSave(WorldSaveEvent event) {}
+    public void onWorldSave(WorldSaveEvent event) {
+    }
 
     /**
      * Called when a World is initializing
@@ -58,12 +63,14 @@ public class WorldListener implements Listener {
      *
      * @param event Relevant event details
      */
-    public void onWorldLoad(WorldLoadEvent event) {}
+    public void onWorldLoad(WorldLoadEvent event) {
+    }
 
     /**
      * Called when a World is unloaded
      *
      * @param event Relevant event details
      */
-    public void onWorldUnload(WorldUnloadEvent event) { }
+    public void onWorldUnload(WorldUnloadEvent event) {
+    }
 }

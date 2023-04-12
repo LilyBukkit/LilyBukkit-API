@@ -147,12 +147,14 @@ public class Configuration extends ConfigurationNode {
             }
             yaml.dump(root, writer);
             return true;
-        } catch (IOException ignored) {} finally {
+        } catch (IOException ignored) {
+        } finally {
             try {
                 if (stream != null) {
                     stream.close();
                 }
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         return false;
@@ -174,6 +176,7 @@ public class Configuration extends ConfigurationNode {
     /**
      * This method returns an empty ConfigurationNode for using as a
      * default in methods that select a node from a node list.
+     *
      * @return The empty node.
      */
     public static ConfigurationNode getEmptyNode() {

@@ -19,9 +19,9 @@ public final class PluginCommand extends Command {
     /**
      * Executes the command, returning its success
      *
-     * @param sender Source object which is executing this command
+     * @param sender       Source object which is executing this command
      * @param commandLabel The alias of the command used
-     * @param args All arguments passed to the command, split via ' '
+     * @param args         All arguments passed to the command, split via ' '
      * @return true if the command was successful, otherwise false
      */
     @Override
@@ -43,7 +43,7 @@ public final class PluginCommand extends Command {
         }
 
         if (!success && usageMessage.length() > 0) {
-            for (String line: usageMessage.replace("<command>", commandLabel).split("\n")) {
+            for (String line : usageMessage.replace("<command>", commandLabel).split("\n")) {
                 sender.sendMessage(line);
             }
         }

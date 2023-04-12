@@ -232,7 +232,8 @@ public class PermissibleBase implements Permissible {
         }
     }
 
-    public Set<PermissionAttachmentInfo> getEffectivePermissions() {;
+    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        ;
         return new HashSet<PermissionAttachmentInfo>(permissions.values());
     }
 

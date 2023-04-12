@@ -11,8 +11,8 @@ public interface Item extends Entity {
 
     /**
      * Gets the item stack associated with this item drop.
-     * <p>
-     * An item stack.
+     *
+     * @return An item stack.
      */
     public ItemStack getItemStack();
 

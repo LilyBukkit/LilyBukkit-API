@@ -1,6 +1,7 @@
 package org.bukkit.event.player;
 
 import java.net.InetAddress;
+
 import org.bukkit.event.Event;
 
 /**
@@ -67,7 +68,7 @@ public class PlayerPreLoginEvent extends Event {
     /**
      * Disallows the player from logging in, with the given reason
      *
-     * @param result New result for disallowing the player
+     * @param result  New result for disallowing the player
      * @param message Kick message to display to the user
      */
     public void disallow(final Result result, final String message) {

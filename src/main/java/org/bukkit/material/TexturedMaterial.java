@@ -49,8 +49,7 @@ public abstract class TexturedMaterial extends MaterialData {
     /**
      * Sets the material this block is made of
      *
-     * @param material
-     *            New material of this block
+     * @param material New material of this block
      */
     public void setMaterial(Material material) {
         if (getTextures().contains(material)) {

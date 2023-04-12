@@ -17,7 +17,7 @@ public interface PluginLoader {
      *
      * @param file File to attempt to load
      * @return Plugin that was contained in the specified file, or null if
-     *         unsuccessful
+     * unsuccessful
      * @throws InvalidPluginException      Thrown when the specified file is not a plugin
      * @throws InvalidDescriptionException If the plugin description file was invalid
      * @throws UnknownDependencyException  If a required dependency could not be found
@@ -30,7 +30,7 @@ public interface PluginLoader {
      * @param file                   File to attempt to load
      * @param ignoreSoftDependencies Loader will ignore soft dependencies if this flag is set to true
      * @return Plugin that was contained in the specified file, or null if
-     *         unsuccessful
+     * unsuccessful
      * @throws InvalidPluginException      Thrown when the specified file is not a plugin
      * @throws InvalidDescriptionException If the plugin description file was invalid
      * @throws UnknownDependencyException  If a required dependency could not be found
@@ -55,7 +55,7 @@ public interface PluginLoader {
 
     /**
      * Enables the specified plugin
-     *
+     * <p>
      * Attempting to enable a plugin that is already enabled will have no effect
      *
      * @param plugin Plugin to enable
@@ -64,7 +64,7 @@ public interface PluginLoader {
 
     /**
      * Disables the specified plugin
-     *
+     * <p>
      * Attempting to disable a plugin that is not enabled will have no effect
      *
      * @param plugin Plugin to disable

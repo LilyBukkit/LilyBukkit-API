@@ -28,6 +28,7 @@ public class EntityTargetEvent extends EntityEvent implements Cancellable {
 
     /**
      * Returns the reason for the targeting
+     * @return {@link TargetReason}
      */
     public TargetReason getReason() {
         return reason;
@@ -48,7 +49,7 @@ public class EntityTargetEvent extends EntityEvent implements Cancellable {
      * Set the entity that you want the mob to target instead.
      * It is possible to be null, null will cause the entity to be
      * target-less.
-     *
+     * <p>
      * This is different from cancelling the event. Cancelling the event
      * will cause the entity to keep an original target, while setting to be
      * null will cause the entity to be reset

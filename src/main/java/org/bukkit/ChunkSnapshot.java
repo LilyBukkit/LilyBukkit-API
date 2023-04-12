@@ -78,6 +78,7 @@ public interface ChunkSnapshot {
 
     /**
      * Get world full time when chunk snapshot was captured
+     *
      * @return time in ticks
      */
     long getCaptureFullTime();
